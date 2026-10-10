@@ -556,7 +556,8 @@ function isVisualRequest(text) {
   const lower = text.toLowerCase();
   return lower.includes("chart") || lower.includes("visual") || lower.includes("graph") ||
          lower.includes("show") || lower.includes("dikhao") || lower.includes("display") ||
-         lower.includes("all") || lower.includes("sab");
+         lower.includes("all") || lower.includes("sab") || lower.includes("image") ||
+         lower.includes("generate") || lower.includes("principle") || lower.includes("principles");
 }
 
 // ===== Append Chat Bubbles =====
@@ -737,6 +738,9 @@ function parsePrinciples(text) {
   if (/^all\b/i.test(lower) || /\ball\s*(9|nine)?\s*principles?\b/i.test(lower) ||
       lower === "sab" || lower === "sabhi" || lower === "sab dikha" ||
       lower === "sab dikhao" || lower === "all reports" || lower === "everything" ||
+      lower.includes("all principle") || lower.includes("all principles") ||
+      lower.includes("sare principle") || lower.includes("sabhi principle") ||
+      lower.includes("9 principle") || lower.includes("nine principle") ||
       /\bsab\s*(dikha|dikhao|de|do)\b/i.test(lower) || /\bsabhi\b/i.test(lower) ||
       /\bpura\s*report\b/i.test(lower) || /\bfull\s*report\b/i.test(lower)) {
     return PRINCIPLES.map(p => p.code);
@@ -765,6 +769,18 @@ function parsePrinciples(text) {
   return null;
 }
 
+// ===================== SAFE CANVAS DIMENSION HELPER =====================
+function getCanvasSafeSize(canvas, defaultH = 175) {
+  const parent = canvas.parentElement || canvas.closest(".live-block") || document.getElementById("rpLive") || document.getElementById("rpVisualizer");
+  const pw = parent && parent.clientWidth > 0 ? (parent.clientWidth - 28) : 0;
+  const cw = canvas.clientWidth > 0 ? canvas.clientWidth : (pw > 0 ? pw : 340);
+  const ch = canvas.clientHeight > 0 ? canvas.clientHeight : defaultH;
+  return {
+    W: Math.max(Math.round(cw * 2), 620),
+    H: Math.max(Math.round(ch * 2), defaultH * 2)
+  };
+}
+
 // ===================== BRSR CHART GENERATOR =====================
 async function generateCharts(principleCodes) {
   const report = await api("/projects/" + currentProjectId + "/report");
@@ -772,9 +788,13 @@ async function generateCharts(principleCodes) {
     throw new Error("Could not load report data for project " + currentProjectId);
   }
 
-  const selectedPrinciples = report.principles.filter(p => principleCodes.includes(p.code));
+  const targetCodes = Array.isArray(principleCodes) && principleCodes.length > 0
+    ? principleCodes
+    : PRINCIPLES.map(p => p.code);
+
+  const selectedPrinciples = report.principles.filter(p => targetCodes.includes(p.code));
   if (selectedPrinciples.length === 0) {
-    throw new Error("No disclosure data found for principles " + principleCodes.join(", "));
+    throw new Error("No disclosure data found for principles " + targetCodes.join(", "));
   }
 
   const emptyState = document.getElementById("rpEmpty");
@@ -786,28 +806,63 @@ async function generateCharts(principleCodes) {
     liveContainer.innerHTML = "";
   }
 
-  // Summary box
+  // 1. Summary Header
   const summaryBox = document.createElement("div");
   summaryBox.style.cssText = "border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 12px;";
   summaryBox.innerHTML = `
-    <div style="font-size: 13.5px; font-weight: 800; color: #fff;">${escHtml(report.project.name)}</div>
-    <div style="font-size: 11.5px; color: #8c8c94; margin-top: 2px;">
-      Reporting Cycle: <strong style="color:#f5b72e;">${report.reportingPeriod.currentFY}</strong> • Completion: <strong style="color:#34d399;">${report.stats.completionPct}%</strong>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size: 14px; font-weight: 800; color: #fff;">${escHtml(report.project.name)}</div>
+      <span style="font-size:10.5px; padding:3px 8px; border-radius:5px; background:rgba(245,183,46,0.15); color:#f5b72e; font-weight:700;">
+        ${selectedPrinciples.length} PRINCIPLES LOADED
+      </span>
+    </div>
+    <div style="font-size: 11.5px; color: #8c8c94; margin-top: 3px;">
+      Reporting Cycle: <strong style="color:#f5b72e;">${report.reportingPeriod.currentFY}</strong> • Overall Completion: <strong style="color:#34d399;">${report.stats.completionPct}%</strong>
     </div>
   `;
   liveContainer.appendChild(summaryBox);
 
-  // Build principle visual blocks
+  // 2. Interactive Principle Filter Pill Bar (When multiple principles are shown)
+  if (selectedPrinciples.length > 1) {
+    const filterBar = document.createElement("div");
+    filterBar.className = "rp-principle-filter-bar";
+    filterBar.innerHTML = `
+      <button class="rp-p-pill active" onclick="filterPrincipleCards('all', this)">All 9 Principles</button>
+      ${selectedPrinciples.map(p => `
+        <button class="rp-p-pill" onclick="filterPrincipleCards('${p.code}', this)">${p.code} ${p.name.split(" ")[0]}</button>
+      `).join("")}
+    `;
+    liveContainer.appendChild(filterBar);
+
+    // 3. MASTER ALL-9-PRINCIPLES CONSOLIDATED SCORECARD CARD
+    const masterCard = createMasterOverviewCard(selectedPrinciples, report.reportingPeriod);
+    liveContainer.appendChild(masterCard);
+  }
+
+  // 4. Build Detailed Visual Block for EACH Selected Principle
   selectedPrinciples.forEach(principle => {
+    const totalItems = principle.items ? principle.items.length : 0;
+    const items = principle.items || [];
+    const enteredItems = items.filter(it => it.hasData && it.currentFY !== "Not entered").length;
+    const pct = totalItems > 0 ? Math.round((enteredItems / totalItems) * 100) : 0;
+
     const block = document.createElement("div");
-    block.className = "live-pr-block";
+    block.className = "live-block live-pr-block";
+    block.id = "pBlock_" + principle.code;
+    block.dataset.pcode = principle.code;
 
     const title = document.createElement("div");
-    title.className = "live-pr-title";
-    title.innerHTML = `<span>${principle.code} — ${principle.name}</span><span style="font-size:11px;color:#8c8c94;font-weight:normal;">${principle.items ? principle.items.length : 0} indicators</span>`;
+    title.className = "live-block-title";
+    title.innerHTML = `
+      <div>
+        <span style="color:#f5b72e;">${principle.code}</span> — <span>${escHtml(principle.name)}</span>
+      </div>
+      <span style="font-size:11px; padding:2px 7px; border-radius:5px; background:rgba(255,255,255,0.06); color:#aaa; font-weight:600;">
+        ${enteredItems}/${totalItems} metrics (${pct}%)
+      </span>
+    `;
     block.appendChild(title);
 
-    const items = principle.items || [];
     const numericItems = items.filter(it =>
       it.hasData && it.currentFY !== "Not entered" &&
       (typeof it.currentFY === "number" || !isNaN(parseFloat(it.currentFY)))
@@ -819,10 +874,12 @@ async function generateCharts(principleCodes) {
       return false;
     });
 
+    // Bar Chart
     if (numericItems.length > 0) {
       block.appendChild(createBarChartForItems(numericItems, report.reportingPeriod, principle.code));
     }
 
+    // Donut Chart
     const statusCounts = { entered: 0, notEntered: 0 };
     items.forEach(it => {
       if (it.hasData && it.currentFY !== "Not entered") statusCounts.entered++;
@@ -832,6 +889,7 @@ async function generateCharts(principleCodes) {
       block.appendChild(createDonutChart(statusCounts, principle.code, items.length));
     }
 
+    // Qualitative Table
     if (qualItems.length > 0) {
       block.appendChild(createStatusTable(qualItems));
     }
@@ -839,6 +897,155 @@ async function generateCharts(principleCodes) {
     liveContainer.appendChild(block);
   });
 }
+
+// Master All 9 Principles Overview Card
+function createMasterOverviewCard(principles, period) {
+  const card = document.createElement("div");
+  card.className = "live-block live-pr-block";
+  card.id = "pBlock_master";
+  card.style.cssText = "border: 1px solid rgba(245,183,46,0.35); background: linear-gradient(180deg, #181822 0%, #121217 100%); margin-bottom: 16px;";
+
+  const title = document.createElement("div");
+  title.className = "live-block-title";
+  title.innerHTML = `
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:14px; font-weight:800; color:#f5b72e;">📊 All 9 Principles ESG Disclosure Scorecard</span>
+    </div>
+    <span style="font-size:11px; color:#34d399; font-weight:700; background:rgba(52,211,153,0.12); padding:3px 8px; border-radius:5px;">COMPLETE REGISTRY</span>
+  `;
+  card.appendChild(title);
+
+  const wrap = document.createElement("div");
+  wrap.className = "live-chart-wrap";
+  wrap.style.cssText = "background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); padding:12px;";
+
+  const headerDiv = document.createElement("div");
+  headerDiv.style.cssText = "font-size:11px; font-weight:700; color:#8c8c94; margin-bottom:8px; display:flex; justify-content:space-between;";
+  headerDiv.innerHTML = `<span>Principles P1 to P9 Disclosure Completion (%)</span><span style="color:#f5b72e;">SEBI BRSR Mandated</span>`;
+  wrap.appendChild(headerDiv);
+
+  const canvas = document.createElement("canvas");
+  canvas.style.width = "100%";
+  canvas.style.height = "210px";
+  wrap.appendChild(canvas);
+
+  const renderMaster = () => drawMasterAllPrinciplesChart(canvas, principles);
+  setTimeout(renderMaster, 40);
+  setTimeout(renderMaster, 140);
+
+  const actions = document.createElement("div");
+  actions.className = "chart-actions";
+  const dlBtn = document.createElement("button");
+  dlBtn.className = "chart-btn";
+  dlBtn.innerHTML = `⬇ Download Master 9-Principles PNG`;
+  dlBtn.onclick = () => downloadCanvas(canvas, "All_9_Principles_BRSR_Scorecard.png");
+  actions.appendChild(dlBtn);
+
+  const zoomBtn = document.createElement("button");
+  zoomBtn.className = "chart-btn";
+  zoomBtn.innerHTML = `🔍 Expand`;
+  zoomBtn.onclick = () => showLightbox(canvas);
+  actions.appendChild(zoomBtn);
+
+  wrap.appendChild(actions);
+  card.appendChild(wrap);
+  return card;
+}
+
+function drawMasterAllPrinciplesChart(canvas, principles) {
+  const ctx = canvas.getContext("2d");
+  const { W, H } = getCanvasSafeSize(canvas, 210);
+  canvas.width = W;
+  canvas.height = H;
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 35, right: 18, bottom: 50, left: 45 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+  const n = principles.length;
+  const colW = chartW / n;
+  const barW = Math.max(colW * 0.55, 16);
+
+  // Background Grid Lines
+  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  ctx.lineWidth = 1;
+  [0, 25, 50, 75, 100].forEach((pct) => {
+    const y = pad.top + chartH - (chartH * (pct / 100));
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.stroke();
+
+    ctx.fillStyle = "#777";
+    ctx.font = "14px sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(pct + "%", pad.left - 6, y + 4);
+  });
+
+  // Bars for each Principle P1..P9
+  principles.forEach((p, i) => {
+    const total = p.items ? p.items.length : 1;
+    const entered = p.items ? p.items.filter(it => it.hasData && it.currentFY !== "Not entered").length : 0;
+    const pct = Math.round((entered / total) * 100);
+
+    const bx = pad.left + i * colW + (colW - barW) / 2;
+    const barH = Math.max((chartH * (pct / 100)), 4);
+    const by = pad.top + chartH - barH;
+
+    // Gradient bar
+    const grad = ctx.createLinearGradient(0, by, 0, pad.top + chartH);
+    if (pct >= 60) {
+      grad.addColorStop(0, "#34d399");
+      grad.addColorStop(1, "#059669");
+    } else {
+      grad.addColorStop(0, "#f5b72e");
+      grad.addColorStop(1, "#c28a15");
+    }
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(bx, by, barW, barH, [4, 4, 0, 0]);
+    } else {
+      ctx.rect(bx, by, barW, barH);
+    }
+    ctx.fill();
+
+    // Value label on top of bar
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 13px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(pct + "%", bx + barW / 2, by - 6);
+
+    // Principle Code on bottom
+    ctx.fillStyle = "#f5b72e";
+    ctx.font = "bold 15px sans-serif";
+    ctx.fillText(p.code, bx + barW / 2, pad.top + chartH + 20);
+
+    // Indicator count below code
+    ctx.fillStyle = "#8c8c94";
+    ctx.font = "12px sans-serif";
+    ctx.fillText(`${entered}/${total}`, bx + barW / 2, pad.top + chartH + 36);
+  });
+}
+
+// Principle Filter Card Switcher
+window.filterPrincipleCards = function(pCode, btn) {
+  document.querySelectorAll(".rp-p-pill").forEach(p => p.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+
+  const masterCard = document.getElementById("pBlock_master");
+  const allCards = document.querySelectorAll(".live-pr-block[data-pcode]");
+
+  if (pCode === "all") {
+    if (masterCard) masterCard.style.display = "block";
+    allCards.forEach(c => c.style.display = "block");
+  } else {
+    if (masterCard) masterCard.style.display = "none";
+    allCards.forEach(c => {
+      c.style.display = (c.dataset.pcode === pCode) ? "block" : "none";
+    });
+  }
+};
 
 function createBarChartForItems(items, period, pCode) {
   const wrap = document.createElement("div");
@@ -866,18 +1073,20 @@ function createBarChartForItems(items, period, pCode) {
   canvas.style.height = "170px";
   wrap.appendChild(canvas);
 
-  setTimeout(() => drawComparisonBarChart(canvas, labels, currentVals, prevVals, period), 50);
+  const renderBar = () => drawComparisonBarChart(canvas, labels, currentVals, prevVals, period);
+  setTimeout(renderBar, 50);
+  setTimeout(renderBar, 150);
 
   const actions = document.createElement("div");
-  actions.className = "live-chart-actions";
+  actions.className = "chart-actions live-chart-actions";
   const dlBtn = document.createElement("button");
-  dlBtn.className = "btn-c-action";
+  dlBtn.className = "chart-btn btn-c-action";
   dlBtn.textContent = "⬇ PNG";
   dlBtn.onclick = () => downloadCanvas(canvas, `${pCode}_barchart.png`);
   actions.appendChild(dlBtn);
 
   const zoomBtn = document.createElement("button");
-  zoomBtn.className = "btn-c-action";
+  zoomBtn.className = "chart-btn btn-c-action";
   zoomBtn.textContent = "🔍 Larger";
   zoomBtn.onclick = () => showLightbox(canvas);
   actions.appendChild(zoomBtn);
@@ -888,18 +1097,19 @@ function createBarChartForItems(items, period, pCode) {
 
 function drawComparisonBarChart(canvas, labels, currentVals, prevVals, period) {
   const ctx = canvas.getContext("2d");
-  const W = canvas.width = canvas.clientWidth * 2;
-  const H = canvas.height = canvas.clientHeight * 2;
+  const { W, H } = getCanvasSafeSize(canvas, 170);
+  canvas.width = W;
+  canvas.height = H;
   ctx.clearRect(0, 0, W, H);
 
   const pad = { top: 30, right: 16, bottom: 60, left: 45 };
   const chartW = W - pad.left - pad.right;
   const chartH = H - pad.top - pad.bottom;
-  const n = labels.length;
+  const n = Math.max(labels.length, 1);
   const allVals = [...currentVals, ...prevVals];
   const max = Math.max(...allVals, 1) * 1.15;
   const groupW = chartW / n;
-  const barW = groupW * 0.32;
+  const barW = Math.max(groupW * 0.32, 8);
 
   // Grid
   ctx.strokeStyle = "rgba(255,255,255,0.06)";
@@ -908,7 +1118,7 @@ function drawComparisonBarChart(canvas, labels, currentVals, prevVals, period) {
     const y = pad.top + chartH * (i / 3);
     ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
     ctx.fillStyle = "#666";
-    ctx.font = "16px sans-serif";
+    ctx.font = "15px sans-serif";
     ctx.textAlign = "right";
     ctx.fillText(Math.round(max * (1 - i / 3)).toLocaleString(), pad.left - 6, y + 5);
   }
@@ -918,12 +1128,12 @@ function drawComparisonBarChart(canvas, labels, currentVals, prevVals, period) {
     const gx = pad.left + i * groupW + groupW * 0.16;
 
     // Prev FY
-    const pH = chartH * (prevVals[i] / max);
+    const pH = chartH * ((prevVals[i] || 0) / max);
     ctx.fillStyle = "#3e3e46";
     ctx.fillRect(gx, pad.top + chartH - pH, barW, pH);
 
     // Curr FY
-    const cH = chartH * (currentVals[i] / max);
+    const cH = chartH * ((currentVals[i] || 0) / max);
     const grad = ctx.createLinearGradient(0, pad.top + chartH - cH, 0, pad.top + chartH);
     grad.addColorStop(0, "#f5b72e");
     grad.addColorStop(1, "#b88210");
@@ -932,7 +1142,7 @@ function drawComparisonBarChart(canvas, labels, currentVals, prevVals, period) {
 
     // Label
     ctx.fillStyle = "#8c8c94";
-    ctx.font = "14px sans-serif";
+    ctx.font = "13px sans-serif";
     ctx.textAlign = "center";
     ctx.save();
     ctx.translate(gx + barW, pad.top + chartH + 14);
@@ -966,7 +1176,7 @@ function createDonutChart(counts, pCode, total) {
   canvas.style.height = "140px";
   wrap.appendChild(canvas);
 
-  setTimeout(() => {
+  const renderDonut = () => {
     drawDonut(canvas, [
       { label: "Entered", value: counts.entered, color: "#34d399" },
       { label: "Not Entered", value: counts.notEntered, color: "rgba(245,183,46,0.3)" }
@@ -982,7 +1192,10 @@ function createDonutChart(counts, pCode, total) {
     ctx.font = "14px sans-serif";
     ctx.fillStyle = "#8c8c94";
     ctx.fillText("coverage", cx, cy + 16);
-  }, 50);
+  };
+
+  setTimeout(renderDonut, 50);
+  setTimeout(renderDonut, 150);
 
   const legend = document.createElement("div");
   legend.style.cssText = "font-size:11px;color:#8c8c94;padding:6px 0 0;display:flex;gap:12px;justify-content:center;";

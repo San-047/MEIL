@@ -428,11 +428,17 @@ function drawLineChart(canvas, labels, series, opts = {}) {
 function drawDonut(canvas, segments) {
   // segments: [{label, value, color}]
   const ctx = canvas.getContext("2d");
-  const W = canvas.width = canvas.clientWidth * 2;
-  const H = canvas.height = canvas.clientHeight * 2;
+  const parent = canvas.parentElement || (typeof document !== "undefined" && document.getElementById("rpLive"));
+  const pw = parent && parent.clientWidth > 0 ? (parent.clientWidth - 24) : 0;
+  const cw = canvas.clientWidth > 0 ? canvas.clientWidth : (pw > 0 ? pw : 340);
+  const ch = canvas.clientHeight > 0 ? canvas.clientHeight : 140;
+  const W = canvas.width = Math.max(Math.round(cw * 2), 600);
+  const H = canvas.height = Math.max(Math.round(ch * 2), 280);
   ctx.clearRect(0, 0, W, H);
   const total = segments.reduce((s, x) => s + x.value, 0) || 1;
-  const cx = W / 2, cy = H / 2, r = Math.min(W, H) / 2 - 10, rInner = r * 0.62;
+  const cx = W / 2, cy = H / 2;
+  const r = Math.max(Math.min(W, H) / 2 - 14, 25);
+  const rInner = Math.max(r * 0.62, 12);
   let start = -Math.PI / 2;
   segments.forEach(seg => {
     const angle = (seg.value / total) * Math.PI * 2;
