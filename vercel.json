@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://YOUR_RENDER_BACKEND_URL.onrender.com/api/:path*"
+      "destination": "https://meil-brsr.onrender.com/api/:path*"
     },
     {
       "source": "/",
