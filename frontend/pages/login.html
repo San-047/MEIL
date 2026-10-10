@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEIL ESG Command Center — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a340;
+    --gold-bright: #e5b349;
+    --gold-light: #fce794;
+    --gold-hover: #c49332;
+    --gold-subtle: rgba(212, 163, 64, 0.1);
+    --gold-border: rgba(212, 163, 64, 0.32);
+    --bg-0: #000000;
+    --bg-panel: #070707;
+    --ink: #ffffff;
+    --muted: #a3a3a3;
+    --border: rgba(255, 255, 255, 0.08);
+  }
+  * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: var(--bg-0);
+    color: var(--ink);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background: #000000;
+  }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 40px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, transparent 100%);
+    transition: opacity .5s ease;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: radial-gradient(circle at 30% 30%, #fce794, #8c671a 75%);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 17px; color: #000000;
+    box-shadow: 0 0 18px rgba(212, 163, 64, 0.45);
+  }
+  .brand-text .name { font-weight: 800; font-size: 15px; letter-spacing: .03em; line-height: 1.1; color: #ffffff; }
+  .brand-text .sub { font-size: 10px; letter-spacing: .14em; color: var(--gold); font-weight: 700; text-transform: uppercase; }
+  .brand-tagline { font-size: 12px; color: var(--muted); line-height: 1.35; border-left: 1px solid var(--border); padding-left: 18px; margin-left: 4px; }
+  .brand-tagline b { color: var(--gold); font-weight: 600; display: block; }
+
+  .top-nav { display: flex; align-items: center; gap: 22px; font-size: 11.5px; letter-spacing: .16em; color: var(--muted); font-weight: 600; }
+  .top-nav span { position: relative; padding-bottom: 8px; cursor: default; }
+  .top-nav span.active { color: var(--gold); }
+  .top-nav span.active::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .btn-back-home {
+    display: inline-flex; align-items: center; gap: 6px; color: var(--gold); font-size: 12px; font-weight: 700;
+    text-decoration: none; padding: 7px 14px; border-radius: 8px;
+    background: var(--gold-subtle); border: 1px solid var(--gold-border);
+    transition: all 0.2s ease;
+  }
+  .btn-back-home:hover {
+    background: var(--gold); color: #000000; transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(212, 163, 64, 0.35);
+  }
+
+  /* ============ HERO ILLUSTRATION SECTION ============ */
+  .hero {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    transition: opacity .6s ease, filter .6s ease;
+    background: #000000;
+  }
+  .hero-scene { position: absolute; inset: 0; }
+  .hero-scene svg { width: 100%; height: 100%; display: block; }
+  .hero-vignette {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 90% at 15% 100%, rgba(0,0,0,.25), transparent 60%),
+      linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 35%, rgba(0,0,0,.92) 100%),
+      linear-gradient(90deg, rgba(0,0,0,.65) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,.85) 100%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative; z-index: 5; height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 0 0 44px; max-width: 640px;
+  }
+  .eyebrow {
+    font-size: 11.5px; letter-spacing: .22em; font-weight: 800; color: var(--gold);
+    margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero-content h1 {
+    font-size: 56px; line-height: 1.06; font-weight: 800; margin: 0 0 22px; letter-spacing: -.01em; color: #ffffff;
+  }
+  .hero-content h1 .accent {
+    background: linear-gradient(90deg, #fce794, #d4a340 55%, #c49332);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-sub { font-size: 16.5px; color: #a3a3a3; line-height: 1.55; font-weight: 400; max-width: 380px; margin-bottom: 38px; }
+
+  .feature-row { display: flex; gap: 38px; }
+  .feature { display: flex; flex-direction: column; gap: 10px; }
+  .feature .ficon {
+    width: 34px; height: 34px; border-radius: 9px; background: var(--gold-subtle);
+    border: 1px solid var(--gold-border); display: flex; align-items: center; justify-content: center;
+  }
+  .feature .flabel { font-size: 12.5px; color: #d4d4d4; line-height: 1.35; font-weight: 600; }
+
+  .hero-footer {
+    position: absolute; left: 44px; bottom: 34px; z-index: 5;
+    display: flex; align-items: center; gap: 22px;
+  }
+  .step-dots { display: flex; align-items: center; gap: 10px; }
+  .step-dots .bar { width: 34px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.18); position: relative; overflow: hidden; }
+  .step-dots .bar.on { background: rgba(255,255,255,.18); }
+  .step-dots .bar.on::after { content: ""; position: absolute; inset: 0; width: 100%; background: var(--gold); }
+  .step-num { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: .05em; }
+  .step-caption { font-size: 12.5px; color: var(--muted); max-width: 230px; line-height: 1.4; }
+
+  /* ============ RIGHT PANEL WITH CURVED CLIP-PATH ============ */
+  .panel-outer {
+    position: relative;
+    flex: 0 0 40%;
+    min-width: 460px;
+    max-width: 640px;
+    height: 100%;
+    transition: flex-basis .85s cubic-bezier(.65,0,.35,1), min-width .85s cubic-bezier(.65,0,.35,1), max-width .85s cubic-bezier(.65,0,.35,1);
+    z-index: 20;
+    background: #000000;
+  }
+  .panel-clip {
+    position: absolute; inset: 0;
+    clip-path: url(#panelCurve);
+    -webkit-clip-path: url(#panelCurve);
+    background:
+      radial-gradient(120% 100% at 100% 0%, rgba(212, 163, 64, 0.12), transparent 55%),
+      radial-gradient(120% 100% at 100% 100%, rgba(212, 163, 64, 0.08), transparent 55%),
+      linear-gradient(160deg, #141414 0%, #0a0a0a 55%, #000000 100%);
+    box-shadow: -20px 0 60px rgba(0,0,0,.85);
+  }
+  .panel-edge-glow {
+    position: absolute; inset: 0;
+    clip-path: url(#panelCurve);
+    -webkit-clip-path: url(#panelCurve);
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1.5px rgba(212, 163, 64, 0.4);
+    filter: drop-shadow(0 0 16px rgba(212, 163, 64, 0.4));
+  }
+
+  .panel-body {
+    position: relative; z-index: 2; height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 70px 0 88px;
+  }
+
+  .welcome-eyebrow { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  .welcome-title { font-size: 30px; font-weight: 800; letter-spacing: .01em; line-height: 1.1; color: #ffffff; }
+  .welcome-sub-title { font-size: 12.5px; letter-spacing: .16em; font-weight: 700; color: var(--gold); margin: 2px 0 14px; text-transform: uppercase; }
+  .welcome-desc { font-size: 13.5px; color: var(--muted); margin-bottom: 30px; }
+
+  .form-field { margin-bottom: 18px; }
+  .form-field label { display: block; font-size: 12.5px; font-weight: 600; color: #d4d4d4; margin-bottom: 7px; }
+  .input-wrap {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .input-wrap:focus-within {
+    border-color: rgba(212, 163, 64, .7);
+    box-shadow: 0 0 0 3px rgba(212, 163, 64, .18);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .input-wrap svg { flex: 0 0 auto; opacity: .85; color: var(--gold); }
+  .input-wrap input {
+    flex: 1; min-width: 0; background: none; border: none; outline: none;
+    color: #ffffff; font-size: 14px; font-family: inherit;
+  }
+  .input-wrap input::placeholder { color: #666666; }
+  .eye-toggle { cursor: pointer; opacity: .65; background: none; border: none; padding: 0; display: flex; color: #a3a3a3; }
+  .eye-toggle:hover { opacity: 1; color: var(--gold); }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin: -6px 0 26px; }
+  .remember { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); }
+  .remember input { accent-color: var(--gold); width: 14px; height: 14px; }
+  .forgot-link { font-size: 12.5px; color: var(--gold); text-decoration: none; font-weight: 600; }
+  .forgot-link:hover { text-decoration: underline; }
+
+  .btn-signin {
+    width: 100%; border: none; cursor: pointer; border-radius: 10px;
+    padding: 14px 18px; font-size: 14.5px; font-weight: 800; font-family: inherit;
+    background: linear-gradient(90deg, #fce794, #d4a340 55%, #c49332);
+    color: #000000;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    box-shadow: 0 10px 28px rgba(212, 163, 64, .25);
+    letter-spacing: 0.02em;
+  }
+  .btn-signin:hover { transform: translateY(-1px); box-shadow: 0 14px 34px rgba(212, 163, 64, .45); }
+  .btn-signin:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+
+  .error-msg { color: #f87171; font-size: 12.5px; min-height: 18px; margin-top: 10px; font-weight: 600; }
+
+  .divider { display: flex; align-items: center; gap: 14px; margin: 26px 0 18px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.08); }
+  .divider span { font-size: 10.5px; letter-spacing: .14em; color: var(--muted); font-weight: 700; white-space: nowrap; }
+
+  .sso-single-wrap { margin-bottom: 24px; }
+  .sso-google-btn {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 11px;
+    padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03); color: #ffffff; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all .2s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4);
+    position: relative;
+  }
+  .sso-google-btn:hover {
+    background: rgba(255,255,255,.07);
+    border-color: rgba(212, 163, 64, .5);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 163, 64, .25);
+  }
+  .badge-sso-verified {
+    margin-left: auto; font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
+    background: var(--gold-subtle); color: var(--gold); border: 1px solid var(--gold-border);
+    padding: 2px 7px; border-radius: 20px; font-weight: 700;
+  }
+
+  /* Google OAuth Workspace Modal (Pure Black & Gold) */
+  .g-modal-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0, 0, 0, .88); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .g-modal-overlay.open { display: flex; }
+  .g-modal-card {
+    background: linear-gradient(180deg, #141414 0%, #050505 100%);
+    border: 1px solid var(--gold-border);
+    border-radius: 18px; width: 100%; max-width: 440px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.9), 0 0 40px rgba(212, 163, 64, .15);
+    overflow: hidden; display: flex; flex-direction: column;
+    animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideUpModal { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .g-modal-header {
+    padding: 24px 26px 16px; border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex; flex-direction: column; align-items: center; text-align: center; position: relative;
+  }
+  .g-modal-close {
+    position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted);
+    cursor: pointer; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; transition: background .15s ease, color .15s ease;
+  }
+  .g-modal-close:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .g-modal-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .g-modal-title { font-size: 17px; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+  .g-modal-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .g-account-list { max-height: 290px; overflow-y: auto; padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .g-account-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+    border-radius: 10px; cursor: pointer; transition: all .15s ease;
+    border: 1px solid transparent; width: 100%; text-align: left; background: transparent; font-family: inherit;
+  }
+  .g-account-item:hover {
+    background: var(--gold-subtle);
+    border-color: var(--gold-border);
+  }
+  .g-avatar {
+    width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; color: #000000; flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,.4);
+    background: linear-gradient(135deg, #fce794, #d4a340);
+  }
+  .g-acc-info { flex: 1; min-width: 0; }
+  .g-acc-name { font-size: 13px; font-weight: 600; color: #ffffff; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .g-acc-email { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .g-role-pill { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600; background: rgba(255,255,255,.08); color: var(--gold); border: 1px solid rgba(212, 163, 64, 0.25); }
+  .g-modal-footer {
+    padding: 14px 20px 18px; border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(0,0,0,.4); display: flex; flex-direction: column; gap: 10px;
+  }
+  .g-custom-row { display: flex; gap: 8px; }
+  .g-custom-input {
+    flex: 1; background: rgba(255,255,255,.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #ffffff; outline: none; font-family: inherit;
+  }
+  .g-custom-input:focus { border-color: var(--gold); }
+  .g-custom-btn {
+    background: var(--gold); color: #000000; border: none; border-radius: 8px;
+    padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit;
+  }
+  .g-custom-btn:hover { background: var(--gold-bright); }
+  .g-footer-note { font-size: 10.5px; color: var(--muted); text-align: center; }
+
+  .signup-line { font-size: 12.5px; color: var(--muted); text-align: center; }
+  .signup-line a { color: var(--gold); text-decoration: none; font-weight: 600; cursor: pointer; }
+  .signup-line a:hover { text-decoration: underline; }
+
+  .demo-toggle { text-align: center; margin-top: 16px; }
+  .demo-toggle button { background: none; border: none; color: var(--muted); font-size: 11.5px; cursor: pointer; font-family: inherit; text-decoration: underline; }
+  .demo-toggle button:hover { color: var(--gold); }
+  .demo-list { margin-top: 10px; display: none; gap: 6px; flex-direction: column; }
+  .demo-list.open { display: flex; }
+  .demo-list button {
+    display: flex; justify-content: space-between; width: 100%; text-align: left;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d4;
+    padding: 7px 10px; border-radius: 7px; font-size: 11.5px; cursor: pointer; font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .demo-list button:hover { border-color: var(--gold-border); background: var(--gold-subtle); color: #ffffff; }
+  .demo-list button span:last-child { color: var(--gold); font-weight: 700; }
+
+  .side-strip {
+    position: absolute; right: 16px; top: 0; bottom: 0; width: 34px;
+    display: flex; align-items: center; justify-content: center; z-index: 3; opacity: .9;
+  }
+  .side-strip span {
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-size: 11px; letter-spacing: .32em; color: rgba(212, 163, 64, .35); font-weight: 800;
+  }
+  .auth-loading {
+    position: absolute; inset: 0; z-index: 3;
+    display: none; align-items: center; justify-content: center; flex-direction: column; gap: 18px;
+    text-align: center; padding: 0 60px; background: #000000;
+  }
+  .auth-loading.show { display: flex; }
+  .spinner-ring {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 3px solid rgba(212, 163, 64, .18); border-top-color: var(--gold);
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .auth-loading .msg1 { font-size: 18px; font-weight: 700; color: #ffffff; }
+  .auth-loading .msg2 { font-size: 13px; color: var(--muted); }
+
+  .panel-form-wrap { transition: opacity .3s ease, transform .3s ease; }
+  .panel-form-wrap.fading { opacity: 0; transform: translateY(8px); pointer-events: none; }
+  .final-fade {
+    position: fixed; inset: 0; background: #000000; opacity: 0; pointer-events: none; z-index: 100;
+    transition: opacity .35s ease;
+  }
+  .final-fade.on { opacity: 1; pointer-events: all; }
+
+  @media (max-width: 980px) {
+    .top-nav { display: none; }
+    .hero-content h1 { font-size: 40px; }
+    .feature-row { flex-wrap: wrap; row-gap: 16px; }
+    .panel-outer { flex-basis: 100%; min-width: 100%; max-width: 100%; }
+    .hero { display: none; }
+    .brand-tagline { display: none; }
+    .panel-body { padding: 0 24px; }
+  }
+
+  /* Seamless Portal Entrance Veil */
+  .login-entrance-veil {
+    position: fixed; inset: 0; background: #000000; z-index: 99999;
+    opacity: 1; pointer-events: none;
+    transition: opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .login-entrance-veil.is-dissolved {
+    opacity: 0;
+  }
+  .app {
+    transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), filter 0.42s ease;
+  }
+  .app.settling {
+    transform: scale(0.99);
+    filter: blur(2px);
+  }
+
+
+  /* Custom Minimalist Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #000000; }
+  ::-webkit-scrollbar-thumb { background: #222222; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+  * { scrollbar-width: thin; scrollbar-color: #222222 #000000; }
+
+  /* Hardware Acceleration */
+  .panel-outer, .hero, .btn-signin, .sso-google-btn {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+</style>
+</head>
+<body>
+<div class="login-entrance-veil" id="loginEntranceVeil"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <clipPath id="panelCurve" clipPathUnits="objectBoundingBox">
+      <path d="M0.30,0
+               C0.02,0.14 0.58,0.27 0.34,0.42
+               C0.06,0.58 0.60,0.74 0.32,1
+               L1,1 L1,0 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- Top Bar -->
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <a href="/" style="text-decoration:none; display:flex; align-items:center; gap:14px; color:inherit;">
+        <div class="logo-mark">M</div>
+        <div class="brand-text">
+          <div class="name">MEIL</div>
+          <div class="sub">ESG COMMAND CENTER</div>
+        </div>
+      </a>
+      <div class="brand-tagline">Engineering<br><b>a Sustainable Tomorrow</b></div>
+    </div>
+    <nav class="top-nav" style="display:flex; align-items:center; gap:20px;">
+      <a href="/" class="btn-back-home">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block; vertical-align:middle; margin-right:4px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> <span>Back to MEIL Corporate Home</span>
+      </a>
+      <span class="active">PEOPLE</span><span>|</span><span>PLANET</span><span>|</span><span>PROGRESS</span>
+    </nav>
+  </header>
+
+  <!-- Left Hero Scene (Illustration in Pure Jet Black & Golden Glow) -->
+  <section class="hero" id="hero">
+    <div class="hero-scene">
+      <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#141414"/>
+            <stop offset="50%" stop-color="#090909"/>
+            <stop offset="100%" stop-color="#000000"/>
+          </linearGradient>
+          <linearGradient id="glowRoad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#d4a340" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#fce794" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#d4a340" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="1000" height="1000" fill="url(#sky)"/>
+      
+        <path d="M0,560 Q150,500 300,540 T600,520 T1000,560 L1000,1000 L0,1000 Z" fill="#181818" opacity="0.95"/>
+        <path d="M0,620 Q200,570 420,610 T1000,600 L1000,1000 L0,1000 Z" fill="#101010"/>
+        
+        <path d="M0,760 Q220,700 380,780 T760,760 Q880,740 1000,790 L1000,1000 L0,1000 Z" fill="#0a0a0a" opacity="0.9"/>
+        
+        <g fill="#060606" opacity="0.95">
+          <ellipse cx="90" cy="640" rx="70" ry="46"/>
+          <ellipse cx="180" cy="660" rx="90" ry="58"/>
+          <ellipse cx="60" cy="690" rx="60" ry="40"/>
+          <ellipse cx="900" cy="650" rx="90" ry="55"/>
+          <ellipse cx="970" cy="690" rx="70" ry="45"/>
+        </g>
+      
+        <g fill="#030303">
+          <rect x="330" y="640" width="14" height="130"/>
+          <rect x="470" y="610" width="14" height="160"/>
+          <rect x="610" y="580" width="14" height="190"/>
+        </g>
+        
+        <path d="M60,470 C260,430 300,560 480,600 C660,640 700,540 940,560"
+              fill="none" stroke="#1c1c1c" stroke-width="26" stroke-linecap="round"/>
+        <path d="M60,470 C260,430 300,560 480,600 C660,640 700,540 940,560"
+              fill="none" stroke="url(#glowRoad)" stroke-width="3.5" stroke-linecap="round" opacity="0.95"/>
+        <path d="M60,470 C260,430 300,560 480,600 C660,640 700,540 940,560"
+              fill="none" stroke="#fff3c4" stroke-width="1.2" stroke-dasharray="10 14" opacity="0.45"/>
+
+        <g id="marker-people">
+          <line x1="330" y1="470" x2="330" y2="420" stroke="rgba(252,231,148,.6)" stroke-width="1.5"/>
+          <circle cx="330" cy="470" r="5" fill="#fce794"/>
+        </g>
+        <g id="marker-planet">
+          <line x1="520" y1="605" x2="520" y2="470" stroke="rgba(252,231,148,.6)" stroke-width="1.5"/>
+          <circle cx="520" cy="605" r="5" fill="#fce794"/>
+        </g>
+        <g id="marker-progress">
+          <line x1="760" y1="555" x2="760" y2="500" stroke="rgba(252,231,148,.6)" stroke-width="1.5"/>
+          <circle cx="760" cy="555" r="5" fill="#fce794"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-vignette"></div>
+
+    <div class="hero-content">
+      <div class="eyebrow">SUSTAINABLE INFRASTRUCTURE</div>
+      <h1>Bigger<br>Projects.<br><span class="accent">Brighter<br>Tomorrows.</span></h1>
+      <div class="hero-sub">Data. Decisions. Impact.<br>All in one place.</div>
+      <div class="feature-row">
+        <div class="feature">
+          <div class="ficon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fce794" stroke-width="2"><path d="M12 2C7 6 5 10 5 14a7 7 0 0014 0c0-4-2-8-7-12z"/></svg>
+          </div>
+          <div class="flabel">Cleaner<br>Environment</div>
+        </div>
+        <div class="feature">
+          <div class="ficon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fce794" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M15.5 14.2c2.4.3 4.5 2.3 4.5 5.8"/></svg>
+          </div>
+          <div class="flabel">Stronger<br>Communities</div>
+        </div>
+        <div class="feature">
+          <div class="ficon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fce794" stroke-width="2"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+          </div>
+          <div class="flabel">Sustainable<br>Growth</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-footer">
+      <div>
+        <div class="step-num" style="margin-bottom:8px;">01&nbsp;&nbsp;&nbsp;02&nbsp;&nbsp;&nbsp;03</div>
+        <div class="step-dots">
+          <div class="bar on"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+      </div>
+      <div class="step-caption">Transforming Infrastructure for a Better Planet</div>
+    </div>
+  </section>
+
+  <!-- Right Curved Panel (Pure Black & Gold) -->
+  <section class="panel-outer" id="panelOuter">
+    <div class="panel-clip"></div>
+    <div class="panel-edge-glow"></div>
+
+    <div class="side-strip"><span>FOR GENERATIONS</span></div>
+
+    <div class="panel-body">
+      <div class="panel-form-wrap" id="formWrap">
+        <div class="welcome-eyebrow">Welcome to</div>
+        <div class="welcome-title">MEIL</div>
+        <div class="welcome-sub-title">ESG COMMAND CENTER</div>
+        <div class="welcome-desc">Sign in to continue your impact journey</div>
+
+        <form id="loginForm">
+          <div class="form-field">
+            <label>Email</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+              <input type="text" id="username" placeholder="yourname@meil.com" autocomplete="username" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+              <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+              <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Toggle password view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeIcon"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-between">
+            <label class="remember"><input type="checkbox" checked> Remember me</label>
+            <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-signin" id="signInBtn">
+            <span id="signInLabel">Sign In</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <div class="error-msg" id="errorMsg"></div>
+        </form>
+
+        <div class="divider"><span>OR CONTINUE WITH</span></div>
+        <div class="sso-single-wrap">
+          <button type="button" class="sso-google-btn" id="googleBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.4 21.3 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.4 14.3c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3V6.6H1.4C.5 8.3 0 10.1 0 12s.5 3.7 1.4 5.4l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.4 6.6l4 3.1c.9-2.8 3.5-4.9 6.6-4.9z"/></svg>
+            <span>Continue with Google Workspace</span>
+            <span class="badge-sso-verified">Verified SSO</span>
+          </button>
+        </div>
+
+        <div class="signup-line">Don't have an account? <a id="contactAdminLink">Contact Admin</a></div>
+
+        <div class="demo-toggle">
+          <button type="button" id="demoToggleBtn">View demo credentials</button>
+          <div class="demo-list" id="demoList">
+            <button type="button" data-u="group.admin"><span>Group Administrator</span><span>HQ Conglomerate · 42 Subs</span></button>
+            <button type="button" data-u="sustain.lead"><span>Sustainability Lead</span><span>Group Targets &amp; Strategy</span></button>
+            <button type="button" data-u="ehs.owner"><span>EHS &amp; Fuels Officer</span><span>Principle 6 · Scope 1 &amp; 2 GHG</span></button>
+            <button type="button" data-u="hr.owner"><span>HR &amp; Social Lead</span><span>Section A · Diversity &amp; POSH</span></button>
+            <button type="button" data-u="plant.owner"><span>Plant Site Owner</span><span>Plant 1 EV Complex Site Desk</span></button>
+            <button type="button" data-u="auditor"><span>Statutory ESG Auditor</span><span>Assurance Desk &amp; SHA-256 Seal</span></button>
+            <button type="button" data-u="mgmt.viewer"><span>Management Viewer</span><span>Boardroom Dossier (Read-Only)</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-loading" id="authLoading">
+        <div class="spinner-ring"></div>
+        <div class="msg1" id="loadingMsg1">Welcome back!</div>
+        <div class="msg2" id="loadingMsg2">Loading your tailored workspace…</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="final-fade" id="finalFade"></div>
+
+<!-- Google Workspace SSO Modal (Pure Black & Gold Theme) -->
+<div class="g-modal-overlay" id="googleAuthModal">
+  <div class="g-modal-card">
+    <div class="g-modal-header">
+      <button type="button" class="g-modal-close" id="gModalClose" title="Close" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="g-modal-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.4 21.3 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.4 14.3c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3V6.6H1.4C.5 8.3 0 10.1 0 12s.5 3.7 1.4 5.4l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.4 6.6l4 3.1c.9-2.8 3.5-4.9 6.6-4.9z"/></svg>
+        <span style="font-size:14px; font-weight:700; color:#ffffff; letter-spacing:.02em;">Google Workspace SSO</span>
+      </div>
+      <div class="g-modal-title">Choose an enterprise account</div>
+      <div class="g-modal-sub">to sign in to MEIL Enterprise ESG Reporting &amp; Assurance Portal</div>
+    </div>
+    
+    <div class="g-account-list">
+      <button type="button" class="g-account-item" data-email="group.admin@meil.com" data-name="Ramesh Kumar" data-user="group.admin">
+        <div class="g-avatar">RK</div>
+        <div class="g-acc-info">
+          <div class="g-acc-name">Ramesh Kumar <span class="g-role-pill">Group Admin</span></div>
+          <div class="g-acc-email">group.admin@meil.com</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <button type="button" class="g-account-item" data-email="plant.owner@meil.com" data-name="Vikram Singh" data-user="plant.owner">
+        <div class="g-avatar">VS</div>
+        <div class="g-acc-info">
+          <div class="g-acc-name">Vikram Singh <span class="g-role-pill">Plant Owner</span></div>
+          <div class="g-acc-email">plant.owner@meil.com</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <button type="button" class="g-account-item" data-email="ehs.owner@meil.com" data-name="Priya Nair" data-user="ehs.owner">
+        <div class="g-avatar">PN</div>
+        <div class="g-acc-info">
+          <div class="g-acc-name">Priya Nair <span class="g-role-pill">EHS Officer</span></div>
+          <div class="g-acc-email">ehs.owner@meil.com</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <button type="button" class="g-account-item" data-email="hr.owner@meil.com" data-name="Suresh Reddy" data-user="hr.owner">
+        <div class="g-avatar">SR</div>
+        <div class="g-acc-info">
+          <div class="g-acc-name">Suresh Reddy <span class="g-role-pill">HR Lead</span></div>
+          <div class="g-acc-email">hr.owner@meil.com</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <button type="button" class="g-account-item" data-email="auditor@bsr.in" data-name="CA Anand Sharma" data-user="auditor">
+        <div class="g-avatar">AS</div>
+        <div class="g-acc-info">
+          <div class="g-acc-name">CA Anand Sharma <span class="g-role-pill">Statutory Auditor</span></div>
+          <div class="g-acc-email">auditor@bsr.in</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <button type="button" class="g-account-item" data-email="board.viewer@meil.com" data-name="Arjun Menon" data-user="mgmt.viewer">
+        <div class="g-avatar">AM</div>
+        <div class="g-acc-info">
+          <div class="g-acc-name">Arjun Menon <span class="g-role-pill">Board / Mgmt</span></div>
+          <div class="g-acc-email">board.viewer@meil.com</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="g-modal-footer">
+      <div style="font-size:11px; color:var(--muted); font-weight:600;">Or use another corporate Google ID:</div>
+      <div class="g-custom-row">
+        <input type="email" class="g-custom-input" id="gCustomEmail" placeholder="e.g. yourname@meil.com" />
+        <button type="button" class="g-custom-btn" id="gCustomSubmit">Authorize</button>
+      </div>
+      <div class="g-footer-note">Secured via Google OAuth 2.0 PKCE &amp; MEIL SAML SSO Federation</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function getLandingPage(user) {
+  if (!user) return "/pages/dashboard.html";
+  const role = user.role || "";
+  const username = user.username || "";
+  if (role === "Auditor" || username.includes("auditor")) return "/pages/portal-auditor.html";
+  if (role === "Plant/Project Owner" || username.includes("plant")) return "/pages/portal-plant.html";
+  if (username.includes("ehs")) return "/pages/portal-ehs.html";
+  if (username.includes("hr")) return "/pages/portal-hr.html";
+  if (role === "Management Viewer" || username.includes("mgmt")) return "/pages/portal-board.html";
+  return "/pages/dashboard.html";
+}
+
+document.getElementById("demoToggleBtn").addEventListener("click", () => {
+  document.getElementById("demoList").classList.toggle("open");
+});
+document.querySelectorAll("#demoList button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("username").value = btn.dataset.u;
+    document.getElementById("password").value = "demo123";
+  });
+});
+
+document.getElementById("eyeToggle").addEventListener("click", () => {
+  const pwd = document.getElementById("password");
+  const showing = pwd.type === "text";
+  pwd.type = showing ? "password" : "text";
+});
+
+document.getElementById("forgotLink").addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("errorMsg").textContent = "Password resets are handled by your Group Admin in this demo.";
+});
+document.getElementById("contactAdminLink").addEventListener("click", () => {
+  document.getElementById("errorMsg").textContent = "New accounts are provisioned by your Group Admin — see Admin panel once signed in.";
+});
+
+// Google Workspace SSO Modal Handling
+const gModal = document.getElementById("googleAuthModal");
+const gBtn = document.getElementById("googleBtn");
+const gClose = document.getElementById("gModalClose");
+const gCustomSubmit = document.getElementById("gCustomSubmit");
+const gCustomEmail = document.getElementById("gCustomEmail");
+
+if (gBtn) {
+  gBtn.addEventListener("click", () => {
+    gModal.classList.add("open");
+  });
+}
+if (gClose) {
+  gClose.addEventListener("click", () => {
+    gModal.classList.remove("open");
+  });
+}
+if (gModal) {
+  gModal.addEventListener("click", (e) => {
+    if (e.target === gModal) gModal.classList.remove("open");
+  });
+}
+
+async function authenticateWithGoogle(payload) {
+  gModal.classList.remove("open");
+  const errorMsg = document.getElementById("errorMsg");
+  const btn = document.getElementById("signInBtn");
+  const label = document.getElementById("signInLabel");
+  errorMsg.textContent = "";
+  btn.disabled = true;
+  label.textContent = "Google SSO…";
+
+  try {
+    const res = await fetch("/api/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errorMsg.textContent = data.error || "Google SSO authentication failed";
+      btn.disabled = false;
+      label.textContent = "Sign In";
+      return;
+    }
+    playLoginAnimation(data.user);
+  } catch (err) {
+    errorMsg.textContent = "Could not connect to Google SSO auth endpoint.";
+    btn.disabled = false;
+    label.textContent = "Sign In";
+  }
+}
+
+document.querySelectorAll(".g-account-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const email = item.dataset.email;
+    const name = item.dataset.name;
+    const username = item.dataset.user;
+    authenticateWithGoogle({ email, name, username });
+  });
+});
+
+if (gCustomSubmit) {
+  gCustomSubmit.addEventListener("click", () => {
+    const email = gCustomEmail.value.trim();
+    if (!email || !email.includes("@")) {
+      alert("Please enter a valid corporate email address.");
+      return;
+    }
+    const namePart = email.split("@")[0].replace(".", " ");
+    const formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    authenticateWithGoogle({ email, name: formattedName });
+  });
+  gCustomEmail.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      gCustomSubmit.click();
+    }
+  });
+}
+
+function playLoginAnimation(user) {
+  document.getElementById("topbar").style.opacity = "0";
+  document.getElementById("hero").style.opacity = "0";
+  document.getElementById("hero").style.filter = "blur(6px)";
+
+  const formWrap = document.getElementById("formWrap");
+  const loading = document.getElementById("authLoading");
+  const panelOuter = document.getElementById("panelOuter");
+
+  formWrap.classList.add("fading");
+  setTimeout(() => {
+    const firstName = user && user.name ? user.name.split(" ")[0] : "";
+    document.getElementById("loadingMsg1").textContent = firstName ? `Welcome back, ${firstName}!` : "Welcome back!";
+    document.getElementById("loadingMsg2").textContent = `Loading ${user && user.role ? user.role : 'Command Center'} workspace…`;
+    loading.classList.add("show");
+    panelOuter.style.flexBasis = "100%";
+    panelOuter.style.minWidth = "100%";
+    panelOuter.style.maxWidth = "100%";
+  }, 260);
+
+  setTimeout(() => {
+    document.getElementById("finalFade").classList.add("on");
+  }, 1050);
+
+  setTimeout(() => {
+    window.location.href = getLandingPage(user);
+  }, 1400);
+}
+
+// ---------- login submit ----------
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
+  const errorMsg = document.getElementById("errorMsg");
+  const btn = document.getElementById("signInBtn");
+  const label = document.getElementById("signInLabel");
+  errorMsg.textContent = "";
+  btn.disabled = true;
+  label.textContent = "Signing in…";
+
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errorMsg.textContent = data.error || "Login failed";
+      btn.disabled = false;
+      label.textContent = "Sign In";
+      return;
+    }
+    playLoginAnimation(data.user);
+  } catch (err) {
+    errorMsg.textContent = "Could not reach server.";
+    btn.disabled = false;
+    label.textContent = "Sign In";
+  }
+});
+
+// If already logged in, skip straight to appropriate landing page
+fetch("/api/me").then(r => r.json()).then(data => {
+  if (data && data.user) window.location.href = getLandingPage(data.user);
+}).catch(() => {});
+
+// Seamless Entrance Dissolve & Back Navigation
+(function() {
+  const veil = document.getElementById('loginEntranceVeil');
+  const app = document.getElementById('app');
+
+  if (app) app.classList.add('settling');
+
+  window.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if (veil) veil.classList.add('is-dissolved');
+        if (app) app.classList.remove('settling');
+      }, 60);
+    });
+  });
+
+  // Smooth back-to-landing transitions
+  document.querySelectorAll('a[href="/"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      if (e.ctrlKey || e.shiftKey || e.metaKey || e.button === 1) return;
+      e.preventDefault();
+      if (veil) veil.classList.remove('is-dissolved');
+      if (app) app.classList.add('settling');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 380);
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

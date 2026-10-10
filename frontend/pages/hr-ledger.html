@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workforce &amp; Social Ledger (Principle 3) — HR Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background: #0f0b14; }
+  .page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(192, 132, 252, 0.15);
+  }
+  .hr-hero-card {
+    background: linear-gradient(135deg, #181024 0%, #221434 100%);
+    border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 12px;
+    padding: 22px; margin-bottom: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
+  @media(max-width: 960px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  .metric-card {
+    background: #140d1e; border: 1px solid rgba(192, 132, 252, 0.15);
+    border-radius: 8px; padding: 14px;
+  }
+  .filter-pill {
+    background: rgba(192, 132, 252, 0.06); border: 1px solid rgba(192, 132, 252, 0.2);
+    color: #e9d5ff; padding: 6px 14px; border-radius: 20px; font-size: 12px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-pill.active, .filter-pill:hover {
+    background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #c084fc;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main-content" style="padding: 26px 32px; overflow-y: auto;">
+    
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#c084fc; letter-spacing:0.06em; text-transform:uppercase;">
+          HR Operational Desk · Section A &amp; Principle 3 Social Ledger
+        </div>
+        <h1 style="font-size:24px; font-weight:800; color:#fff; margin:4px 0;">Workforce Demographics &amp; Social Governance Ledger</h1>
+        <div style="font-size:13px; color:#8c8c94;">
+          Permanent and contractual workforce metrics, gender diversity ratios, wage equality &amp; OHS safety performance.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="hr-posh.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 14px;">POSH Desk</a>
+        <a href="ai-hr.html" class="btn btn-primary" style="background:#c084fc; color:#120721; font-weight:700; font-size:12.5px; padding:8px 16px;">🤖 HR AI Copilot</a>
+      </div>
+    </div>
+
+    <!-- Hero Card -->
+    <div class="hr-hero-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-size:11px; font-weight:800; background:#c084fc; color:#120721; padding:3px 8px; border-radius:4px;">
+            SEBI BRSR CORE SOCIAL INDICATORS 2 &amp; 3
+          </span>
+          <h2 style="font-size:20px; font-weight:800; color:#fff; margin:8px 0 2px;">Total Consolidated Workforce: 1,240 Personnel</h2>
+          <div style="font-size:12.5px; color:#c4b5fd;">Chief People Officer: <strong>Sneha Roy</strong> · Audited Biometric Roll for Q3 FY25</div>
+        </div>
+        <button class="btn btn-secondary" onclick="exportHrCsv()" style="font-size:12px; padding:8px 14px;">
+          ⬇️ Export Social CSV
+        </button>
+      </div>
+
+      <div class="grid-4">
+        <div class="metric-card">
+          <div style="font-size:11px; color:#a78bfa; text-transform:uppercase; font-weight:700;">Permanent Employees</div>
+          <div style="font-size:22px; font-weight:800; color:#fff; margin:4px 0;">480 (38.7%)</div>
+          <div style="font-size:11.5px; color:#c084fc;">395 Male · 85 Female (17.7%)</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:11px; color:#a78bfa; text-transform:uppercase; font-weight:700;">Contractual Workforce</div>
+          <div style="font-size:22px; font-weight:800; color:#f43f5e; margin:4px 0;">760 (61.3%)</div>
+          <div style="font-size:11.5px; color:#f43f5e;">653 Male · 107 Female (14.1%)</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:11px; color:#a78bfa; text-transform:uppercase; font-weight:700;">Gender Parity Ratio</div>
+          <div style="font-size:22px; font-weight:800; color:#34d399; margin:4px 0;">0.96 : 1.00</div>
+          <div style="font-size:11.5px; color:#34d399;">Equal basic pay benchmarked</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:11px; color:#a78bfa; text-transform:uppercase; font-weight:700;">Safety Performance</div>
+          <div style="font-size:22px; font-weight:800; color:#60a5fa; margin:4px 0;">0 Fatalities · 0.12 LTIFR</div>
+          <div style="font-size:11.5px; color:#60a5fa;">42.5 hrs safety training/worker</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; gap:8px;">
+        <button class="filter-pill active" onclick="filterTable('ALL')">All Demographic Categories (6)</button>
+        <button class="filter-pill" onclick="filterTable('PERM')">Permanent Staff</button>
+        <button class="filter-pill" onclick="filterTable('CONT')">Contractual Workers</button>
+        <button class="filter-pill" onclick="filterTable('SAFETY')">Safety &amp; Training</button>
+      </div>
+      <div style="font-size:12px; color:#c4b5fd;">
+        Statutory Verification: <strong>EPFO ECR &amp; ESIC Reconciled</strong>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card" style="padding:0; overflow:hidden; border:1px solid rgba(192, 132, 252, 0.15); background:#110b1a;">
+      <table style="width:100%; border-collapse:collapse; font-size:12.5px; text-align:left;">
+        <thead>
+          <tr style="background:#181024; border-bottom:1px solid rgba(192, 132, 252, 0.2); color:#e9d5ff; text-transform:uppercase; font-size:11px;">
+            <th style="padding:12px 16px;">SEBI BRSR Indicator</th>
+            <th style="padding:12px 16px;">Employee Category</th>
+            <th style="padding:12px 16px;">Total Count</th>
+            <th style="padding:12px 16px;">Male (No. &amp; %)</th>
+            <th style="padding:12px 16px;">Female (No. &amp; %)</th>
+            <th style="padding:12px 16px;">Median Remuneration Ratio</th>
+            <th style="padding:12px 16px;">Assurance Status</th>
+          </tr>
+        </thead>
+        <tbody id="hrTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+let hrData = [
+  { id: 1, type: "PERM", ind: "P3.1 Gender Breakdown", cat: "Permanent Executives & Management", total: "120", male: "92 (76.7%)", female: "28 (23.3%)", ratio: "0.98 : 1.00", status: "Verified" },
+  { id: 2, type: "PERM", ind: "P3.1 Gender Breakdown", cat: "Permanent Technical & Engineers", total: "240", male: "205 (85.4%)", female: "35 (14.6%)", ratio: "0.96 : 1.00", status: "Verified" },
+  { id: 3, type: "PERM", ind: "P3.1 Gender Breakdown", cat: "Permanent Plant Operators", total: "120", male: "98 (81.7%)", female: "22 (18.3%)", ratio: "0.95 : 1.00", status: "Verified" },
+  { id: 4, type: "CONT", ind: "P3.2 Contract Labour", cat: "EPC Site Contractual Technicians", total: "420", male: "365 (86.9%)", female: "55 (13.1%)", ratio: "1.00 : 1.00 (Govt Scale)", status: "Verified" },
+  { id: 5, type: "CONT", ind: "P3.2 Contract Labour", cat: "Site Logistics & Material Handlers", total: "340", male: "288 (84.7%)", female: "52 (15.3%)", ratio: "1.00 : 1.00 (Govt Scale)", status: "Verified" },
+  { id: 6, type: "SAFETY", ind: "P3.3 OHS & Induction", cat: "Mandatory Safety Training Roster", total: "1,240 covered", male: "1,048 (100%)", female: "192 (100%)", ratio: "42.5 Avg Hours / Worker", status: "Verified" }
+];
+
+let activeFilter = 'ALL';
+
+(async () => {
+  const user = await initLayout("hr-ledger.html");
+  if (!user) return;
+  renderTable();
+})();
+
+function filterTable(type) {
+  activeFilter = type;
+  document.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+  event.target.classList.add("active");
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.getElementById("hrTableBody");
+  const filtered = activeFilter === 'ALL' ? hrData : hrData.filter(d => d.type === activeFilter);
+  tbody.innerHTML = filtered.map(row => `
+    <tr style="border-bottom:1px solid rgba(192, 132, 252, 0.08); transition:background 0.15s;" onmouseover="this.style.background='rgba(192, 132, 252, 0.04)'" onmouseout="this.style.background='transparent'">
+      <td style="padding:12px 16px; font-weight:700; color:#c084fc;">${row.ind}</td>
+      <td style="padding:12px 16px; color:#fff;">${row.cat}</td>
+      <td style="padding:12px 16px; font-weight:700; color:#e2e8f0;">${row.total}</td>
+      <td style="padding:12px 16px; color:#94a3b8;">${row.male}</td>
+      <td style="padding:12px 16px; font-weight:700; color:#f43f5e;">${row.female}</td>
+      <td style="padding:12px 16px; color:#34d399; font-weight:700;">${row.ratio}</td>
+      <td style="padding:12px 16px;">
+        <span style="background:rgba(52,211,153,0.15); color:#34d399; font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px;">✓ ${row.status}</span>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function exportHrCsv() {
+  let csv = "Indicator,Category,Total,Male,Female,Ratio,Status\n";
+  hrData.forEach(r => {
+    csv += `"${r.ind}","${r.cat}","${r.total}","${r.male}","${r.female}","${r.ratio}","${r.status}"\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "MEIL_Principle3_Social_Ledger.csv";
+  a.click();
+  toast("✓ Social Ledger CSV exported successfully!");
+}
+</script>
+</body>
+</html>

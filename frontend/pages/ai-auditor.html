@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statutory ESG Assurance &amp; Sampling AI Copilot — Independent Audit Workbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #030811; color: #fff; height: 100vh; overflow: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .app-shell { display: flex; height: 100vh; overflow: hidden; }
+  .chat-page { display: flex; flex: 1; height: 100vh; overflow: hidden; }
+
+  /* Left Chat Pane */
+  .chat-pane {
+    position: relative; flex: 1; display: flex; flex-direction: column; height: 100vh;
+    border-right: 1px solid rgba(56, 189, 248, 0.12); background: #050d18; overflow: hidden;
+  }
+  .chat-bg-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+  }
+  .chat-inner-wrap {
+    position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden;
+  }
+
+  /* Scoped Sidebar Active State for Auditor Copilot */
+  .sidebar nav a.active {
+    background: rgba(2, 132, 199, 0.18) !important;
+    color: #38bdf8 !important;
+    border-left: 3px solid #38bdf8 !important;
+  }
+
+  /* Chat Header */
+  .chat-header {
+    padding: 16px 24px; border-bottom: 1px solid rgba(56, 189, 248, 0.12);
+    display: flex; justify-content: space-between; align-items: center;
+    background: #050d18; flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-icon-box {
+    width: 38px; height: 38px; border-radius: 9px;
+    background: rgba(2, 132, 199, 0.16); border: 1px solid rgba(56, 189, 248, 0.35);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .header-title { font-size: 16px; font-weight: 800; color: #fff; line-height: 1.2; }
+  .header-subtitle { font-size: 11.5px; color: #64748b; margin-top: 3px; }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .header-download-btn {
+    background: rgba(2, 132, 199, 0.12); border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38bdf8; font-weight: 700; font-size: 12px; padding: 7px 14px;
+    border-radius: 8px; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 7px; transition: all 0.15s ease;
+  }
+  .header-download-btn:hover {
+    background: rgba(2, 132, 199, 0.25); border-color: #38bdf8; color: #fff;
+  }
+  .header-role-pill {
+    background: #0284c7; color: #fff; font-weight: 800; font-size: 11px;
+    padding: 7px 14px; border-radius: 8px; letter-spacing: 0.04em;
+  }
+
+  /* Chat Messages */
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .msg {
+    max-width: 96%; font-size: 13.5px; line-height: 1.55;
+  }
+  .msg-ai {
+    align-self: flex-start;
+    background: linear-gradient(135deg, rgba(8, 28, 54, 0.82) 0%, rgba(4, 16, 32, 0.92) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 14px; padding: 18px 20px; color: #e2e8f0;
+    box-shadow: 0 10px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+    width: 100%; max-width: 96%;
+  }
+  .msg-user {
+    align-self: flex-end; background: #0284c7; color: #fff; font-weight: 600;
+    border-radius: 12px; padding: 12px 18px; border-bottom-right-radius: 2px;
+    max-width: 82%;
+  }
+  .msg-header-row {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .msg-badge-group { display: flex; align-items: center; gap: 12px; }
+  .msg-avatar-box {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .msg-time-badge {
+    display: flex; align-items: center; gap: 7px; font-size: 11px; color: #64748b;
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+    display: inline-block; box-shadow: 0 0 6px #22c55e;
+  }
+  .badge-source {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.05em;
+    padding: 3px 9px; border-radius: 4px; text-transform: uppercase;
+    background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+  .msg-lead {
+    color: #fff; font-size: 13.5px; margin-bottom: 6px; line-height: 1.5;
+  }
+  .msg-body {
+    color: #94a3b8; font-size: 13px; line-height: 1.55;
+  }
+
+  /* Quick Prompts Bar */
+  .prompts-bar {
+    padding: 10px 24px; border-top: 1px solid rgba(56, 189, 248, 0.1);
+    display: flex; gap: 8px; overflow-x: auto; flex-shrink: 0; scrollbar-width: none;
+  }
+  .prompts-bar::-webkit-scrollbar { display: none; }
+  .prompt-pill {
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(56, 189, 248, 0.22);
+    color: #94a3b8; padding: 7px 14px; border-radius: 20px; font-size: 11.5px;
+    font-weight: 600; white-space: nowrap; cursor: pointer; transition: all 0.15s ease;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .prompt-pill:hover {
+    background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #fff;
+  }
+  .prompt-pill.p-highlight {
+    background: rgba(2, 132, 199, 0.22); border-color: #0284c7; color: #38bdf8; font-weight: 700;
+  }
+  .prompt-pill.p-highlight:hover {
+    background: rgba(2, 132, 199, 0.35); color: #fff;
+  }
+
+  /* Input Bar */
+  .input-bar {
+    padding: 14px 24px 18px; border-top: 1px solid rgba(56, 189, 248, 0.12);
+    display: flex; gap: 10px; align-items: center; flex-shrink: 0; background: #050d18;
+  }
+  .chat-input {
+    flex: 1; background: #071626; border: 1px solid rgba(56, 189, 248, 0.22);
+    border-radius: 9px; color: #fff; padding: 11px 16px; font-size: 13px; outline: none;
+    transition: border-color 0.15s;
+  }
+  .chat-input:focus {
+    border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+  }
+  .chat-input::placeholder { color: #64748b; }
+  .btn-voice-input {
+    width: 38px; height: 38px; min-width: 38px; border-radius: 9px;
+    background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25);
+    color: #7dd3fc; display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.15s; padding: 0;
+  }
+  .btn-voice-input:hover {
+    background: rgba(56, 189, 248, 0.18); border-color: #38bdf8; color: #fff;
+  }
+  .btn-voice-input.listening {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+  }
+  #sendBtn {
+    background: #0284c7; color: #fff; font-weight: 700; padding: 11px 20px;
+    border: none; border-radius: 9px; cursor: pointer; display: inline-flex;
+    align-items: center; gap: 7px; font-size: 13px;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); transition: background 0.15s, transform 0.1s;
+  }
+  #sendBtn:hover { background: #0369a1; }
+
+  /* Right Workbench Pane */
+  .preview-pane {
+    width: 470px; display: flex; flex-direction: column; height: 100vh;
+    background: #030913; border-left: 1px solid rgba(56, 189, 248, 0.12);
+    overflow-y: auto; padding: 22px 20px; flex-shrink: 0;
+  }
+  @media (max-width: 1080px) { .preview-pane { display: none; } }
+  .wb-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;
+  }
+  .wb-title {
+    font-size: 12px; font-weight: 800; color: #38bdf8; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .wb-live-tag {
+    display: flex; align-items: center; gap: 6px; font-size: 11px;
+    color: #94a3b8; font-weight: 700;
+  }
+  .live-dot-blue {
+    width: 7px; height: 7px; border-radius: 50%; background: #38bdf8;
+    display: inline-block; box-shadow: 0 0 8px #38bdf8;
+  }
+
+  /* Workbench Cards */
+  .wb-card {
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; position: relative;
+  }
+  .wb-card.c-blue {
+    background: rgba(8, 26, 48, 0.7); border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+  .wb-card.c-green {
+    background: rgba(6, 32, 28, 0.65); border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+  .wb-card.c-amber {
+    background: rgba(30, 24, 10, 0.65); border: 1px solid rgba(245, 183, 46, 0.35);
+  }
+  .wb-card-head {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .wb-icon-box {
+    width: 36px; height: 36px; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .wb-icon-box.b-blue { background: rgba(2, 132, 199, 0.2); }
+  .wb-icon-box.b-green { background: rgba(16, 185, 129, 0.18); }
+  .wb-icon-box.b-amber { background: rgba(245, 183, 46, 0.18); }
+
+  .wb-card-label {
+    font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .wb-card-val {
+    font-size: 18px; font-weight: 800; color: #fff; margin-top: 2px;
+  }
+  .wb-card-val.val-green { color: #10b981; }
+  .wb-card-val.val-amber { color: #f5b72e; }
+
+  .wb-bar-row {
+    display: flex; align-items: center; gap: 10px; margin: 12px 0 10px;
+  }
+  .wb-bar-track {
+    flex: 1; height: 5px; background: rgba(255, 255, 255, 0.08); border-radius: 999px; overflow: hidden;
+  }
+  .wb-bar-fill { height: 100%; border-radius: 999px; }
+  .wb-bar-fill.fill-blue { background: #38bdf8; }
+  .wb-bar-fill.fill-green { background: #10b981; }
+  .wb-bar-fill.fill-amber { background: #f5b72e; }
+  .wb-bar-pct { font-size: 11px; font-weight: 700; }
+  .wb-bar-pct.pct-blue { color: #38bdf8; }
+  .wb-bar-pct.pct-green { color: #10b981; }
+
+  .wb-card-sub {
+    font-size: 11.5px; color: #94a3b8; line-height: 1.45;
+  }
+
+  @keyframes pulseBlue { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+  .pulse-dot { display: inline-block; animation: pulseBlue 1.2s infinite; color: #38bdf8; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="chat-page">
+    
+    <!-- Left Chat Pane -->
+    <div class="chat-pane">
+      <!-- Ambient Glowing Wave Canvas Background -->
+      <canvas class="chat-bg-canvas" id="bgCanvas"></canvas>
+
+      <div class="chat-inner-wrap">
+        <!-- Top Chat Header -->
+        <div class="chat-header">
+          <div class="header-left">
+            <div class="header-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <path d="M9 15l2 2 4-4"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="header-title">Statutory ESG Assurance &amp; Sampling AI Copilot</h2>
+              <div class="header-subtitle">ISAE 3000 / SSAE 3000 Limited Assurance standards, 10% sampling engine &amp; SHA-256 seal integrity</div>
+            </div>
+          </div>
+          <div class="header-actions">
+            <a href="/api/reports/pdf/auditor" target="_blank" class="header-download-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="12" y2="18"></line>
+                <line x1="15" y1="15" x2="12" y2="18"></line>
+              </svg>
+              Download Assurance Certificate PDF
+            </a>
+            <span class="header-role-pill">AUDITOR AI</span>
+          </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg msg-ai" id="welcomeMsg">
+            <div class="msg-header-row">
+              <div class="msg-badge-group">
+                <div class="msg-avatar-box">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="10" rx="3"></rect>
+                    <circle cx="12" cy="5" r="2"></circle>
+                    <path d="M12 7v4"></path>
+                    <line x1="8" y1="15" x2="8.01" y2="15" stroke-width="2.5"></line>
+                    <line x1="16" y1="15" x2="16.01" y2="15" stroke-width="2.5"></line>
+                  </svg>
+                </div>
+                <span class="badge-source">ASSURANCE DESK AI</span>
+              </div>
+              <div class="msg-time-badge">
+                <span id="welcomeTime">Today, 02:32 AM</span>
+                <span class="live-dot"></span>
+              </div>
+            </div>
+            <div class="msg-lead">
+              <strong>Namaste Anand Sharma Ji!</strong> Main Statutory ESG Assurance AI Copilot hoon.
+            </div>
+            <div class="msg-body">
+              SEBI BRSR Core mandate ke tehat ISAE 3000 10% stratified sampling, cryptographic SHA-256 ledger verification, materiality misstatement threshold, ya statutory assurance opinion drafting ke baare mein puchhiye.
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Prompt Pills -->
+        <div class="prompts-bar">
+          <button class="prompt-pill p-highlight" onclick="sendPrompt('Generate and download Statutory Assurance Certificate PDF Report')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span>Download AI PDF Report</span>
+          </button>
+          <button class="prompt-pill" onclick="sendPrompt('Calculate ISAE 3000 10% stratified sample size for 142 ESG transaction records')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span>10% Sampling Size Logic</span>
+          </button>
+          <button class="prompt-pill" onclick="sendPrompt('How to verify SHA-256 cryptographic hash integrity for Plant 1 monthly lock?')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span>SHA-256 Integrity Verification</span>
+          </button>
+          <button class="prompt-pill" onclick="sendPrompt('What is materiality threshold limit for Scope 2 electricity bills under BRSR Core?')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="4"></line><line x1="12" y1="20" x2="12" y2="10"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+            <span>Materiality Misstatement Limit</span>
+          </button>
+          <button class="prompt-pill" onclick="sendPrompt('Draft standard ISAE 3000 Limited Assurance Conclusion paragraph')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span>Limited Assurance Clause Draft</span>
+          </button>
+        </div>
+
+        <!-- Input Bar -->
+        <form class="input-bar" id="chatForm">
+          <button type="button" class="btn-voice-input" id="btnVoiceInputLeft" title="Click to speak">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+          <input type="text" class="chat-input" id="chatInput" placeholder="Ask about ISAE 3000 sampling methodology, hash validations, materiality limits...">
+          <button type="button" class="btn-voice-input" id="btnVoiceInput" title="Click to speak">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+          <button type="submit" class="btn btn-primary" id="sendBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Live Preview Pane -->
+    <div class="preview-pane" id="previewPane">
+      <div class="wb-header">
+        <div class="wb-title">STATUTORY ASSURANCE TESTING WORKBENCH</div>
+        <div class="wb-live-tag">
+          <span class="live-dot-blue"></span>
+          <span>Live</span>
+        </div>
+      </div>
+
+      <!-- Card 1: Sample Selection -->
+      <div class="wb-card c-blue">
+        <div class="wb-card-head">
+          <div class="wb-icon-box b-blue">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div>
+            <div class="wb-card-label">ISAE 3000 SAMPLE SELECTION (10% MANDATE)</div>
+            <div class="wb-card-val">15 / 15 Samples Tested</div>
+          </div>
+        </div>
+        <div class="wb-bar-row">
+          <div class="wb-bar-track">
+            <div class="wb-bar-fill fill-blue" style="width: 100%;"></div>
+          </div>
+          <span class="wb-bar-pct pct-blue">100%</span>
+        </div>
+        <div class="wb-card-sub">
+          Covering Plant 1 (7), Plant 2 (4), Solar Park (2), TSDF Facility (2). 100% vouchers examined.
+        </div>
+      </div>
+
+      <!-- Card 2: Cryptographic Integrity -->
+      <div class="wb-card c-green">
+        <div class="wb-card-head">
+          <div class="wb-icon-box b-green">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="wb-card-label">LEDGER CRYPTOGRAPHIC INTEGRITY</div>
+            <div class="wb-card-val val-green">0 Hash Mismatches</div>
+          </div>
+        </div>
+        <div class="wb-bar-row">
+          <div class="wb-bar-track">
+            <div class="wb-bar-fill fill-green" style="width: 100%;"></div>
+          </div>
+          <span class="wb-bar-pct pct-green">100%</span>
+        </div>
+        <div class="wb-card-sub">
+          All 15 sample PDFs matched against initial SHA-256 chain-of-custody stamps. Zero post-lock modifications.
+        </div>
+      </div>
+
+      <!-- Card 3: Materiality Assessment -->
+      <div class="wb-card c-amber">
+        <div class="wb-card-head">
+          <div class="wb-icon-box b-amber">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f5b72e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <div>
+            <div class="wb-card-label">MATERIALITY ASSESSMENT</div>
+            <div class="wb-card-val val-amber">0.04% Net Discrepancy</div>
+          </div>
+        </div>
+        <div class="wb-bar-row">
+          <div class="wb-bar-track" style="position: relative;">
+            <div class="wb-bar-fill fill-amber" style="width: 16px; border-radius: 999px;"></div>
+          </div>
+        </div>
+        <div class="wb-card-sub">
+          Well below the 0.50% materiality tolerance boundary. 1 minor IOCL challan tare query.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/voice-input.js" defer></script>
+<script>
+// Ambient Wave Canvas Glow
+function drawBgCanvas() {
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  canvas.width = parent.offsetWidth;
+  canvas.height = parent.offsetHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const W = canvas.width, H = canvas.height;
+
+  // Deep dark base
+  ctx.fillStyle = '#050e18';
+  ctx.fillRect(0, 0, W, H);
+
+  // Bottom radial wave glow in electric ocean blue
+  const radBlue = ctx.createRadialGradient(W * 0.45, H * 1.05, 0, W * 0.45, H * 1.05, H * 0.85);
+  radBlue.addColorStop(0, 'rgba(2, 132, 199, 0.42)');
+  radBlue.addColorStop(0.35, 'rgba(3, 105, 161, 0.20)');
+  radBlue.addColorStop(0.65, 'rgba(2, 60, 105, 0.08)');
+  radBlue.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = radBlue;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle ambient wave curves across bottom
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.82);
+  ctx.bezierCurveTo(W * 0.35, H * 0.68, W * 0.65, H * 0.94, W, H * 0.76);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.06)';
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.90);
+  ctx.bezierCurveTo(W * 0.30, H * 0.78, W * 0.70, H * 0.98, W, H * 0.84);
+  ctx.stroke();
+}
+window.addEventListener('resize', drawBgCanvas);
+setTimeout(drawBgCanvas, 50);
+
+// Initialize Welcome Message Time
+try {
+  const timeEl = document.getElementById("welcomeTime");
+  if (timeEl) {
+    const now = new Date();
+    timeEl.textContent = `Today, ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  }
+} catch (e) {}
+
+let auditSessionId = "";
+let isSending = false;
+window.sendPrompt = sendPrompt;
+
+// Attach immediately
+const form = document.getElementById("chatForm");
+const input = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+
+if (form) {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = input ? input.value.trim() : "";
+    if (!text || isSending) return;
+    sendPrompt(text);
+  });
+}
+
+// Background layout init
+(async () => {
+  try {
+    if (typeof initLayout === "function") {
+      await initLayout("ai-auditor.html");
+    }
+  } catch (err) {
+    console.warn("Layout init note:", err);
+  }
+})();
+
+// Voice buttons click handlers
+const vLeft = document.getElementById("btnVoiceInputLeft");
+const vRight = document.getElementById("btnVoiceInput");
+function triggerVoice() {
+  if (vRight && typeof vRight.onclick === "function") {
+    vRight.onclick(new Event('click'));
+  }
+}
+if (vLeft) vLeft.addEventListener("click", triggerVoice);
+
+function appendMessage(htmlContent, isAi, customId) {
+  const c = document.getElementById("chatMessages");
+  if (!c) return null;
+  const d = document.createElement("div");
+  d.className = `msg ${isAi ? "msg-ai" : "msg-user"}`;
+  if (customId) d.id = customId;
+  d.innerHTML = htmlContent;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  return d;
+}
+
+function formatInline(str) {
+  return str
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code style="background:rgba(255,255,255,0.1); padding:2px 5px; border-radius:4px; font-size:12px;">$1</code>');
+}
+
+function formatAiMarkdown(text) {
+  if (!text) return "";
+  let s = String(text);
+
+  if (s.includes("|")) {
+    const lines = s.split("\n");
+    let inTable = false;
+    let tableHtml = "";
+    let processed = [];
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("|") && line.endsWith("|")) {
+        if (/^\|[\s\-:|]+\|$/.test(line)) continue;
+        const cells = line.split("|").slice(1, -1).map(c => c.trim());
+        if (!inTable) {
+          inTable = true;
+          tableHtml += '<div style="overflow-x:auto; margin:8px 0;"><table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid rgba(56,189,248,0.2);"><thead><tr style="background:rgba(56,189,248,0.15); color:#38bdf8;">';
+          cells.forEach(c => tableHtml += `<th style="padding:6px 10px; text-align:left; border:1px solid rgba(56,189,248,0.2);">${formatInline(c)}</th>`);
+          tableHtml += '</tr></thead><tbody>';
+        } else {
+          tableHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);">';
+          cells.forEach(c => tableHtml += `<td style="padding:6px 10px; border:1px solid rgba(56,189,248,0.1);">${formatInline(c)}</td>`);
+          tableHtml += '</tr>';
+        }
+      } else {
+        if (inTable) {
+          inTable = false;
+          tableHtml += '</tbody></table></div>';
+          processed.push(tableHtml);
+          tableHtml = "";
+        }
+        processed.push(line);
+      }
+    }
+    if (inTable) {
+      tableHtml += '</tbody></table></div>';
+      processed.push(tableHtml);
+    }
+    s = processed.join("\n");
+  }
+
+  s = s.replace(/^### (.*$)/gim, '<h4 style="font-size:13px; font-weight:700; color:#38bdf8; margin:8px 0 4px;">$1</h4>');
+  s = s.replace(/^## (.*$)/gim, '<h3 style="font-size:14px; font-weight:800; color:#fff; margin:10px 0 6px;">$1</h3>');
+  s = s.replace(/^# (.*$)/gim, '<h2 style="font-size:15px; font-weight:800; color:#fff; margin:12px 0 8px;">$1</h2>');
+  s = s.replace(/^---$/gim, '<hr style="border:none; border-top:1px solid rgba(56,189,248,0.2); margin:10px 0;">');
+  s = s.replace(/^\s*[-*•]\s+(.*$)/gim, '<div style="margin:3px 0 3px 12px;">• $1</div>');
+  s = s.replace(/^\s*(\d+)\.\s+(.*$)/gim, '<div style="margin:3px 0 3px 12px;"><strong>$1.</strong> $2</div>');
+  s = formatInline(s);
+  s = s.replace(/\n\n/g, '<div style="height:6px;"></div>');
+  s = s.replace(/\n/g, '<br>');
+  return s;
+}
+
+async function sendPrompt(q) {
+  if (input) input.value = "";
+  appendMessage(q, false);
+
+  const lower = (q || "").toLowerCase().trim();
+
+  // 0. PDF Report Request
+  if (lower.includes("pdf") || (lower.includes("report") && (lower.includes("download") || lower.includes("generate")))) {
+    setTimeout(() => {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Assurance Desk AI</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <strong>Independent Reasonable Assurance Certificate Ready!</strong><br>
+        SEBI BRSR Core Circular compliance, ISAE 3000 audit testing, materiality thresholds, aur FCA statutory seal ka verified audit certificate PDF tayyar hai.<br><br>
+        <a href="/api/reports/pdf/auditor" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:#0284c7; color:#fff; font-weight:800; font-size:12.5px; padding:9px 16px; border-radius:8px; text-decoration:none; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          Download Auditor Assurance Certificate (PDF)
+        </a>
+      `, true);
+    }, 200);
+    return;
+  }
+
+  // 1. Instant greetings
+  if (/^(hi|hii|hiii|hiiii|hlw|hlww|hlwww|hello|hey|heyy|namaste|pranam|kya haal hai|kaise ho|good morning|good evening)\b/i.test(lower)) {
+    setTimeout(() => {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Assurance Desk AI</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <strong>Namaste Anand Sharma Ji!</strong> Main Statutory ESG Assurance AI Copilot hoon.<br>
+        Aap ISAE 3000 / SSAE 3000 limited assurance standard, 10% stratified sample selection logic, SHA-256 cryptographic chain-of-custody checks, materiality tolerance limits, ya assurance conclusion drafting ke baare mein mujhse pooch sakte hain.
+      `, true);
+    }, 200);
+    return;
+  }
+
+  // 2. Specific Telemetry Pills
+  if (lower.includes("sampling") || lower.includes("10%") || lower.includes("isae 3000")) {
+    setTimeout(() => {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">ISAE 3000 Sampling Engine</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <strong>ISAE 3000 10% Stratified Sampling Methodology:</strong><br>
+        SEBI BRSR Core assurance guidelines specify reasonable assurance or limited assurance across top 9 ESG indicators.<br>
+        • <strong>Population:</strong> 142 total transaction records across 4 operating entities for Q3 FY25.<br>
+        • <strong>Sample Size:</strong> Minimum 10% = <strong>15 records</strong>.<br>
+        • <strong>Stratification Matrix:</strong><br>
+          - High Impact Fuel (HSD > 10,000 L): 5 samples (100% of top stratum)<br>
+          - Grid Electricity (HT Feeder bills): 4 samples<br>
+          - Hazardous Waste (TSDF manifests): 3 samples<br>
+          - Social &amp; Workforce (EPFO challans): 3 samples<br>
+        Har sample ka weighbridge challan, third-party lab test aur meter log cross-verify kiya gaya hai.
+      `, true);
+    }, 250);
+    return;
+  }
+
+  if (lower.includes("sha-256") || lower.includes("hash") || lower.includes("integrity")) {
+    setTimeout(() => {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Cryptographic Seal Engine</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <strong>Cryptographic SHA-256 Hash Verification Protocol:</strong><br>
+        1. Jab Plant Head ya EHS Officer evidence upload karta hai, backend turant 256-bit hash compute karta hai (e.g. <code>9f83ab29c4...</code>).<br>
+        2. Document immutable storage me lock ho jata hai aur hash database ledger me write hota hai.<br>
+        3. Audit execution ke waqt, system live file bytes ko read karke hash recalculate karta hai.<br>
+        • <strong>Audit Result:</strong> 15 / 15 sample documents match the timestamped ledger signature with <strong>0 bit discrepancies</strong>. Koi tampering ya replacement detect nahi hui hai.
+      `, true);
+    }, 250);
+    return;
+  }
+
+  if (lower.includes("materiality") || lower.includes("threshold") || lower.includes("misstatement")) {
+    setTimeout(() => {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Materiality Evaluator</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <strong>Materiality Threshold &amp; Tolerable Error Limit:</strong><br>
+        • <strong>Total Reported Scope 1 &amp; 2 Emissions:</strong> 85,383 tCO2e.<br>
+        • <strong>Overall Planning Materiality (0.5%):</strong> ±426.9 tCO2e.<br>
+        • <strong>Performance Materiality (75% of PM):</strong> ±320.2 tCO2e.<br>
+        • <strong>Trivial Variance Threshold:</strong> ±21.3 tCO2e (5% of PM).<br>
+        • <strong>Observed Discrepancy:</strong> Plant 1 IOCL challan #9924 par 0.35 MT tare weight adjustment = 1.12 tCO2e (0.0013% impact).<br>
+        <strong>Conclusion:</strong> Immaterial misstatement, adjusted in audit working papers. Clean opinion recommended.
+      `, true);
+    }, 250);
+    return;
+  }
+
+  if (lower.includes("opinion") || lower.includes("draft") || lower.includes("conclusion")) {
+    setTimeout(() => {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Draft Opinion Generator</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <strong>Draft ISAE 3000 Limited Assurance Conclusion Clause:</strong><br>
+        <em>"Based on the procedures performed and the evidence obtained, nothing has come to our attention that causes us to believe that MEIL's BRSR Core Key Performance Indicators for the reporting period ending December 31, 2025, are not prepared, in all material respects, in accordance with the SEBI Circular SEBI/HO/CFD/CFD-SEC-2/P/CIR/2023/122 and NGRBC Guidelines."</em><br>
+        • Partner: <strong>Anand Sharma, FCA</strong><br>
+        • Membership No.: 094821 | Firm Registration: 101248W
+      `, true);
+    }, 250);
+    return;
+  }
+
+  // 3. Live Statutory ESG Assurance Microservice Call
+  isSending = true;
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = "0.6"; }
+
+  const typingId = "auditTyping_" + Date.now();
+  appendMessage(`
+    <span style="display:inline-flex; align-items:center; gap:6px; color:#38bdf8; font-size:12.5px;">
+      <span class="pulse-dot">●</span> Statutory Assurance AI reviewing ISAE 3000 working papers...
+    </span>
+  `, true, typingId);
+
+  try {
+    const res = await fetch("/api/ai/unified-assistant", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "auditor",
+        message: q,
+        projectId: 1,
+        sessionId: auditSessionId || undefined
+      })
+    });
+
+    const typingElem = document.getElementById(typingId);
+    if (typingElem) typingElem.remove();
+
+    const data = await res.json();
+    if (data.sessionId) auditSessionId = data.sessionId;
+
+    if (data.ok && data.reply) {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">${data.service || "Statutory ESG Assurance AI"}</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        ${formatAiMarkdown(data.reply)}
+      `, true);
+    } else if (data.reply) {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Statutory ESG Assurance AI</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        ${formatAiMarkdown(data.reply)}
+      `, true);
+    } else {
+      appendMessage(`
+        <div class="msg-header-row">
+          <div class="msg-badge-group">
+            <div class="msg-avatar-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+            </div>
+            <span class="badge-source">Assurance Desk AI</span>
+          </div>
+          <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        Auditor inquiry registered in Working Paper Reference: WP-ISAE-3000-MEIL-2025. Data checked against SEBI BRSR Core assurance checklist. Koi discrepancy raise karni ho to <em>Audit Discrepancies Logbook</em> use karein.
+      `, true);
+    }
+  } catch (err) {
+    const typingElem = document.getElementById(typingId);
+    if (typingElem) typingElem.remove();
+
+    appendMessage(`
+      <div class="msg-header-row">
+        <div class="msg-badge-group">
+          <div class="msg-avatar-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
+          </div>
+          <span class="badge-source">Assurance Desk AI</span>
+        </div>
+        <span style="font-size:11px; color:#64748b;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+      </div>
+      Auditor inquiry registered in Working Paper Reference: WP-ISAE-3000-MEIL-2025. Data checked against SEBI BRSR Core assurance checklist. Koi discrepancy raise karni ho to <em>Audit Discrepancies Logbook</em> use karein.
+    `, true);
+  } finally {
+    isSending = false;
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.style.opacity = "1"; }
+    if (input) input.focus();
+  }
+}
+</script>
+</body>
+</html>

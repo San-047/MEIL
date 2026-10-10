@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Boardroom ESG Dossier — MEIL Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .board-hero {
+    background: linear-gradient(135deg, #141208 0%, #241e0a 100%);
+    border: 1px solid rgba(245, 183, 46, 0.35);
+    border-radius: 14px;
+    padding: 26px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  }
+  .board-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #f5b72e, #eab308, transparent);
+  }
+  .board-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+  @media (max-width: 900px) {
+    .board-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .board-kpi-card {
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .board-kpi-label {
+    font-size: 11.5px;
+    color: #8c8c94;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .board-kpi-val {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin: 8px 0 4px;
+  }
+  .rating-pill {
+    background: rgba(52, 211, 153, 0.12);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1>Executive Boardroom ESG Dossier</h1>
+        <div class="sub">Annual Board of Directors &amp; Investor Strategic ESG Briefing · Read-Only Executive Summary</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span class="chip" style="background:rgba(245, 183, 46, 0.15); color:#f5b72e; border:1px solid rgba(245, 183, 46, 0.3); font-weight:700;">
+          Arjun Menon (Management Viewer / Board)
+        </span>
+        <span class="chip">Executive Review</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Board Hero Banner -->
+      <div class="board-hero">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span class="chip" style="background:#f5b72e; color:#000; font-weight:800; font-size:11px;">BOARD BRIEFING</span>
+              <span style="font-size:12px; color:#94a3b8;">Megha Engineering &amp; Infrastructures Ltd. · Group Consolidated Scope</span>
+            </div>
+            <h2 style="margin:0 0 4px; font-size:24px; font-weight:800; color:#fff;">FY 2025-26 Strategic ESG &amp; SEBI BRSR Core Dossier</h2>
+            <div style="color:#94a3b8; font-size:13.5px;">Consolidated performance scorecard covering 42 subsidiaries, 250+ project units, and ₹29,840 Cr group revenue</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <a href="board-kpis.html" class="btn btn-primary" style="background:#f5b72e; color:#000; font-weight:700; padding:9px 18px; text-decoration:none;">
+              NGRBC 9 Principles Scorecard
+            </a>
+            <button class="btn btn-secondary" onclick="window.print()" style="border-color:rgba(245, 183, 46, 0.3); color:#f5b72e; font-weight:700; padding:9px 18px;">
+              Print Dossier (PDF)
+            </button>
+          </div>
+        </div>
+
+        <div class="board-kpi-grid">
+          <div class="board-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+            <div class="board-kpi-label"><span></span> SEBI Core Assurance Readiness</div>
+            <div class="board-kpi-val" style="color:#34d399;">92.4%</div>
+            <div style="font-size:11.5px; color:#8c8c94;">Auditor Sample Sign-Off Stage 3 of 4</div>
+          </div>
+          <div class="board-kpi-card" style="border-color:rgba(245,183,46,0.25);">
+            <div class="board-kpi-label"><span></span> Decarbonization Trajectory</div>
+            <div class="board-kpi-val" style="color:#f5b72e;">-14.2% <span style="font-size:13px; color:#8c8c94;">Intensity</span></div>
+            <div style="font-size:11.5px; color:#8c8c94;">Per ₹ Crore Turnover vs FY24 Baseline</div>
+          </div>
+          <div class="board-kpi-card" style="border-color:rgba(96,165,250,0.25);">
+            <div class="board-kpi-label"><span></span> Renewable Power Share</div>
+            <div class="board-kpi-val" style="color:#60a5fa;">35.5%</div>
+            <div style="font-size:11.5px; color:#8c8c94;">Solar PPA &amp; Hydro Captive Generation</div>
+          </div>
+          <div class="board-kpi-card" style="border-color:rgba(192,132,252,0.25);">
+            <div class="board-kpi-label"><span></span> Fair Wage &amp; POSH Record</div>
+            <div class="board-kpi-val" style="color:#c084fc;">100%</div>
+            <div style="font-size:11.5px; color:#8c8c94;">Zero Unresolved Grievances Across Group</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rating Agency & Investor Benchmarks -->
+      <div class="card" style="margin-bottom:22px;">
+        <div class="card-title-row" style="margin-bottom:16px;">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 2px;">Global Rating Agency ESG Benchmarking (Investor View)</h2>
+            <div style="font-size:12px; color:#8c8c94;">Alignment against SEBI BRSR Core, CRISIL ESG, and Global Peer Indices</div>
+          </div>
+          <span class="rating-pill">✓ SEBI Top-1000 Listed Entity Compliant</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+          <div style="background:#09090c; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:16px;">
+            <div style="font-size:12px; color:#8c8c94; font-weight:700;">CRISIL ESG SCORE</div>
+            <div style="font-size:22px; font-weight:800; color:#34d399; margin:6px 0;">68 / 100 (Strong)</div>
+            <div style="font-size:12px; color:#cbd5e1;">Top quartile amongst Indian heavy infrastructure &amp; EPC conglomerates.</div>
+          </div>
+
+          <div style="background:#09090c; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:16px;">
+            <div style="font-size:12px; color:#8c8c94; font-weight:700;">MSCI ESG RATING OUTLOOK</div>
+            <div style="font-size:22px; font-weight:800; color:#f5b72e; margin:6px 0;">'A' Upgrade Track</div>
+            <div style="font-size:12px; color:#cbd5e1;">Driven by Olectra EV Bus manufacturing scale and solar expansion.</div>
+          </div>
+
+          <div style="background:#09090c; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:16px;">
+            <div style="font-size:12px; color:#8c8c94; font-weight:700;">STATUTORY ASSURANCE SEAL</div>
+            <div style="font-size:22px; font-weight:800; color:#60a5fa; margin:6px 0;">Reasonable Assurance</div>
+            <div style="font-size:12px; color:#cbd5e1;">Independent auditor sample verification completed with SHA-256 seals.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategic Principles Summary Table -->
+      <div class="card">
+        <div class="card-title-row" style="margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 2px;">NGRBC 9 Principles Strategic Scorecard</h2>
+            <div style="font-size:12px; color:#8c8c94;">Consolidated status across all nine National Guidelines on Responsible Business Conduct</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Principle</th><th>Principle Domain</th><th>Core KPI Focus</th><th>FY 2025-26 Performance</th><th>Assurance Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>P1</code></td><td>Ethics &amp; Transparency</td><td>Anti-corruption &amp; Bribery Disclosures</td><td>100% Policy Review Completed</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P2</code></td><td>Sustainable Products</td><td>Electric Bus &amp; Clean Transport Mobility</td><td>1,800 EV Buses Operating on Indian Roads</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P3</code></td><td>Employee Well-being</td><td>Fair Wages, Health Insurance &amp; POSH</td><td>100% Covered · 0 POSH Complaints</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P4</code></td><td>Stakeholder Engagement</td><td>Community &amp; Local EPC Consultation</td><td>98.2% Grievance Resolution Rate</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P5</code></td><td>Human Rights</td><td>Supply Chain Due Diligence</td><td>Zero Child or Forced Labour Instances</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P6</code></td><td>Environment &amp; Climate</td><td>Scope 1 &amp; 2 Direct/Indirect Emissions</td><td>14.2% GHG Intensity Reduction per ₹ Cr</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P7</code></td><td>Policy Advocacy</td><td>Public Policy &amp; Trade Associations</td><td>Transparent Industry Association Filings</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P8</code></td><td>Inclusive Growth</td><td>CSR Project Impact &amp; Local Sourcing</td><td>₹ 84.5 Cr CSR Deployed in Clean Water &amp; Health</td><td><span class="badge badge-success">Verified</span></td></tr>
+              <tr><td><code>P9</code></td><td>Consumer Responsibility</td><td>Customer Safety &amp; Cyber Protection</td><td>Zero Cyber Incidents &amp; Safety Recalls</td><td><span class="badge badge-success">Verified</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+(async () => {
+  const user = await initLayout("portal-board.html");
+  if (!user) return;
+})();
+</script>
+</body>
+</html>

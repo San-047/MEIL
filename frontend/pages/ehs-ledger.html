@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Environmental &amp; GHG Ledger (Principle 6) — EHS Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background: #071510; }
+  .page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(52,211,153,0.15);
+  }
+  .ehs-hero-card {
+    background: linear-gradient(135deg, #0a2018 0%, #0d2e22 100%);
+    border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 12px;
+    padding: 22px; margin-bottom: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
+  @media(max-width: 960px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  .metric-card {
+    background: #081a14; border: 1px solid rgba(52, 211, 153, 0.15);
+    border-radius: 8px; padding: 14px;
+  }
+  .filter-pill {
+    background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.2);
+    color: #a7f3d0; padding: 6px 14px; border-radius: 20px; font-size: 12px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-pill.active, .filter-pill:hover {
+    background: rgba(52, 211, 153, 0.2); border-color: #34d399; color: #34d399;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main-content" style="padding: 26px 32px; overflow-y: auto;">
+    
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#34d399; letter-spacing:0.06em; text-transform:uppercase;">
+          EHS Operational Desk · Principle 6 Environmental Integrity
+        </div>
+        <h1 style="font-size:24px; font-weight:800; color:#fff; margin:4px 0;">Environmental &amp; GHG Accounting Ledger</h1>
+        <div style="font-size:13px; color:#8c8c94;">
+          Activity data, IPCC AR6 direct emissions, CEA V19 grid conversions, water balance &amp; TSDF hazardous waste tracking.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="ehs-evidence.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 14px;">EHS Bills &amp; Manifests</a>
+        <a href="ai-ehs.html" class="btn btn-primary" style="background:#34d399; color:#04150d; font-weight:700; font-size:12.5px; padding:8px 16px;">🤖 EHS AI Copilot</a>
+      </div>
+    </div>
+
+    <!-- Hero KPI Overview -->
+    <div class="ehs-hero-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-size:11px; font-weight:800; background:#34d399; color:#04150d; padding:3px 8px; border-radius:4px;">
+            SEBI BRSR CORE PRINCIPLE 6 · CERTIFIED LEDGER
+          </span>
+          <h2 style="font-size:20px; font-weight:800; color:#fff; margin:8px 0 2px;">Net Scope 1 &amp; Scope 2 Carbon Balance</h2>
+          <div style="font-size:12.5px; color:#94a3b8;">Officer in Charge: <strong>Priya Nair (EHS &amp; Fuels Officer)</strong> · Verified for Q3 FY25</div>
+        </div>
+        <button class="btn btn-secondary" onclick="exportEhsCsv()" style="font-size:12px; padding:8px 14px;">
+          ⬇️ Export Ledger CSV
+        </button>
+      </div>
+
+      <div class="grid-4">
+        <div class="metric-card">
+          <div style="font-size:11px; color:#94a3b8; text-transform:uppercase; font-weight:700;">Scope 1 Direct GHG</div>
+          <div style="font-size:22px; font-weight:800; color:#fff; margin:4px 0;" id="ehsScope1Val">113.90 tCO2e</div>
+          <div style="font-size:11.5px; color:#34d399;" id="ehsDieselSubtitle">42,500 L HSD bunkered</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:11px; color:#94a3b8; text-transform:uppercase; font-weight:700;">Scope 2 Grid GHG</div>
+          <div style="font-size:22px; font-weight:800; color:#60a5fa; margin:4px 0;" id="ehsScope2Val">85.38 tCO2e</div>
+          <div style="font-size:11.5px; color:#94a3b8;" id="ehsGridSubtitle">119,250 kWh @ 0.716 kg/kWh</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:11px; color:#94a3b8; text-transform:uppercase; font-weight:700;">Solar PPA Decarbonization</div>
+          <div style="font-size:22px; font-weight:800; color:#34d399; margin:4px 0;">-47.08 tCO2e</div>
+          <div style="font-size:11.5px; color:#34d399;">65,750 kWh rooftop solar</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:11px; color:#94a3b8; text-transform:uppercase; font-weight:700;">Water Circularity</div>
+          <div style="font-size:22px; font-weight:800; color:#f5b72e; margin:4px 0;" id="ehsWaterRecPct">38.5% Recycled</div>
+          <div style="font-size:11.5px; color:#f5b72e;">5,486 KL via on-site STP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; gap:8px;">
+        <button class="filter-pill active" onclick="filterTable('ALL')">All Environmental Lines (7)</button>
+        <button class="filter-pill" onclick="filterTable('SCOPE1')">Scope 1 Direct Fuels</button>
+        <button class="filter-pill" onclick="filterTable('SCOPE2')">Scope 2 Grid Electricity</button>
+        <button class="filter-pill" onclick="filterTable('WATER')">Water &amp; Effluent</button>
+        <button class="filter-pill" onclick="filterTable('WASTE')">TSDF Waste Stream</button>
+      </div>
+      <div style="font-size:12px; color:#a7f3d0;">
+        Statutory Factor Engine: <strong>CEA Baseline V19 &amp; IPCC AR6</strong>
+      </div>
+    </div>
+
+    <!-- Ledger Table -->
+    <div class="card" style="padding:0; overflow:hidden; border:1px solid rgba(52,211,153,0.15); background:#0a1813;">
+      <table style="width:100%; border-collapse:collapse; font-size:12.5px; text-align:left;">
+        <thead>
+          <tr style="background:#0e241c; border-bottom:1px solid rgba(52,211,153,0.2); color:#a7f3d0; text-transform:uppercase; font-size:11px;">
+            <th style="padding:12px 16px;">Reporting Indicator</th>
+            <th style="padding:12px 16px;">Activity Source / Facility</th>
+            <th style="padding:12px 16px;">Raw Consumption</th>
+            <th style="padding:12px 16px;">Statutory Factor Applied</th>
+            <th style="padding:12px 16px;">GHG / Equivalent Output</th>
+            <th style="padding:12px 16px;">Evidence Slip Ref</th>
+            <th style="padding:12px 16px;">Assurance Status</th>
+          </tr>
+        </thead>
+        <tbody id="ehsTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+let ledgerData = [
+  { id: 1, cat: "SCOPE1", ind: "P6.1 Scope 1 GHG", source: "Plant 1 DG Sets (500 kVA x2)", raw: "42,500 Litres HSD", factor: "2.68 kg CO2e / Litre (IPCC AR6)", output: "113.90 tCO2e", ref: "WB-IOCL-99824", status: "Audited & Verified" },
+  { id: 2, cat: "SCOPE1", ind: "P6.1 Scope 1 GHG", source: "Site Transport & Shuttles", raw: "3,200 kg Compressed Natural Gas", factor: "2.75 kg CO2e / kg CNG", output: "8.80 tCO2e", ref: "CNG-BPCL-1049", status: "Audited & Verified" },
+  { id: 3, cat: "SCOPE2", ind: "P6.2 Scope 2 GHG", source: "TSSPDCL Dedicated 33kV Feeder", raw: "119,250 kWh Grid Draw", factor: "0.716 kg CO2e / kWh (CEA V19 Grid)", output: "85.38 tCO2e", ref: "EB-TSS-1184", status: "Audited & Verified" },
+  { id: 4, cat: "SCOPE2", ind: "P6.2 Scope 2 GHG", source: "Plant 1 Rooftop Solar PPA", raw: "65,750 kWh Clean Power", factor: "Zero Direct Grid Factor", output: "-47.08 tCO2e avoided", ref: "SOL-PPA-0382", status: "Audited & Verified" },
+  { id: 5, cat: "WATER", ind: "P6.3 Water Balance", source: "Borewell & Municipal Tankers", raw: "14,250 KL Total Inflow", factor: "Groundwater Extraction Permitted", output: "Gross Withdrawal", ref: "WT-TANK-0129", status: "Audited & Verified" },
+  { id: 6, cat: "WATER", ind: "P6.3 Water Balance", source: "On-Site Sewage Treatment (STP)", raw: "5,486 KL Recycled Effluent", factor: "38.5% Total Inflow Recycled", output: "Zero Liquid Discharge (ZLD)", ref: "LOG-STP-0931", status: "Audited & Verified" },
+  { id: 7, cat: "WASTE", ind: "P6.4 Hazardous Waste", source: "Paint Sludge & Spent Oil", raw: "12.4 Metric Tonnes", factor: "CPCB Schedule II Code 21.1", output: "Disposed to HWMP Dundigal", ref: "HW-TSDF-0492", status: "Audited & Verified" }
+];
+
+let currentFilter = 'ALL';
+
+(async () => {
+  const user = await initLayout("ehs-ledger.html");
+  if (!user) return;
+  try {
+    const res = await api("/operations/state");
+    if (res && res.ehs && res.plant) {
+      document.getElementById("ehsScope1Val").textContent = res.ehs.scope1_tCO2e.toFixed(2) + " tCO2e";
+      document.getElementById("ehsScope2Val").textContent = res.ehs.scope2_tCO2e.toFixed(2) + " tCO2e";
+      document.getElementById("ehsDieselSubtitle").textContent = res.plant.dieselBunkeredL.toLocaleString() + " L HSD bunkered";
+      document.getElementById("ehsGridSubtitle").textContent = res.plant.gridKwh.toLocaleString() + " kWh @ 0.716 kg/kWh";
+      
+      ledgerData[0].raw = res.plant.dieselBunkeredL.toLocaleString() + " Litres HSD";
+      ledgerData[0].output = (res.plant.dieselBunkeredL * 2.68 / 1000).toFixed(2) + " tCO2e";
+      ledgerData[2].raw = res.plant.gridKwh.toLocaleString() + " kWh Grid Draw";
+      ledgerData[2].output = (res.plant.gridKwh * 40 * 0.716 / 1000).toFixed(2) + " tCO2e";
+    }
+  } catch(e) {}
+  renderLedger();
+})();
+
+function filterTable(cat) {
+  currentFilter = cat;
+  document.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+  event.target.classList.add("active");
+  renderLedger();
+}
+
+function renderLedger() {
+  const tbody = document.getElementById("ehsTableBody");
+  const filtered = currentFilter === 'ALL' ? ledgerData : ledgerData.filter(d => d.cat === currentFilter);
+  tbody.innerHTML = filtered.map(row => `
+    <tr style="border-bottom:1px solid rgba(52,211,153,0.08); transition:background 0.15s;" onmouseover="this.style.background='rgba(52,211,153,0.04)'" onmouseout="this.style.background='transparent'">
+      <td style="padding:12px 16px; font-weight:700; color:#34d399;">${row.ind}</td>
+      <td style="padding:12px 16px; color:#fff;">${row.source}</td>
+      <td style="padding:12px 16px; font-weight:600; color:#e2e8f0;">${row.raw}</td>
+      <td style="padding:12px 16px; color:#94a3b8; font-size:11.5px;">${row.factor}</td>
+      <td style="padding:12px 16px; font-weight:800; color:${row.output.includes('-') ? '#34d399' : '#fff'};">${row.output}</td>
+      <td style="padding:12px 16px; font-family:monospace; color:#38bdf8;">${row.ref}</td>
+      <td style="padding:12px 16px;">
+        <span style="background:rgba(52,211,153,0.15); color:#34d399; font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px;">✓ ${row.status}</span>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function exportEhsCsv() {
+  let csv = "Indicator,Facility Source,Raw Consumption,Factor Applied,Output,Evidence Ref,Status\n";
+  ledgerData.forEach(r => {
+    csv += `"${r.ind}","${r.source}","${r.raw}","${r.factor}","${r.output}","${r.ref}","${r.status}"\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "MEIL_Principle6_Environmental_Ledger.csv";
+  a.click();
+  toast("✓ Environmental Ledger CSV exported successfully!");
+}
+</script>
+</body>
+</html>

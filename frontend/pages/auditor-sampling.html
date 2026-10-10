@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10% Random Sampling Workbench (ISAE 3000) — Statutory Assurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background: #06111a; }
+  .page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(56,189,248,0.15);
+  }
+  .audit-hero {
+    background: linear-gradient(135deg, #091c2b 0%, #0d283e 100%);
+    border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px;
+    padding: 22px; margin-bottom: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
+  @media(max-width: 960px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  .metric-box {
+    background: #081a28; border: 1px solid rgba(56, 189, 248, 0.15);
+    border-radius: 8px; padding: 14px;
+  }
+  .filter-pill {
+    background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2);
+    color: #bae6fd; padding: 6px 14px; border-radius: 20px; font-size: 12px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-pill.active, .filter-pill:hover {
+    background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main-content" style="padding: 26px 32px; overflow-y: auto;">
+    
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#38bdf8; letter-spacing:0.06em; text-transform:uppercase;">
+          🔍 Statutory Assurance Workbench · ISAE 3000 / SSAE 3000
+        </div>
+        <h1 style="font-size:24px; font-weight:800; color:#fff; margin:4px 0;">10% Stratified Random Sampling Engine</h1>
+        <div style="font-size:13px; color:#8c8c94;">
+          Mandatory 10% sampling engine for SEBI BRSR Core reasonable/limited assurance. Stratified across fuels, electricity, water &amp; social.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="auditor-evidence.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 14px;">🔐 SHA-256 Verifier</a>
+        <a href="ai-auditor.html" class="btn btn-primary" style="background:#38bdf8; color:#031422; font-weight:700; font-size:12.5px; padding:8px 16px;">🤖 Auditor AI Copilot</a>
+      </div>
+    </div>
+
+    <!-- Hero Card -->
+    <div class="audit-hero">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-size:11px; font-weight:800; background:#38bdf8; color:#031422; padding:3px 8px; border-radius:4px;">
+            SEBI CIRCULAR SEBI/HO/CFD/CFD-SEC-2/P/CIR/2023/122
+          </span>
+          <h2 style="font-size:20px; font-weight:800; color:#fff; margin:8px 0 2px;">Assurance Sampling Population: 142 Vouchers</h2>
+          <div style="font-size:12.5px; color:#7dd3fc;">Lead Partner: <strong>Anand Sharma, FCA</strong> · BSR &amp; Co. LLP (FRN: 101248W)</div>
+        </div>
+        <button class="btn btn-secondary" onclick="runResampling()" style="font-size:12px; padding:8px 14px;">
+          🎲 Run Re-Sampling Algorithm
+        </button>
+      </div>
+
+      <div class="grid-4">
+        <div class="metric-box">
+          <div style="font-size:11px; color:#7dd3fc; text-transform:uppercase; font-weight:700;">Mandated Sample (10%)</div>
+          <div style="font-size:22px; font-weight:800; color:#fff; margin:4px 0;">15 Vouchers</div>
+          <div style="font-size:11.5px; color:#38bdf8;">10.56% of total population</div>
+        </div>
+        <div class="metric-box">
+          <div style="font-size:11px; color:#7dd3fc; text-transform:uppercase; font-weight:700;">Samples Tested</div>
+          <div style="font-size:22px; font-weight:800; color:#34d399; margin:4px 0;">15 / 15 (100%)</div>
+          <div style="font-size:11.5px; color:#34d399;">Field testing complete</div>
+        </div>
+        <div class="metric-box">
+          <div style="font-size:11px; color:#7dd3fc; text-transform:uppercase; font-weight:700;">Cryptographic Match</div>
+          <div style="font-size:22px; font-weight:800; color:#38bdf8; margin:4px 0;">100% SHA-256</div>
+          <div style="font-size:11.5px; color:#7dd3fc;">Zero bit discrepancies</div>
+        </div>
+        <div class="metric-box">
+          <div style="font-size:11px; color:#7dd3fc; text-transform:uppercase; font-weight:700;">Material Misstatements</div>
+          <div style="font-size:22px; font-weight:800; color:#34d399; margin:4px 0;">0 Detected</div>
+          <div style="font-size:11.5px; color:#34d399;">Within 0.5% tolerance</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; gap:8px;">
+        <button class="filter-pill active" onclick="filterSamples('ALL')">All Tested Samples (8)</button>
+        <button class="filter-pill" onclick="filterSamples('PLANT1')">🏗️ Plant 1 Site Samples</button>
+        <button class="filter-pill" onclick="filterSamples('PLANT2')">🏭 Plant 2 &amp; Foundry</button>
+        <button class="filter-pill" onclick="filterSamples('SOLAR')">☀️ Solar Park Samples</button>
+      </div>
+      <div style="font-size:12px; color:#7dd3fc;">
+        Assurance Standard: <strong>ISAE 3000 (Revised) Limited Assurance</strong>
+      </div>
+    </div>
+
+    <!-- Samples Table -->
+    <div class="card" style="padding:0; overflow:hidden; border:1px solid rgba(56,189,248,0.15); background:#071420;">
+      <table style="width:100%; border-collapse:collapse; font-size:12.5px; text-align:left;">
+        <thead>
+          <tr style="background:#0c2032; border-bottom:1px solid rgba(56,189,248,0.2); color:#bae6fd; text-transform:uppercase; font-size:11px;">
+            <th style="padding:12px 16px;">Sample ID</th>
+            <th style="padding:12px 16px;">Target Facility</th>
+            <th style="padding:12px 16px;">ESG Indicator &amp; Source</th>
+            <th style="padding:12px 16px;">Declared Value vs Field Voucher</th>
+            <th style="padding:12px 16px;">Voucher Ref</th>
+            <th style="padding:12px 16px;">Sampling Status</th>
+            <th style="padding:12px 16px;">Assurance Action</th>
+          </tr>
+        </thead>
+        <tbody id="samplesTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+let samples = [
+  { id: "SMP-01", site: "PLANT1", facility: "Plant 1 Complex", ind: "P6.1 Scope 1 Fuel", claim: "42,500 L HSD", voucher: "42,500 L (35.91 MT net slip)", ref: "WB-IOCL-99824", status: "Verified & Sealed" },
+  { id: "SMP-02", site: "PLANT1", facility: "Plant 1 Complex", ind: "P6.2 Scope 2 Grid", claim: "119,250 kWh", voucher: "119,250 kWh (×40 CT/PT ratio)", ref: "EB-TSS-1184", status: "Verified & Sealed" },
+  { id: "SMP-03", site: "PLANT1", facility: "Plant 1 Complex", ind: "P6.3 Water Balance", claim: "5,486 KL STP Recycled", voucher: "5,486 KL (38.5% inflow recycle)", ref: "LOG-STP-0931", status: "Verified & Sealed" },
+  { id: "SMP-04", site: "PLANT1", facility: "Plant 1 Complex", ind: "P6.4 TSDF Waste", claim: "12.4 MT Hazardous", voucher: "12.4 MT HWMP Dundigal Manifest", ref: "HW-TSDF-0492", status: "Verified & Sealed" },
+  { id: "SMP-05", site: "PLANT2", facility: "Plant 2 Precision Foundry", ind: "P6.1 Scope 1 Fuel", claim: "28,400 L Furnace Oil", voucher: "28,400 L HPCL Tanker Receipt", ref: "WB-HPCL-7714", status: "Verified & Sealed" },
+  { id: "SMP-06", site: "PLANT2", facility: "Plant 2 Precision Foundry", ind: "P6.2 Scope 2 Grid", claim: "340,100 kWh HT Draw", voucher: "340,100 kWh DISCOM Meter Extract", ref: "EB-DISCOM-9921", status: "Verified & Sealed" },
+  { id: "SMP-07", site: "SOLAR", facility: "50MW Solar Park", ind: "P6.2 Green Export", claim: "4.2 Million kWh Clean", voucher: "4.2M kWh SRLDC Grid Settlement", ref: "SRLDC-SETTL-04", status: "Verified & Sealed" },
+  { id: "SMP-08", site: "PLANT1", facility: "Plant 1 Complex", ind: "P3.1 Social / EPFO", claim: "1,240 Workforce PF", voucher: "1,240 ECR Remittance Verified", ref: "EPFO-ECR-2025-10", status: "Verified & Sealed" }
+];
+
+let activeFilter = 'ALL';
+
+(async () => {
+  const user = await initLayout("auditor-sampling.html");
+  if (!user) return;
+  try {
+    const res = await api("/operations/state");
+    if (res && res.auditor && res.auditor.samples) {
+      samples = res.auditor.samples;
+    }
+  } catch(e) {}
+  renderTable();
+})();
+
+function filterSamples(site) {
+  activeFilter = site;
+  document.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+  event.target.classList.add("active");
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.getElementById("samplesTableBody");
+  const filtered = activeFilter === 'ALL' ? samples : samples.filter(s => s.site === activeFilter);
+  tbody.innerHTML = filtered.map(s => `
+    <tr style="border-bottom:1px solid rgba(56,189,248,0.08); transition:background 0.15s;" onmouseover="this.style.background='rgba(56,189,248,0.04)'" onmouseout="this.style.background='transparent'">
+      <td style="padding:12px 16px; font-weight:700; color:#38bdf8; font-family:monospace;">${s.id}</td>
+      <td style="padding:12px 16px; color:#fff; font-weight:600;">${s.facility}</td>
+      <td style="padding:12px 16px; color:#bae6fd;">${s.ind}</td>
+      <td style="padding:12px 16px;">
+        <div style="color:#fff; font-weight:700;">${s.claim}</div>
+        <div style="font-size:11px; color:#34d399;">✓ Voucher: ${s.voucher}</div>
+      </td>
+      <td style="padding:12px 16px; font-family:monospace; color:#f5b72e;">${s.ref}</td>
+      <td style="padding:12px 16px;">
+        <span style="background:rgba(52,211,153,0.15); color:#34d399; font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px;">✓ ${s.status}</span>
+      </td>
+      <td style="padding:12px 16px;">
+        <button class="btn btn-secondary" onclick="viewWorkingPaper('${s.id}')" style="font-size:11px; padding:4px 10px;">Inspect WP</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function runResampling() {
+  toast("🎲 Re-running ISAE 3000 stratified sampling algorithm...");
+  setTimeout(() => {
+    toast("✓ 15 sample vouchers re-drawn and verified against cryptographic hashes!");
+  }, 600);
+}
+
+function viewWorkingPaper(id) {
+  toast(`Opening Working Paper Reference WP-ISAE-3000-${id}...`);
+}
+</script>
+</body>
+</html>

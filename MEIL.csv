@@ -1,0 +1,11 @@
+Employee_ID,Name,Designation,Department,Gender,Employment_Type,Monthly_Wage_INR,Safety_Training_Hours,POSH_Compliant,EPFO_UAN_Active
+MEIL-001,Rajesh Sharma,Chief Plant Engineer,Operations,Male,Permanent,95000,48,Yes,Yes
+MEIL-002,Priya Nair,Senior EHS Officer,Safety & Environment,Female,Permanent,88000,52,Yes,Yes
+MEIL-003,Amitabh Verma,Heavy Machinery Operator,Plant 04 Earthmoving,Male,Contractual,34000,40,Yes,Yes
+MEIL-004,Sunita Patel,HR & Diversity Lead,Human Resources,Female,Permanent,78000,45,Yes,Yes
+MEIL-005,Vikram Singh,Maintenance Supervisor,HVAC & Electricals,Male,Permanent,62000,44,Yes,Yes
+MEIL-006,Ananya Roy,Sustainability Analyst,Corporate ESG,Female,Permanent,71000,50,Yes,Yes
+MEIL-007,Ramesh Yadav,Site Transit Driver,Logistics Fleet,Male,Contractual,28000,36,Yes,Yes
+MEIL-008,Kavita Deshmukh,Quality Control Chemist,Water Treatment Lab,Female,Permanent,64000,46,Yes,Yes
+MEIL-009,Mohammed Irfan,Scaffolding & Rigging,Civil Infra,Male,Contractual,31000,42,Yes,Yes
+MEIL-010,Deepa Sundaram,Compliance Legal Counsel,Corporate Governance,Female,Permanent,92000,40,Yes,Yes

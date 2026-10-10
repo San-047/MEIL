@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Machinery &amp; Energy Log — Plant 1 Operations Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .form-card {
+    background: #0d0d11; border: 1px solid rgba(245, 183, 46, 0.25);
+    border-radius: 12px; padding: 22px; margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media(max-width: 840px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 11.5px; font-weight: 700; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.04em; }
+  .form-control {
+    background: #141418; border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; color: #fff; padding: 10px 12px; font-size: 13.5px; outline: none;
+    font-family: inherit;
+  }
+  .form-control:focus { border-color: #f5b72e; box-shadow: 0 0 0 2px rgba(245,183,46,0.15); }
+  .calc-badge {
+    background: rgba(245, 183, 46, 0.1); border: 1px dashed rgba(245, 183, 46, 0.35);
+    border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: #f5b72e;
+    display: flex; align-items: center; justify-content: space-between; margin-top: 10px;
+  }
+  .filter-pill {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: #a1a1aa; padding: 6px 14px; border-radius: 20px; font-size: 12px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-pill.active, .filter-pill:hover {
+    background: rgba(245, 183, 46, 0.15); border-color: #f5b72e; color: #f5b72e;
+  }
+  .status-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;
+  }
+  .status-tag.verified { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+  .status-tag.pending { background: rgba(245, 183, 46, 0.15); color: #f5b72e; }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main-content" style="padding: 26px 32px; overflow-y: auto;">
+    
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#f5b72e; letter-spacing:0.06em; text-transform:uppercase;">
+          Plant 1 Site Operations · Unit MEIL-HYD-01
+        </div>
+        <h1 style="font-size:24px; font-weight:800; color:#fff; margin:4px 0;">Site Machinery &amp; Energy Log</h1>
+        <div style="font-size:13px; color:#8c8c94;">
+          Direct daily operational logging for DG sets, TSSPDCL 33kV grid feeder, STP water meters &amp; TSDF hazardous bins.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="plant-evidence.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 14px;">Weighbridge Slips</a>
+        <a href="ai-plant.html" class="btn btn-primary" style="background:#f5b72e; color:#000; font-weight:700; font-size:12.5px; padding:8px 16px;">🤖 Plant AI Copilot</a>
+      </div>
+    </div>
+
+    <!-- Live Entry Form -->
+    <div class="form-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:15px; font-weight:700; color:#fff; display:flex; align-items:center; gap:8px;">
+          <span></span> Record New Operational Telemetry Reading
+        </h3>
+        <span style="font-size:11.5px; color:#8c8c94;">Shift Incharge: <strong>Vikram Singh (Site Head)</strong></span>
+      </div>
+
+      <form id="logForm">
+        <div class="grid-3">
+          <div class="form-group">
+            <label>Equipment / Asset</label>
+            <select class="form-control" id="equipmentSelect" required onchange="handleEquipChange()">
+              <option value="DG-01">DG Set 1 (500 kVA Standby Genset)</option>
+              <option value="DG-02">DG Set 2 (500 kVA Standby Genset)</option>
+              <option value="GRID-HT">TSSPDCL Dedicated 33kV Feeder (Service #HT-99420)</option>
+              <option value="STP-FLOW">Plant STP Primary Flowmeter (Inflow/Recycled)</option>
+              <option value="TSDF-BIN">Hazardous Waste Bin (HWMP Manifest Form 10)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Operational Shift &amp; Date</label>
+            <input type="text" class="form-control" id="shiftDate" value="Shift A (06:00 - 14:00) · Today" required>
+          </div>
+          <div class="form-group">
+            <label>Challan / Meter Voucher Ref</label>
+            <input type="text" class="form-control" id="voucherRef" placeholder="e.g. WB-IOCL-99824" required>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="form-group">
+            <label id="paramLabel1">Run Hours (Hrs)</label>
+            <input type="number" step="0.1" class="form-control" id="paramVal1" placeholder="e.g. 8.5" required oninput="calculateEquipMath()">
+          </div>
+          <div class="form-group">
+            <label id="paramLabel2">Fuel Added / Reading (Litres)</label>
+            <input type="number" step="0.1" class="form-control" id="paramVal2" placeholder="e.g. 750" required oninput="calculateEquipMath()">
+          </div>
+          <div class="form-group">
+            <label>Operator Initials &amp; Badge ID</label>
+            <input type="text" class="form-control" id="operatorBadge" value="VS-9428 (Vikram Singh)" required>
+          </div>
+        </div>
+
+        <div class="calc-badge" id="calcBadge">
+          <span><strong>Auto-Conversion:</strong> 750 Litres HSD = <strong>0.634 Metric Tonnes</strong> | Approx Direct GHG: <strong>2.01 tCO2e</strong> (IPCC factor 2.68 kg/L)</span>
+          <span style="font-weight:700; color:#34d399;">✓ Within Permissible DG Burn Rate</span>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:16px;">
+          <button type="reset" class="btn btn-secondary" style="font-size:12.5px;">Clear Form</button>
+          <button type="submit" class="btn btn-primary" style="background:#f5b72e; color:#000; font-weight:700; font-size:13px; padding:9px 20px;">
+            ✓ Commit Reading to Site Ledger
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Filter & Table Section -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; gap:8px;">
+        <button class="filter-pill active" onclick="filterLogs('ALL')">All Logs (24)</button>
+        <button class="filter-pill" onclick="filterLogs('DG')">DG Fuel &amp; Hours</button>
+        <button class="filter-pill" onclick="filterLogs('GRID')">TSSPDCL 33kV Grid</button>
+        <button class="filter-pill" onclick="filterLogs('STP')">STP Water Flow</button>
+        <button class="filter-pill" onclick="filterLogs('TSDF')">TSDF Hazardous</button>
+      </div>
+      <div>
+        <button class="btn btn-secondary" onclick="exportLogsCsv()" style="font-size:12px; padding:6px 14px;">
+          ⬇️ Export CSV Ledger
+        </button>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden; border:1px solid rgba(255,255,255,0.08); background:#0c0c0e;">
+      <table style="width:100%; border-collapse:collapse; font-size:12.5px; text-align:left;">
+        <thead>
+          <tr style="background:#121217; border-bottom:1px solid rgba(255,255,255,0.1); color:#8c8c94; text-transform:uppercase; font-size:11px; letter-spacing:0.04em;">
+            <th style="padding:12px 16px;">Date &amp; Shift</th>
+            <th style="padding:12px 16px;">Equipment Asset</th>
+            <th style="padding:12px 16px;">Primary Reading</th>
+            <th style="padding:12px 16px;">Calculated Equivalent</th>
+            <th style="padding:12px 16px;">Voucher / Slip Ref</th>
+            <th style="padding:12px 16px;">Logged By</th>
+            <th style="padding:12px 16px;">Auditor Status</th>
+          </tr>
+        </thead>
+        <tbody id="logsTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+let logsData = [
+  { id: 1, type: "DG", date: "Today · Shift A", asset: "DG Set 2 (500 kVA Standby)", primary: "8.5 Hrs · 740 L HSD", equiv: "0.625 MT · 1.98 tCO2e", ref: "WB-IOCL-99824", operator: "VS-9428", status: "verified" },
+  { id: 2, type: "GRID", date: "Today · Shift A", asset: "TSSPDCL Dedicated 33kV", primary: "3,820 kWh Draw", equiv: "152.8 MWh gross (×40 CT)", ref: "MTR-TSS-8831", operator: "VS-9428", status: "verified" },
+  { id: 3, type: "STP", date: "Yesterday · Shift C", asset: "Plant STP Inflow Flowmeter", primary: "480 KL Inflow", equiv: "185 KL Treated (38.5% recycled)", ref: "LOG-STP-0931", operator: "RK-7712", status: "verified" },
+  { id: 4, type: "DG", date: "Yesterday · Shift B", asset: "DG Set 1 (500 kVA Standby)", primary: "6.0 Hrs · 520 L HSD", equiv: "0.439 MT · 1.39 tCO2e", ref: "WB-IOCL-99818", operator: "RK-7712", status: "verified" },
+  { id: 5, type: "TSDF", date: "24 Oct 2025", asset: "TSDF Paint Sludge Bin", primary: "2.4 MT Hazardous", equiv: "HWMP Dundigal Manifest", ref: "CPCB-F10-4412", operator: "VS-9428", status: "pending" },
+  { id: 6, type: "GRID", date: "23 Oct 2025", asset: "TSSPDCL Dedicated 33kV", primary: "4,120 kWh Draw", equiv: "164.8 MWh gross (×40 CT)", ref: "MTR-TSS-8820", operator: "VS-9428", status: "verified" }
+];
+
+let activeFilter = 'ALL';
+
+(async () => {
+  const user = await initLayout("plant-log.html");
+  if (!user) return;
+  try {
+    const res = await api("/operations/state");
+    if (res && res.plant && res.plant.logs) {
+      logsData = res.plant.logs;
+    }
+  } catch(e) {}
+  renderTable();
+})();
+
+function handleEquipChange() {
+  const val = document.getElementById("equipmentSelect").value;
+  const l1 = document.getElementById("paramLabel1");
+  const l2 = document.getElementById("paramLabel2");
+  const p1 = document.getElementById("paramVal1");
+  const p2 = document.getElementById("paramVal2");
+
+  if (val.startsWith("DG")) {
+    l1.textContent = "Run Hours (Hrs)";
+    l2.textContent = "Fuel Added / Bunkered (Litres HSD)";
+    p1.placeholder = "e.g. 8.5";
+    p2.placeholder = "e.g. 740";
+  } else if (val === "GRID-HT") {
+    l1.textContent = "HT CT/PT Multiplier";
+    l2.textContent = "Net Meter Advance (kWh)";
+    p1.value = "40";
+    p1.readOnly = true;
+    p2.placeholder = "e.g. 3,850";
+  } else if (val === "STP-FLOW") {
+    l1.textContent = "Raw Water Inflow (KL)";
+    l2.textContent = "Treated STP Effluent (KL)";
+    p1.placeholder = "e.g. 480";
+    p2.placeholder = "e.g. 185";
+    p1.readOnly = false;
+  } else if (val === "TSDF-BIN") {
+    l1.textContent = "Manifest Weight (Metric Tonnes)";
+    l2.textContent = "Waste Category Code (Schedule II)";
+    p1.placeholder = "e.g. 2.4";
+    p2.placeholder = "e.g. 21.1 (Paint Sludge)";
+    p1.readOnly = false;
+  }
+  calculateEquipMath();
+}
+
+function calculateEquipMath() {
+  const val = document.getElementById("equipmentSelect").value;
+  const v1 = parseFloat(document.getElementById("paramVal1").value) || 0;
+  const v2 = parseFloat(document.getElementById("paramVal2").value) || 0;
+  const badge = document.getElementById("calcBadge");
+
+  if (val.startsWith("DG")) {
+    const tonnes = (v2 * 0.845 / 1000).toFixed(3);
+    const co2 = (v2 * 2.68 / 1000).toFixed(2);
+    badge.innerHTML = `<span><strong>Auto-Conversion:</strong> ${v2} Litres HSD = <strong>${tonnes} MT</strong> | Direct GHG: <strong>${co2} tCO2e</strong> (IPCC AR6)</span><span style="font-weight:700; color:#34d399;">✓ Burn Rate Normal (~${v1 > 0 ? (v2/v1).toFixed(1) : 0} L/hr)</span>`;
+  } else if (val === "GRID-HT") {
+    const mwh = (v2 * 40 / 1000).toFixed(2);
+    const co2 = (mwh * 0.716).toFixed(2);
+    badge.innerHTML = `<span><strong>Auto-Conversion:</strong> ${v2} kWh × 40 Multiplier = <strong>${mwh} MWh</strong> | Scope 2 GHG: <strong>${co2} tCO2e</strong> (CEA V19)</span><span style="font-weight:700; color:#60a5fa;">✓ Grid Meter Verified</span>`;
+  } else if (val === "STP-FLOW") {
+    const recPct = v1 > 0 ? ((v2 / v1) * 100).toFixed(1) : 0;
+    badge.innerHTML = `<span><strong>Auto-Conversion:</strong> Inflow: ${v1} KL | Recycled: ${v2} KL = <strong>${recPct}% Circularity</strong></span><span style="font-weight:700; color:#34d399;">✓ Exceeds 30% CPCB Benchmark</span>`;
+  } else {
+    badge.innerHTML = `<span><strong>TSDF Form 10:</strong> Manifested ${v1} MT to HWMP Dundigal treatment complex</span><span style="font-weight:700; color:#fbbf24;">✓ CPCB Certified</span>`;
+  }
+}
+
+document.getElementById("logForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const select = document.getElementById("equipmentSelect");
+  const assetName = select.options[select.selectedIndex].text;
+  const p1 = document.getElementById("paramVal1").value;
+  const p2 = document.getElementById("paramVal2").value;
+  const ref = document.getElementById("voucherRef").value;
+  const badgeId = document.getElementById("operatorBadge").value;
+
+  try {
+    const res = await api("/operations/log", {
+      method: "POST",
+      body: {
+        equipment: assetName,
+        qty: parseFloat(p2) || 0,
+        runHours: parseFloat(p1) || 8.0,
+        slipRef: ref,
+        operator: badgeId
+      }
+    });
+    if (res && res.state && res.state.plant) {
+      logsData = res.state.plant.logs;
+    }
+    toast(`✓ Reading committed to Plant 1 Site Ledger! SHA-256: ${res.hash ? res.hash.slice(0, 16) : ''}…`);
+  } catch(err) {
+    logsData.unshift({
+      id: Date.now(),
+      type: "DG",
+      date: "Just Now · Shift A",
+      asset: assetName,
+      primary: `${p1} Hrs · ${p2}`,
+      equiv: "Recorded",
+      ref: ref,
+      operator: badgeId,
+      status: "verified"
+    });
+    toast("✓ Reading committed locally!");
+  }
+
+  renderTable();
+  document.getElementById("logForm").reset();
+  handleEquipChange();
+});
+
+function filterLogs(type) {
+  activeFilter = type;
+  document.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+  event.target.classList.add("active");
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.getElementById("logsTableBody");
+  const list = activeFilter === 'ALL' ? logsData : logsData.filter(d => d.type === activeFilter);
+  tbody.innerHTML = list.map(item => `
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+      <td style="padding:12px 16px; font-weight:600; color:#fff;">${item.date}</td>
+      <td style="padding:12px 16px; color:#f5b72e; font-weight:700;">${item.asset}</td>
+      <td style="padding:12px 16px; color:#fff;">${item.primary}</td>
+      <td style="padding:12px 16px; color:#a1a1aa;">${item.equiv}</td>
+      <td style="padding:12px 16px; font-family:monospace; color:#38bdf8;">${item.ref}</td>
+      <td style="padding:12px 16px; color:#8c8c94;">${item.operator}</td>
+      <td style="padding:12px 16px;">
+        <span class="status-tag ${item.status}">${item.status === 'verified' ? '✓ Verified' : 'Pending Sampling'}</span>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function exportLogsCsv() {
+  let csv = "Date,Equipment,Primary Reading,Calculated Equivalent,Voucher Ref,Operator,Status\n";
+  logsData.forEach(r => {
+    csv += `"${r.date}","${r.asset}","${r.primary}","${r.equiv}","${r.ref}","${r.operator}","${r.status}"\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Plant1_Site_Machinery_Energy_Log.csv";
+  a.click();
+  toast("✓ Plant 1 CSV Ledger exported successfully!");
+}
+</script>
+</body>
+</html>

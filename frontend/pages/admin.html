@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel — MEIL BRSR Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    <div class="topbar">
+      <div><h1>Admin Panel</h1><div class="sub">Manage users, roles, departments, plants, and disclosure fields</div></div>
+    </div>
+    <div class="content">
+      <div class="grid grid-4" style="margin-bottom:18px;" id="summaryCards"></div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="users">Users &amp; Roles</button>
+        <button class="tab-btn" data-tab="org">Departments &amp; Plants</button>
+        <button class="tab-btn" data-tab="fields">Disclosure Fields</button>
+        <button class="tab-btn" data-tab="factors">⚡ Scientific Emission Factors</button>
+      </div>
+
+      <div id="tab-users">
+        <div class="card-title-row" style="margin-bottom:10px;"><h2>Users</h2><button class="btn btn-primary btn-sm" id="addUserBtn">+ Add User</button></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Scope</th><th></th></tr></thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-org" style="display:none;">
+        <div class="card">
+          <div class="card-title-row"><h2>Departments &amp; Plants</h2></div>
+          <div id="orgAdminTree"></div>
+        </div>
+      </div>
+
+      <div id="tab-fields" style="display:none;">
+        <div class="card">
+          <div class="card-title-row"><h2>BRSR Disclosure Field Catalog</h2><span class="muted" id="fieldCount" style="font-size:12px;"></span></div>
+          <div class="filter-bar"><input type="text" id="fieldSearch" placeholder="Search catalog..."></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Section</th><th>Principle</th><th>Indicator</th><th>Type</th><th>Core KPI</th><th>Unit</th><th>Default Owner</th></tr></thead>
+              <tbody id="fieldsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-factors" style="display:none;">
+        <div class="card">
+          <div class="card-title-row">
+            <div>
+              <h2>⚡ Scientific Carbon &amp; Energy Conversion Factors</h2>
+              <div class="muted" style="font-size:12px;margin-top:2px;">Group-wide parameters applied across all 400 project units (Corporate EHS Standard)</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>ID</th><th>Fuel / Source</th><th>GHG Scope</th><th>Input Unit</th><th>Conversion Factor</th><th>Scientific Standard Citation</th></tr>
+              </thead>
+              <tbody id="adminFactorsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="userModal" style="display:none;">
+  <div class="modal">
+    <button class="modal-close" id="closeUserModal">&times;</button>
+    <h2>Add User</h2>
+    <div class="form-grid">
+      <div class="form-field"><label>Full Name</label><input type="text" id="nuName"></div>
+      <div class="form-field"><label>Username</label><input type="text" id="nuUsername"></div>
+      <div class="form-field">
+        <label>Role</label>
+        <select id="nuRole">
+          <option>Group Admin</option><option>Sustainability Lead</option><option>Department Owner</option>
+          <option>Plant/Project Owner</option><option>Auditor</option><option>Management Viewer</option>
+        </select>
+      </div>
+    </div>
+    <div class="muted" style="font-size:11.5px;margin-top:10px;">Default password: demo123</div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn btn-primary" id="saveUserBtn">Create User</button>
+      <button class="btn btn-secondary" id="cancelUserBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+(async () => {
+  const user = await initLayout("admin.html");
+  if (!user) return;
+  if (user.role !== "Group Admin") {
+    document.querySelector(".content").innerHTML = `<div class="empty-state">Access restricted to Group Admin role.</div>`;
+    return;
+  }
+
+  const summary = await api("/admin/summary");
+  document.getElementById("summaryCards").innerHTML = `
+    <div class="card"><h3>Users</h3><div class="kpi-value">${summary.users}</div></div>
+    <div class="card"><h3>Registry Fields</h3><div class="kpi-value">${summary.registryFields}</div></div>
+    <div class="card"><h3>Data Entries</h3><div class="kpi-value">${summary.entries}</div></div>
+    <div class="card"><h3>Evidence Files</h3><div class="kpi-value">${summary.evidence}</div></div>
+  `;
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      ["users","org","fields","factors"].forEach(t => document.getElementById("tab-"+t).style.display = t === btn.dataset.tab ? "block" : "none");
+    });
+  });
+
+  async function loadAdminFactors() {
+    try {
+      const factors = await api("/conversion-factors");
+      document.getElementById("adminFactorsBody").innerHTML = factors.map(f => `
+        <tr>
+          <td><span class="badge" style="background:rgba(245,183,46,0.12); color:#f5b72e; border:1px solid rgba(245,183,46,0.3); font-weight:700;">${f.id}</span></td>
+          <td><strong>${f.name}</strong><div class="muted" style="font-size:11px; margin-top:2px;">${f.description}</div></td>
+          <td><span class="badge" style="background:${f.scope === 'Scope 1' ? 'rgba(248,113,113,0.15)' : f.scope === 'Scope 2' ? 'rgba(96,165,250,0.15)' : 'rgba(52,211,153,0.15)'}; color:${f.scope === 'Scope 1' ? '#f87171' : f.scope === 'Scope 2' ? '#60a5fa' : '#34d399'}; font-weight:700;">${f.scope}</span></td>
+          <td>${f.inputUnit}</td>
+          <td><strong style="color:#f5b72e;">${f.factorPerUnitDisplay}</strong></td>
+          <td class="muted" style="font-size:12px;">${f.standard}</td>
+        </tr>
+      `).join("");
+    } catch (e) {
+      console.error("Failed to load factors in admin:", e);
+    }
+  }
+  loadAdminFactors();
+
+  async function loadUsers() {
+    const users = await api("/users");
+    document.getElementById("usersBody").innerHTML = users.map(u => `
+      <tr>
+        <td>${u.name}</td><td>${u.username}</td><td><span class="badge badge-neutral">${u.role}</span></td>
+        <td class="muted" style="font-size:12px;">${u.scope && u.scope.plantId ? u.scope.plantId : (u.scope && u.scope.departmentId ? u.scope.departmentId : "Group-wide")}</td>
+        <td><button class="btn btn-danger btn-sm" data-id="${u.id}">Remove</button></td>
+      </tr>
+    `).join("");
+    document.querySelectorAll("#usersBody button[data-id]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        await api(`/users/${btn.dataset.id}`, { method: "DELETE" });
+        toast("User removed.");
+        loadUsers();
+      });
+    });
+  }
+  loadUsers();
+
+  document.getElementById("addUserBtn").addEventListener("click", () => document.getElementById("userModal").style.display = "flex");
+  document.getElementById("closeUserModal").addEventListener("click", () => document.getElementById("userModal").style.display = "none");
+  document.getElementById("cancelUserBtn").addEventListener("click", () => document.getElementById("userModal").style.display = "none");
+  document.getElementById("saveUserBtn").addEventListener("click", async () => {
+    await api("/users", { method: "POST", body: {
+      name: document.getElementById("nuName").value,
+      username: document.getElementById("nuUsername").value,
+      role: document.getElementById("nuRole").value,
+      scope: {}
+    }});
+    toast("User created.");
+    document.getElementById("userModal").style.display = "none";
+    loadUsers();
+  });
+
+  const org = await api("/org");
+  document.getElementById("orgAdminTree").innerHTML = org.subsidiaries.map(s => `
+    <div style="margin-bottom:14px;">
+      <div style="font-weight:700;color:var(--primary);">${s.name}</div>
+      ${s.businessUnits.map(bu => `
+        <div style="margin-left:16px;margin-top:6px;">
+          <div style="font-weight:600;font-size:13px;">${bu.name}</div>
+          ${bu.plants.map(p => `
+            <div style="margin-left:16px;margin-top:4px;font-size:12.5px;">
+              🏭 ${p.name}
+              <div style="margin-left:16px;color:var(--text-muted);">${p.departments.map(d => d.name).join(" · ")}</div>
+            </div>
+          `).join("")}
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+
+  const registry = await api("/registry");
+  document.getElementById("fieldCount").textContent = `${registry.length} fields`;
+  function renderFields(list) {
+    document.getElementById("fieldsBody").innerHTML = list.slice(0, 300).map(r => `
+      <tr>
+        <td><code>${r.id}</code></td><td>${r.section}</td><td>${r.principle || "—"}</td>
+        <td style="max-width:300px;">${r.indicator}</td><td>${r.type}</td>
+        <td>${r.coreKpi ? '<span class="badge badge-gold">Core</span>' : "—"}</td>
+        <td>${r.unit}</td><td class="muted" style="font-size:12px;">${r.owner}</td>
+      </tr>
+    `).join("");
+  }
+  renderFields(registry);
+  document.getElementById("fieldSearch").addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase();
+    renderFields(registry.filter(r => r.indicator.toLowerCase().includes(q) || r.id.toLowerCase().includes(q)));
+  });
+})();
+</script>
+</body>
+</html>

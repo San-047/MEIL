@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emission Variance &amp; Anomaly Detection — EHS Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background: #071510; }
+  .page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(52,211,153,0.15);
+  }
+  .anomaly-card {
+    background: #091a13; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+  }
+  .anomaly-card.high { border-left: 4px solid #f87171; }
+  .anomaly-card.medium { border-left: 4px solid #fbbf24; }
+  .anomaly-card.low { border-left: 4px solid #34d399; }
+  .form-card {
+    background: #0a1f17; border: 1px solid rgba(52, 211, 153, 0.25);
+    border-radius: 12px; padding: 22px; margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main-content" style="padding: 26px 32px; overflow-y: auto;">
+    
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#34d399; letter-spacing:0.06em; text-transform:uppercase;">
+          EHS Quality Assurance · Anomaly Detection Engine
+        </div>
+        <h1 style="font-size:24px; font-weight:800; color:#fff; margin:4px 0;">Emission Variance &amp; Spike Desk</h1>
+        <div style="font-size:13px; color:#8c8c94;">
+          Automated algorithmic detection of energy &amp; fuel spikes exceeding ±15% rolling baseline. Root cause justification log for auditor assurance.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="ehs-ledger.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 14px;">GHG Ledger</a>
+        <a href="ai-ehs.html" class="btn btn-primary" style="background:#34d399; color:#04150d; font-weight:700; font-size:12.5px; padding:8px 16px;">🤖 EHS AI Copilot</a>
+      </div>
+    </div>
+
+    <!-- Threshold Control Banner -->
+    <div style="background:#0a1e16; border:1px solid rgba(52,211,153,0.2); border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+      <div>
+        <div style="font-size:13px; font-weight:700; color:#fff;">Statistical Anomaly Sensitivity Threshold</div>
+        <div style="font-size:11.5px; color:#8c8c94;">Calculated against 90-day moving median with ±2σ standard deviation band.</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span style="font-size:12px; color:#a7f3d0;">Trigger Delta: <strong id="threshVal" style="color:#34d399; font-size:14px;">±15%</strong></span>
+        <input type="range" id="threshRange" min="5" max="30" value="15" style="accent-color:#34d399; cursor:pointer;" oninput="updateThresh(this.value)">
+      </div>
+    </div>
+
+    <!-- Anomaly Cards List -->
+    <div id="anomaliesList">
+      
+      <div class="anomaly-card high">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+          <div>
+            <span style="font-size:10.5px; font-weight:800; background:rgba(248,113,113,0.15); color:#f87171; padding:3px 8px; border-radius:4px;">
+              CRITICAL SPIKE (+24.2%) · FUEL CONSUMPTION
+            </span>
+            <h3 style="font-size:16px; font-weight:700; color:#fff; margin:6px 0 2px;">Plant 1 Standby DG Set 2 — 18-Hour Continuous Run Spike</h3>
+            <div style="font-size:12px; color:#8c8c94;">Date: <strong>14 Oct 2025</strong> · Primary Asset: DG Set 2 (500 kVA) · Baseline: 12.0 L/day avg</div>
+          </div>
+          <span style="font-size:11.5px; color:#34d399; font-weight:700; background:rgba(52,211,153,0.15); padding:4px 10px; border-radius:6px;">✓ Auditor Approved</span>
+        </div>
+        <p style="font-size:13px; color:#cbd5e1; margin-bottom:12px; line-height:1.5;">
+          <strong>Root Cause Summary:</strong> Unscheduled TSSPDCL 33kV dedicated feeder tripping during severe thunderstorm in Maheshwaram cluster. DG Set 2 was engaged to power critical clean-room HVAC for 18 hours. Additional fuel bunkered was 1,620 Litres HSD.
+        </p>
+        <div style="font-size:11.5px; color:#94a3b8; display:flex; gap:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+          <span>Voucher Proof: <strong style="color:#38bdf8; font-family:monospace;">WB-IOCL-99824</strong></span>
+          <span>Investigated By: <strong style="color:#fff;">Priya Nair (EHS Officer)</strong></span>
+          <span>Auditor WP: <strong style="color:#34d399;">WP-ISAE-3000-F04</strong></span>
+        </div>
+      </div>
+
+      <div class="anomaly-card medium">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+          <div>
+            <span style="font-size:10.5px; font-weight:800; background:rgba(251,191,36,0.15); color:#fbbf24; padding:3px 8px; border-radius:4px;">
+              PROCESS VARIANCE (+18.0%) · WATER INFLOW
+            </span>
+            <h3 style="font-size:16px; font-weight:700; color:#fff; margin:6px 0 2px;">Plant 1 Sewage Treatment Plant (STP) — High Hydraulic Load</h3>
+            <div style="font-size:12px; color:#8c8c94;">Date: <strong>18 Oct 2025</strong> · Primary Asset: STP Equalization Tank · Baseline: 400 KL/day avg</div>
+          </div>
+          <span style="font-size:11.5px; color:#34d399; font-weight:700; background:rgba(52,211,153,0.15); padding:4px 10px; border-radius:6px;">✓ Documented</span>
+        </div>
+        <p style="font-size:13px; color:#cbd5e1; margin-bottom:12px; line-height:1.5;">
+          <strong>Root Cause Summary:</strong> Heavy monsoon rainwater catchment channeled through factory storm trenches into primary balancing pond. Recycled water output rose proportionately to 5,486 KL (38.5% circularity). NABL water test verified BOD at 6.2 mg/L.
+        </p>
+        <div style="font-size:11.5px; color:#94a3b8; display:flex; gap:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+          <span>Voucher Proof: <strong style="color:#38bdf8; font-family:monospace;">LOG-STP-0931 &amp; LAB-0418</strong></span>
+          <span>Investigated By: <strong style="color:#fff;">Priya Nair (EHS Officer)</strong></span>
+        </div>
+      </div>
+
+      <div class="anomaly-card low">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+          <div>
+            <span style="font-size:10.5px; font-weight:800; background:rgba(52,211,153,0.15); color:#34d399; padding:3px 8px; border-radius:4px;">
+              POSITIVE DEVIATION (-18.5%) · BOREWELL WITHDRAWAL
+            </span>
+            <h3 style="font-size:16px; font-weight:700; color:#fff; margin:6px 0 2px;">Groundwater Extraction Reduction via Rainwater Harvesting</h3>
+            <div style="font-size:12px; color:#8c8c94;">Date: <strong>01-30 Oct 2025</strong> · Primary Asset: Deep Tubewell 01 · Baseline: 10,800 KL/mo</div>
+          </div>
+          <span style="font-size:11.5px; color:#34d399; font-weight:700; background:rgba(52,211,153,0.15); padding:4px 10px; border-radius:6px;">✓ Sustainable Win</span>
+        </div>
+        <p style="font-size:13px; color:#cbd5e1; margin-bottom:12px; line-height:1.5;">
+          <strong>Root Cause Summary:</strong> Commissioning of 500 KL rooftop rainwater harvesting tank at Plant 1 assembly shed allowed ground abstraction to decrease from 10,800 KL to 8,800 KL, saving ~2,000 KL of deep aquifers.
+        </p>
+        <div style="font-size:11.5px; color:#94a3b8; display:flex; gap:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+          <span>Voucher Proof: <strong style="color:#38bdf8; font-family:monospace;">WT-TANK-0129</strong></span>
+          <span>Reported By: <strong style="color:#fff;">Priya Nair (EHS Officer)</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Submit Variance Justification Form -->
+    <div class="form-card">
+      <h3 style="font-size:16px; font-weight:700; color:#fff; margin-bottom:6px;">Submit Operational Variance Justification Note</h3>
+      <p style="font-size:12.5px; color:#8c8c94; margin-bottom:16px;">This justification is forwarded directly to Lead Auditor Anand Sharma for working-paper sign-off.</p>
+      
+      <form id="varianceForm">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+          <div>
+            <label style="font-size:11.5px; color:#a7f3d0; font-weight:700; display:block; margin-bottom:4px;">Anomaly Stream</label>
+            <select id="varStream" class="form-control" style="width:100%; padding:9px; background:#081812; border:1px solid #1f4738; color:#fff; border-radius:6px;">
+              <option value="DG">Standby DG Fuel Consumption (> 15% Spike)</option>
+              <option value="GRID">TSSPDCL Grid Peak Demand Surcharge</option>
+              <option value="WATER">Municipal Tanker / Groundwater Variation</option>
+              <option value="HAZ">TSDF Hazardous Waste Mass Discrepancy</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11.5px; color:#a7f3d0; font-weight:700; display:block; margin-bottom:4px;">Root Cause Classification</label>
+            <select id="varCause" class="form-control" style="width:100%; padding:9px; background:#081812; border:1px solid #1f4738; color:#fff; border-radius:6px;">
+              <option value="OUTAGE">Grid Power Feeder Outage / DG Transfer</option>
+              <option value="PRODUCTION">Production Shift Ramp-Up / Overtime</option>
+              <option value="WEATHER">Severe Weather / Storm Runoff Inflow</option>
+              <option value="MAINT">Scheduled Machinery Overhaul &amp; Calibration</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:11.5px; color:#a7f3d0; font-weight:700; display:block; margin-bottom:4px;">Operational Investigation &amp; Technical Explanation</label>
+          <textarea id="varNotes" rows="3" class="form-control" style="width:100%; padding:10px; background:#081812; border:1px solid #1f4738; color:#fff; border-radius:6px; font-family:inherit; font-size:13px;" placeholder="Provide technical details, reference slip numbers, and corrective measures taken..." required></textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button type="submit" class="btn btn-primary" style="background:#34d399; color:#04150d; font-weight:700; font-size:12.5px; padding:9px 20px;">
+            ✓ Submit Justification to Auditor
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+(async () => {
+  const user = await initLayout("ehs-variance.html");
+  if (!user) return;
+  try {
+    const res = await api("/operations/state");
+    if (res && res.ehs && res.ehs.anomalies) {
+      renderAnomalies(res.ehs.anomalies);
+    }
+  } catch(e) {}
+})();
+
+function renderAnomalies(anoms) {
+  const container = document.getElementById("anomaliesList");
+  container.innerHTML = anoms.map(a => `
+    <div class="anomaly-card ${a.severity}">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div>
+          <span style="font-size:10.5px; font-weight:800; background:rgba(248,113,113,0.15); color:${a.severity==='high'?'#f87171':a.severity==='medium'?'#fbbf24':'#34d399'}; padding:3px 8px; border-radius:4px;">
+            ${a.severity.toUpperCase()} ANOMALY · ACTIVE SPIKE
+          </span>
+          <h3 style="font-size:16px; font-weight:700; color:#fff; margin:6px 0 2px;">${a.title}</h3>
+          <div style="font-size:12px; color:#8c8c94;">Date: <strong>${a.date}</strong> · Asset: ${a.asset}</div>
+        </div>
+        <span style="font-size:11.5px; color:#34d399; font-weight:700; background:rgba(52,211,153,0.15); padding:4px 10px; border-radius:6px;">${a.status}</span>
+      </div>
+      <p style="font-size:13px; color:#cbd5e1; margin-bottom:12px; line-height:1.5;">
+        <strong>Root Cause / Operational Note:</strong> ${a.cause}
+      </p>
+      <div style="font-size:11.5px; color:#94a3b8; display:flex; gap:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+        <span>Voucher Proof: <strong style="color:#38bdf8; font-family:monospace;">${a.ref || 'WB-IOCL-99824'}</strong></span>
+        <span>Investigated By: <strong style="color:#fff;">Priya Nair (EHS Officer)</strong></span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function updateThresh(val) {
+  document.getElementById("threshVal").textContent = `±${val}%`;
+}
+
+document.getElementById("varianceForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const notes = document.getElementById("varNotes").value;
+  toast("✓ Variance justification transmitted to Statutory Auditor working papers!");
+  document.getElementById("varianceForm").reset();
+});
+</script>
+</body>
+</html>

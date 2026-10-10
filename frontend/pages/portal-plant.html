@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant 1 Site Operations Portal — MEIL ESG Field Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .plant-hero {
+    background: linear-gradient(135deg, #120e06 0%, #1c150a 100%);
+    border: 1px solid rgba(245, 183, 46, 0.3);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+  .plant-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #f5b72e, #e09f1a, transparent);
+  }
+  .plant-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+  @media (max-width: 900px) {
+    .plant-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .plant-kpi-card {
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .plant-kpi-label {
+    font-size: 11.5px;
+    color: #8c8c94;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .plant-kpi-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin: 8px 0 4px;
+  }
+  .log-box {
+    background: #0c0c0e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+  .equipment-tag {
+    background: rgba(245, 183, 46, 0.1);
+    color: #f5b72e;
+    border: 1px solid rgba(245, 183, 46, 0.25);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .challan-card {
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease;
+  }
+  .challan-card:hover {
+    border-color: rgba(245, 183, 46, 0.4);
+    transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1>Plant 1 Site Operations Portal</h1>
+        <div class="sub">Olectra Greentech EV Bus Manufacturing Complex (Hyderabad) · Site Operating Ingestion Desk</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span class="chip" style="background:rgba(245, 183, 46, 0.15); color:#f5b72e; border:1px solid rgba(245, 183, 46, 0.3); font-weight:700;">
+          Vikram Singh (Site In-Charge)
+        </span>
+        <span class="chip">FY 2025-26</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Plant Hero Banner -->
+      <div class="plant-hero">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span class="chip" style="background:#f5b72e; color:#000; font-weight:800; font-size:11px;">PLANT 1 ACTIVE</span>
+              <span style="font-size:12px; color:#94a3b8;">Asset Tag: MEIL-HYD-EV-01 · EPC Complex</span>
+            </div>
+            <h2 style="margin:0 0 4px; font-size:22px; font-weight:800; color:#fff;">Plant 1 Operations Log &amp; Weighbridge Desk</h2>
+            <div style="color:#94a3b8; font-size:13px;">Daily machinery logs, diesel tanker bunkering slips, grid meter records &amp; monthly compliance sign-off</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <a href="plant-log.html" class="btn btn-primary" style="background:#f5b72e; color:#000; font-weight:700; padding:8px 16px; text-decoration:none;">
+              Machinery &amp; Energy Log
+            </a>
+            <a href="plant-signoff.html" class="btn btn-secondary" style="border-color:rgba(52,211,153,0.3); color:#34d399; font-weight:700; padding:8px 16px; text-decoration:none;">
+              Sign-Off Monthly Package
+            </a>
+          </div>
+        </div>
+
+        <div class="plant-kpi-grid">
+          <div class="plant-kpi-card" style="border-color:rgba(248,113,113,0.25);">
+            <div class="plant-kpi-label"><span></span> Diesel Bunkered (DG Sets)</div>
+            <div class="plant-kpi-val" id="kpiDiesel" style="color:#f87171;">42,500 L</div>
+            <div style="font-size:11px; color:#8c8c94;">4 Standby 500 kVA Generators · 840 Hrs</div>
+          </div>
+          <div class="plant-kpi-card" style="border-color:rgba(96,165,250,0.25);">
+            <div class="plant-kpi-label"><span></span> Grid EB Meter Drawn</div>
+            <div class="plant-kpi-val" id="kpiPower" style="color:#60a5fa;">119,250 kWh</div>
+            <div style="font-size:11px; color:#8c8c94;">TSSPDCL Dedicated Industrial Feeder</div>
+          </div>
+          <div class="plant-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+            <div class="plant-kpi-label"><span></span> Water Flowmeter (STP)</div>
+            <div class="plant-kpi-val" id="kpiWater" style="color:#34d399;">14,250 KL</div>
+            <div style="font-size:11px; color:#8c8c94;">38.5% Recycled via On-Site STP Plant</div>
+          </div>
+          <div class="plant-kpi-card" style="border-color:rgba(251,191,36,0.25);">
+            <div class="plant-kpi-label"><span></span> TSDF Hazardous Scrap</div>
+            <div class="plant-kpi-val" id="kpiWaste" style="color:#fbbf24;">12.4 MT</div>
+            <div style="font-size:11px; color:#8c8c94;">100% Manifested under Form 10 to TSDF</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Log Entry Form -->
+      <div class="log-box" id="quickLogBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <div>
+            <h3 style="margin:0 0 4px; font-size:16px; color:#fff;">Site Equipment Log &amp; Weighbridge Entry</h3>
+            <div style="font-size:12px; color:#8c8c94;">Log fresh meter reading or fuel delivery ticket directly to plant ledger</div>
+          </div>
+          <span class="equipment-tag">Active Asset: Plant 1 Olectra EV</span>
+        </div>
+
+        <form id="plantLogForm" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+          <div>
+            <label style="font-size:11.5px; color:#8c8c94; font-weight:700; text-transform:uppercase; margin-bottom:6px; display:block;">Equipment / Station</label>
+            <select id="pEquipment" required style="width:100%; background:#141416; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:9px 12px; border-radius:8px; font-size:13px; outline:none;">
+              <option value="DG Set 1 & 2 (500 kVA Genset)">DG Set 1 &amp; 2 (500 kVA Genset - Diesel)</option>
+              <option value="TSSPDCL Dedicated Grid Feeder">TSSPDCL Dedicated Grid Feeder (Power kWh)</option>
+              <option value="Groundwater Borewell & Municipal Tanker">Groundwater Borewell &amp; Municipal Tanker (Water KL)</option>
+              <option value="Paint Shop TSDF Hazardous Scrap">Paint Shop TSDF Hazardous Scrap (Waste MT)</option>
+              <option value="Plant EV Shuttles & Transport Vans">Plant EV Shuttles &amp; Transport Vans (CNG/Diesel)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:11.5px; color:#8c8c94; font-weight:700; text-transform:uppercase; margin-bottom:6px; display:block;">Quantity Added / Meter Reading</label>
+            <input type="number" step="any" id="pQty" placeholder="e.g. 5000" required style="width:100%; background:#141416; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:9px 12px; border-radius:8px; font-size:13px; outline:none;">
+          </div>
+
+          <div>
+            <label style="font-size:11.5px; color:#8c8c94; font-weight:700; text-transform:uppercase; margin-bottom:6px; display:block;">Weighbridge Slip / Invoice #</label>
+            <input type="text" id="pSlipNo" placeholder="e.g. WB-OCT-49201" required style="width:100%; background:#141416; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:9px 12px; border-radius:8px; font-size:13px; outline:none;">
+          </div>
+
+          <div style="grid-column: 1 / -1; display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:12px; color:#34d399;">
+              ✓ Auto-generates SHA-256 cryptographic proof &amp; logs to Corporate EHS ledger
+            </div>
+            <button type="submit" class="btn btn-primary" id="btnLogSubmit" style="background:#f5b72e; color:#000; font-weight:700; padding:9px 24px;">
+              Record &amp; Sync to EHS Ledger
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Weighbridge Slips & Delivery Challan Gallery -->
+      <div class="card" style="margin-bottom:22px;">
+        <div class="card-title-row" style="margin-bottom:16px;">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 2px;">Physical Weighbridge Slips &amp; Delivery Challans (Plant 1)</h2>
+            <div style="font-size:12px; color:#8c8c94;">Auditor-verifiable paper slips with timestamp &amp; cryptographic hash</div>
+          </div>
+          <a href="evidence.html" class="btn btn-secondary btn-sm" style="border-color:rgba(245,183,46,0.3); color:#f5b72e;">Open Full Evidence Repository →</a>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;" id="plantChallansGrid">
+          <div class="challan-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="equipment-tag">Diesel HSD</span>
+              <span class="badge badge-success">Verified</span>
+            </div>
+            <div style="font-weight:700; color:#fff; font-size:13.5px;">Challan #WB-49201 - 12,000 Litres HSD</div>
+            <div style="font-size:12px; color:#8c8c94;">Supplier: Indian Oil Corporation Ltd. · Tanker #TS-09-UB-4819</div>
+            <div style="font-size:11px; font-family:monospace; color:#34d399; background:rgba(52,211,153,0.08); padding:4px 8px; border-radius:4px;">
+              SHA-256: 4a9f20e81c... Verified
+            </div>
+          </div>
+
+          <div class="challan-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="equipment-tag" style="color:#60a5fa; border-color:rgba(96,165,250,0.3);">Grid Power</span>
+              <span class="badge badge-success">Verified</span>
+            </div>
+            <div style="font-weight:700; color:#fff; font-size:13.5px;">EB Bill #TSSPDCL-SEP-88192</div>
+            <div style="font-size:12px; color:#8c8c94;">Meter ID: HT-99420 · 119,250 kWh Thermal Grid Draw</div>
+            <div style="font-size:11px; font-family:monospace; color:#34d399; background:rgba(52,211,153,0.08); padding:4px 8px; border-radius:4px;">
+              SHA-256: b82c918fa2... Verified
+            </div>
+          </div>
+
+          <div class="challan-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="equipment-tag" style="color:#fbbf24; border-color:rgba(251,191,36,0.3);">TSDF Waste</span>
+              <span class="badge badge-success">Verified</span>
+            </div>
+            <div style="font-weight:700; color:#fff; font-size:13.5px;">TSDF Form 10 Manifest #HW-1204</div>
+            <div style="font-size:12px; color:#8c8c94;">Hyderabad Waste Mgmt Project (HWMP) · 12.4 MT Spent Oil</div>
+            <div style="font-size:11px; font-family:monospace; color:#34d399; background:rgba(52,211,153,0.08); padding:4px 8px; border-radius:4px;">
+              SHA-256: 7d1e843bc1... Verified
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plant Indicators Readiness Checklist -->
+      <div class="card">
+        <div class="card-title-row" style="margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 2px;">Plant 1 Monthly Reporting Checklist (25 Disclosures)</h2>
+            <div style="font-size:12px; color:#8c8c94;">Current status of disclosures scoped directly to Plant 1 EV Manufacturing Site</div>
+          </div>
+          <span class="badge badge-gold">89.4% Complete (22/25 Done)</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicator ID</th><th>Operational Parameter</th><th>Current Monthly Value</th><th>Unit</th><th>Evidence</th><th>Status</th></tr>
+            </thead>
+            <tbody id="plantEntriesBody">
+              <tr><td><code>C-P6-01</code></td><td>Total Diesel Fuel Consumption</td><td style="color:#f87171;font-weight:700;">42,500</td><td>Litres</td><td><span class="badge badge-success">WB-49201</span></td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr><td><code>C-P6-02</code></td><td>Electricity Consumed (Grid Feeder)</td><td style="color:#60a5fa;font-weight:700;">119,250</td><td>kWh</td><td><span class="badge badge-success">EB-88192</span></td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr><td><code>C-P6-03</code></td><td>Total Water Withdrawal (Groundwater + Tanker)</td><td style="color:#34d399;font-weight:700;">14,250</td><td>KL</td><td><span class="badge badge-success">STP-LOG-01</span></td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr><td><code>C-P6-04</code></td><td>Hazardous Waste Disposed (Form 10)</td><td style="color:#fbbf24;font-weight:700;">12.40</td><td>MT</td><td><span class="badge badge-success">HW-1204</span></td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr><td><code>A-06</code></td><td>Total On-Site Workers &amp; Technicians</td><td style="font-weight:700;color:#fff;">1,240</td><td>Headcount</td><td><span class="badge badge-success">ROSTER-P1</span></td><td><span class="badge badge-success">Approved</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+(async () => {
+  const user = await initLayout("portal-plant.html");
+  if (!user) return;
+
+  try {
+    const res = await api("/operations/state");
+    if (res && res.plant) {
+      document.getElementById("kpiDiesel").textContent = res.plant.dieselBunkeredL.toLocaleString() + " L";
+      document.getElementById("kpiPower").textContent = res.plant.gridKwh.toLocaleString() + " kWh";
+      document.getElementById("kpiWater").textContent = res.plant.waterInflowKL.toLocaleString() + " KL";
+      document.getElementById("kpiWaste").textContent = res.plant.wasteHazardousMT.toFixed(2) + " MT";
+    }
+  } catch(e) {}
+
+  // Handle Quick Log Form
+  document.getElementById("plantLogForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const eq = document.getElementById("pEquipment").value;
+    const qty = parseFloat(document.getElementById("pQty").value);
+    const slip = document.getElementById("pSlipNo").value;
+    const submitBtn = document.getElementById("btnLogSubmit");
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Logging & Hashing...";
+
+    try {
+      const res = await api("/operations/log", {
+        method: "POST",
+        body: {
+          equipment: eq,
+          qty: qty,
+          slipRef: slip
+        }
+      });
+
+      if (res && res.state && res.state.plant) {
+        document.getElementById("kpiDiesel").textContent = res.state.plant.dieselBunkeredL.toLocaleString() + " L";
+        document.getElementById("kpiPower").textContent = res.state.plant.gridKwh.toLocaleString() + " kWh";
+        document.getElementById("kpiWater").textContent = res.state.plant.waterInflowKL.toLocaleString() + " KL";
+        document.getElementById("kpiWaste").textContent = res.state.plant.wasteHazardousMT.toFixed(2) + " MT";
+      }
+
+      toast(`Logged ${qty} for ${eq}. Slip #${slip} cryptographically sealed! SHA-256: ${res.hash ? res.hash.slice(0, 16) : ''}…`);
+      document.getElementById("plantLogForm").reset();
+    } catch(err) {
+      toast("Error logging entry");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Record & Sync to EHS Ledger";
+    }
+  });
+})();
+</script>
+</body>
+</html>

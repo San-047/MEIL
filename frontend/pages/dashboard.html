@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Company Overview &amp; BRSR Reports — MEIL Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .kpi-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .principle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+  }
+  @media (max-width: 960px) {
+    .principle-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .principle-grid { grid-template-columns: 1fr; }
+  }
+  .principle-mini-card {
+    background: #0c0c0e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .principle-mini-card .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .principle-mini-card .pcode {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 13px;
+  }
+  .principle-mini-card .pname {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .checklist-table td {
+    padding: 10px 12px;
+  }
+  .checklist-table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .status-not-entered {
+    background: rgba(245, 183, 46, 0.14);
+    color: #f5b72e;
+    border: 1px solid rgba(245, 183, 46, 0.35);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+  .val-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+
+  /* =========================================================================
+     EXECUTIVE GROUP MACRO DASHBOARD STYLES
+     ========================================================================= */
+  .macro-command-center {
+    background: linear-gradient(135deg, #0e0e12 0%, #15151c 100%);
+    border: 1px solid rgba(245, 183, 46, 0.25);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .macro-command-center::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #f5b72e, #e09f1a, transparent);
+  }
+  .macro-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .macro-title h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.01em;
+  }
+  .macro-title h2 .gold { color: #f5b72e; }
+  .macro-title .sub {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .macro-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 1200px) {
+    .macro-grid-5 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .macro-grid-5 { grid-template-columns: 1fr; }
+  }
+  .macro-kpi-card {
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .macro-kpi-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(245, 183, 46, 0.35);
+  }
+  .macro-kpi-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #8c8c94;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .macro-kpi-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f5b72e;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .macro-kpi-sub {
+    font-size: 11.5px;
+    color: #94a3b8;
+    line-height: 1.3;
+  }
+
+  /* Submission Tracker Strip */
+  .submission-tracker-strip {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .tracker-stat-pills {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .tracker-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* UN SDG Matrix Widget */
+  .sdg-widget-box {
+    background: #0d0d10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 22px;
+  }
+  .sdg-widget-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .sdg-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 1100px) {
+    .sdg-cards-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .sdg-cards-grid { grid-template-columns: 1fr; }
+  }
+  .sdg-card-item {
+    background: #14141a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: border-color 0.15s, transform 0.15s;
+    cursor: default;
+  }
+  .sdg-card-item:hover {
+    border-color: rgba(245, 183, 46, 0.4);
+    transform: translateY(-2px);
+  }
+  .sdg-badge-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: #f5b72e;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .sdg-topic {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sdg-stat {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.3;
+  }
+
+  /* View Mode Switcher */
+  .view-mode-tabs {
+    display: flex;
+    gap: 8px;
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 4px;
+    border-radius: 8px;
+  }
+  .view-mode-tab {
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #8c8c94;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: all 0.15s;
+  }
+  .view-mode-tab.active {
+    background: #1f1f28;
+    color: #f5b72e;
+    border: 1px solid rgba(245, 183, 46, 0.3);
+  }
+
+  /* Leaderboard Table Styles */
+  .leaderboard-wrap {
+    background: #0c0c0e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .leaderboard-table th {
+    background: #141419;
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8c8c94;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .leaderboard-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    vertical-align: middle;
+  }
+  .leaderboard-table tr:hover td {
+    background: rgba(245, 183, 46, 0.03);
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1 id="topbarTitle">Dashboard — Company Overview</h1>
+        <div class="sub" id="topbarSub">Group structure and company-scoped ESG disclosures</div>
+      </div>
+      <div class="tag-row" id="topbarMeta">
+        <span class="chip" style="background:rgba(245, 183, 46, 0.15);color:var(--accent);border:1px solid rgba(245, 183, 46, 0.3);">MEIL Group</span>
+        <span class="chip">FY 2025-26</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 1: DASHBOARD COMPANY OVERVIEW (3 CARDS PER ROW, FULL LIST, SCROLL)   -->
+      <!-- ========================================================================= -->
+      <div id="viewOverview">
+
+        <!-- ========================================================================= -->
+        <!-- ROLE VIEW 1: MEIL GROUP CORPORATE EXECUTIVE COMMAND CENTER (group.admin)    -->
+        <!-- ========================================================================= -->
+        <div id="groupAdminDashboardSection">
+
+          <!-- EXECUTIVE GROUP MACRO COMMAND CENTER -->
+          <div class="macro-command-center">
+          <div class="macro-header-row">
+            <div class="macro-title">
+              <h2>MEIL Group <span class="gold">Executive ESG Command Center</span></h2>
+              <div class="sub">Consolidated Group Performance across 42 Subsidiaries &amp; 250+ Project Units · SEBI BRSR FY 2025-26</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <a href="assignments.html" class="btn btn-secondary" style="font-size:12.5px;padding:7px 14px;border-color:rgba(245,183,46,0.3);color:#f5b72e;">
+                Review Submissions (4)
+              </a>
+              <a href="reports.html" class="btn btn-primary" style="font-size:12.5px;padding:7px 14px;">
+                Master SEBI Report →
+              </a>
+            </div>
+          </div>
+
+          <!-- 5 High-Impact Macro Scorecards -->
+          <div class="macro-grid-5">
+            <!-- 1. Carbon Footprint -->
+            <div class="macro-kpi-card">
+              <div>
+                <div class="macro-kpi-label"><span></span> GHG Footprint (Scope 1+2)</div>
+                <div class="macro-kpi-num" id="macroGhgVal">1.42 M</div>
+                <div class="macro-kpi-sub">MT CO₂e (Scope 1: 884K · Scope 2: 536K)</div>
+              </div>
+              <div style="margin-top:10px;">
+                <span class="chip" style="background:rgba(52,211,153,0.12);color:#34d399;font-size:11px;border:1px solid rgba(52,211,153,0.3);">
+                  ▼ -12.4% Intensity
+                </span>
+              </div>
+            </div>
+
+            <!-- 2. Renewable Energy -->
+            <div class="macro-kpi-card">
+              <div>
+                <div class="macro-kpi-label"><span></span> Green Energy Mix</div>
+                <div class="macro-kpi-num" id="macroEnergyVal">34.8%</div>
+                <div class="macro-kpi-sub">420 MW Solar &amp; Hydro Capacity Installed</div>
+              </div>
+              <div style="margin-top:10px;">
+                <div class="progress-bar" style="height:5px;"><div style="width:34.8%;"></div></div>
+                <div style="font-size:10.5px;color:#8c8c94;margin-top:4px;">Target: 45% by FY28</div>
+              </div>
+            </div>
+
+            <!-- 3. Total Workforce -->
+            <div class="macro-kpi-card">
+              <div>
+                <div class="macro-kpi-label"><span></span> Total Group Workforce</div>
+                <div class="macro-kpi-num" id="macroWorkforceVal">48,250</div>
+                <div class="macro-kpi-sub">Permanent &amp; Contractual across all sites</div>
+              </div>
+              <div style="margin-top:10px;">
+                <span class="chip" style="background:rgba(245,183,46,0.12);color:#f5b72e;font-size:11px;border:1px solid rgba(245,183,46,0.3);">
+                  9.4% Women · 100% Minimum Wage
+                </span>
+              </div>
+            </div>
+
+            <!-- 4. Safety & Health -->
+            <div class="macro-kpi-card">
+              <div>
+                <div class="macro-kpi-label"><span></span> Health &amp; Safety (LTIFR)</div>
+                <div class="macro-kpi-num" id="macroSafetyVal">0.14</div>
+                <div class="macro-kpi-sub">Lost Time Injury Rate per million man-hours</div>
+              </div>
+              <div style="margin-top:10px;">
+                <span class="chip" style="background:rgba(52,211,153,0.12);color:#34d399;font-size:11px;border:1px solid rgba(52,211,153,0.3);">
+                  Zero Fatalities FY26
+                </span>
+              </div>
+            </div>
+
+            <!-- 5. CSR Spend -->
+            <div class="macro-kpi-card">
+              <div>
+                <div class="macro-kpi-label"><span></span> Group CSR Investment</div>
+                <div class="macro-kpi-num" id="macroCsrVal">₹ 48.6 Cr</div>
+                <div class="macro-kpi-sub">250+ Villages &amp; Education Projects</div>
+              </div>
+              <div style="margin-top:10px;">
+                <span class="chip" style="background:rgba(245,183,46,0.12);color:#f5b72e;font-size:11px;border:1px solid rgba(245,183,46,0.3);">
+                  100% Mandate Compliant
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submission & Compliance Tracker -->
+          <div class="submission-tracker-strip">
+            <div class="tracker-stat-pills">
+              <span style="font-size:13px;font-weight:700;color:#fff;">Subsidiary Reporting Status:</span>
+              <span class="tracker-pill" style="background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.3);">
+                36 Submitted (85.7%)
+              </span>
+              <span class="tracker-pill" style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.3);">
+                4 In Review
+              </span>
+              <span class="tracker-pill" style="background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.3);">
+                2 Overdue
+              </span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:12px;color:#8c8c94;">Group Assurance Readiness: <strong style="color:#f5b72e;">88.4%</strong></span>
+              <div class="progress-bar" style="width:120px;height:7px;"><div style="width:88.4%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UN SDG IMPACT MATRIX WIDGET -->
+        <div class="sdg-widget-box">
+          <div class="sdg-widget-title">
+            <div>
+              <strong style="color:#fff;font-size:14px;">UN Sustainable Development Goals (SDG) Alignment</strong>
+              <div style="font-size:11.5px;color:#8c8c94;margin-top:2px;">Mapped to SEBI BRSR Principles P1 – P9 &amp; MEIL Infrastructure Operations</div>
+            </div>
+            <span class="chip" style="font-size:11px;background:rgba(245,183,46,0.1);color:#f5b72e;border:1px solid rgba(245,183,46,0.3);">
+              UN Agenda 2030 Active
+            </span>
+          </div>
+          <div class="sdg-cards-grid">
+            <div class="sdg-card-item">
+              <div class="sdg-badge-num">SDG 6</div>
+              <div class="sdg-topic">Clean Water</div>
+              <div class="sdg-stat">3.2M KL water recycled; zero untreated effluent discharge</div>
+            </div>
+            <div class="sdg-card-item">
+              <div class="sdg-badge-num">SDG 7</div>
+              <div class="sdg-topic">Clean Energy</div>
+              <div class="sdg-stat">34.8% renewable share; 420 MW solar/hydro plants</div>
+            </div>
+            <div class="sdg-card-item">
+              <div class="sdg-badge-num">SDG 8</div>
+              <div class="sdg-topic">Decent Work</div>
+              <div class="sdg-stat">100% fair wages, social security &amp; safety training</div>
+            </div>
+            <div class="sdg-card-item">
+              <div class="sdg-badge-num">SDG 9</div>
+              <div class="sdg-topic">Sustainable Infra</div>
+              <div class="sdg-stat">Olectra zero-emission e-buses; green civil design</div>
+            </div>
+            <div class="sdg-card-item">
+              <div class="sdg-badge-num">SDG 12</div>
+              <div class="sdg-topic">Responsible Mfg</div>
+              <div class="sdg-stat">88.2% non-hazardous waste diverted &amp; recycled</div>
+            </div>
+            <div class="sdg-card-item">
+              <div class="sdg-badge-num">SDG 13</div>
+              <div class="sdg-topic">Climate Action</div>
+              <div class="sdg-stat">Continuous GHG monitoring across 250+ sites</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- CONGLOMERATE 12-MONTH INGESTION CADENCE                                   -->
+        <!-- ========================================================================= -->
+        <div class="card" style="margin-bottom:22px; background:#0c0c0e; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h3 style="margin:0; font-size:15px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+                <span></span> Conglomerate Monthly Data Ingestion Cadence (FY 2025-26)
+              </h3>
+              <div style="font-size:12px; color:#8c8c94; margin-top:3px;">
+                Monitoring all 400 Operating Units (250 EPC Projects + 150 O&amp;M Contracts) across 12 monthly reporting cycles
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:11px; border:1px solid rgba(52,211,153,0.3);">
+                9 Months Closed &amp; Audited
+              </span>
+              <span class="chip" style="background:rgba(245,183,46,0.12); color:#f5b72e; font-size:11px; border:1px solid rgba(245,183,46,0.3);">
+                Month 10 (Jan '26) In Review
+              </span>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(12, 1fr); gap:8px; overflow-x:auto; padding-bottom:6px;" id="dashboardCadenceGrid">
+            <!-- 12 Months Cards populated dynamically -->
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SCIENTIFIC CARBON & ENERGY BREAKDOWN                                      -->
+        <!-- ========================================================================= -->
+        <div class="card" style="margin-bottom:22px; background:#0c0c0e; border:1px solid rgba(245,183,46,0.25); border-radius:12px; padding:20px; position:relative; overflow:hidden;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:18px;"></span>
+                <h3 style="margin:0; font-size:15px; font-weight:800; color:#fff;">Scientific GHG &amp; Energy Conversion Architecture</h3>
+                <span class="chip" style="background:rgba(245,183,46,0.15); color:#f5b72e; font-size:10.5px; border:1px solid rgba(245,183,46,0.3);">
+                  IPCC 2006 &amp; CEA Baseline V19
+                </span>
+              </div>
+              <div style="font-size:12px; color:#8c8c94; margin-top:3px;">
+                Physical fuel combustion to CO₂ equivalents &amp; green power purchase accounting across all sites
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btnOpenFactorsModal" style="border-color:rgba(245,183,46,0.35); color:#f5b72e; font-weight:700;">
+              View Emission Factor Library (10)
+            </button>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;">
+            <!-- Col 1: Scope 1 Fuels Combustion -->
+            <div style="background:#14141a; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div>
+                  <span style="font-size:11px; font-weight:800; color:#f87171; letter-spacing:0.5px; text-transform:uppercase;">Scope 1 Direct Fuels</span>
+                  <div style="font-size:20px; font-weight:800; color:#fff; margin-top:2px;">124,750 <span style="font-size:12px; color:#8c8c94; font-weight:500;">tCO₂e</span></div>
+                </div>
+                <span style="font-size:22px;"></span>
+              </div>
+              <div style="font-size:11.5px; color:#94a3b8; display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; justify-content:space-between; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <span>High Speed Diesel (19.5M L):</span>
+                  <strong style="color:#fff;">52,400 tCO₂e (42%)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <span>Boiler Lignite &amp; Anthracite (24.8K MT):</span>
+                  <strong style="color:#fff;">44,900 tCO₂e (36%)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span>Fleet CNG &amp; Industrial LPG:</span>
+                  <strong style="color:#fff;">27,450 tCO₂e (22%)</strong>
+                </div>
+              </div>
+              <div style="margin-top:12px; font-size:11px; color:#8c8c94; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px;">
+                <em>Diesel converted at 2.68 kg/L; Lignite Coal at 1.41 t/t.</em>
+              </div>
+            </div>
+
+            <!-- Col 2: Scope 2 Electricity Grid vs Green -->
+            <div style="background:#14141a; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div>
+                  <span style="font-size:11px; font-weight:800; color:#60a5fa; letter-spacing:0.5px; text-transform:uppercase;">Scope 2 Purchased Power</span>
+                  <div style="font-size:20px; font-weight:800; color:#fff; margin-top:2px;">48,200 <span style="font-size:12px; color:#8c8c94; font-weight:500;">tCO₂e</span></div>
+                </div>
+                <span style="font-size:22px;"></span>
+              </div>
+              <div style="font-size:11.5px; color:#94a3b8; display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; justify-content:space-between; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <span>Thermal Grid (0.716 kg/kWh):</span>
+                  <strong style="color:#fff;">48,200 tCO₂e (64%)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <span>Green Solar/Wind PPA (37.8M kWh):</span>
+                  <strong style="color:#34d399;">0.00 tCO₂e (36%)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span>Clean Offset Avoided:</span>
+                  <strong style="color:#34d399;">-27,100 tCO₂e</strong>
+                </div>
+              </div>
+              <div style="margin-top:12px; font-size:11px; color:#8c8c94; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px;">
+                <em>National Grid CEA V19 factor applied vs 0 factor for Solar PPA.</em>
+              </div>
+            </div>
+
+            <!-- Col 3: Scope 3 Value Chain & Water/Waste -->
+            <div style="background:#14141a; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div>
+                  <span style="font-size:11px; font-weight:800; color:#34d399; letter-spacing:0.5px; text-transform:uppercase;">Scope 3 Travel &amp; Resources</span>
+                  <div style="font-size:20px; font-weight:800; color:#fff; margin-top:2px;">14,820 <span style="font-size:12px; color:#8c8c94; font-weight:500;">tCO₂e</span></div>
+                </div>
+                <span style="font-size:22px;"></span>
+              </div>
+              <div style="font-size:11.5px; color:#94a3b8; display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; justify-content:space-between; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <span>Air Travel (0.150 kg/km):</span>
+                  <strong style="color:#fff;">7,230 tCO₂e (49%)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <span>Water Recycled (34.2%):</span>
+                  <strong style="color:#34d399;">2.88M KL Saved</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span>Hazardous TSDF Compliance:</span>
+                  <strong style="color:#34d399;">100% Manifested</strong>
+                </div>
+              </div>
+              <div style="margin-top:12px; font-size:11px; color:#8c8c94; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px;">
+                <em>Corporate EHS Standard: Scope 1 &amp; 2 track direct combustion &amp; grid power; Scope 3 travel tracks passenger-km.</em>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Controls Toolbar -->
+        <div class="filter-toolbar">
+          <div class="filter-top-row">
+            <div class="search-wrapper">
+              <span class="icon"></span>
+              <input type="text" id="entitySearch" placeholder="Search company by name, sector, or branch…">
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <label style="font-size:12.5px;color:var(--text-muted);font-weight:600;">Branch:</label>
+              <select id="branchSelect" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:#070708;color:#ffffff;">
+                <option value="all">All Group Branches</option>
+                <option value="MEIL Holdings Limited (MHL)">MEIL Holdings Limited (MHL)</option>
+                <option value="MEIL Advanced Technologies Private Limited">MEIL Advanced Technologies</option>
+                <option value="MEIL Global Holdings B.V.">MEIL Global Holdings B.V.</option>
+                <option value="MEIL Direct Subsidiaries">MEIL Direct Subsidiaries</option>
+                <option value="Infrastructure / Road Project SPVs">Infrastructure / Road SPVs</option>
+                <option value="Power / Energy Entities">Power / Energy Entities</option>
+                <option value="Other Entities">Other Entities</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Sector Chips -->
+          <div class="chips-row" id="sectorChips">
+            <span class="filter-chip active" data-cat="all">All Entities (42)</span>
+            <span class="filter-chip" data-cat="parent-holding">Parent &amp; Holding</span>
+            <span class="filter-chip" data-cat="transport">Transport &amp; EV</span>
+            <span class="filter-chip" data-cat="power">Power &amp; Energy</span>
+            <span class="filter-chip" data-cat="gas-utilities">Gas &amp; Utilities</span>
+            <span class="filter-chip" data-cat="roadways">Roadway SPVs</span>
+            <span class="filter-chip" data-cat="telecom">Telecom &amp; Tech</span>
+            <span class="filter-chip" data-cat="manufacturing">Manufacturing</span>
+            <span class="filter-chip" data-cat="support">Media &amp; Services</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+          <div style="font-size:13px;color:var(--text-muted);" id="catalogCounter">
+            Loading company catalog…
+          </div>
+          <div class="view-mode-tabs">
+            <button class="view-mode-tab active" id="btnViewGrid" onclick="switchCatalogView('grid')">Cards Grid (42)</button>
+            <button class="view-mode-tab" id="btnViewLeaderboard" onclick="switchCatalogView('leaderboard')">Compliance Leaderboard</button>
+          </div>
+        </div>
+
+        <!-- 3 Cards Per Row Grid with Normal Scroll -->
+        <div class="entity-cards-grid" id="entityGrid">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Subsidiary Compliance Leaderboard Table View -->
+        <div class="leaderboard-wrap" id="leaderboardWrap" style="display:none;">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Subsidiary / Entity</th>
+                <th>Branch</th>
+                <th>Sector</th>
+                <th>BRSR Status</th>
+                <th>Completion</th>
+                <th>Risk Level</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        </div> <!-- /#groupAdminDashboardSection -->
+
+        <!-- ========================================================================= -->
+        <!-- ROLE VIEW 2: EHS & ENVIRONMENTAL DESK (ehs.owner)                         -->
+        <!-- ========================================================================= -->
+        <div id="ehsDashboardSection" style="display:none;">
+          <div class="macro-command-center" style="background: linear-gradient(135deg, #071510 0%, #0d221a 100%); border-color: rgba(52,211,153,0.35);">
+            <div class="macro-header-row">
+              <div class="macro-title">
+                <h2>Olectra Greentech Ltd. · <span style="color:#34d399;">EHS &amp; Environmental Desk</span></h2>
+                <div class="sub">Operating Unit: <strong>Plant 1 (Hyderabad EV Complex)</strong> · Assigned Officer: <strong>Priya Nair (EHS Dept Owner)</strong></div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <a href="data-entry.html" class="btn btn-primary" style="background:#34d399; color:#04150d; font-weight:700; font-size:12.5px; padding:8px 16px;">
+                  Enter Monthly EHS Data
+                </a>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('factorsModal').style.display='flex'" style="border-color:rgba(52,211,153,0.35); color:#34d399; font-size:12.5px; padding:8px 16px;">
+                  Scientific Factor Library
+                </button>
+                <a href="evidence.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 16px;">
+                  Upload Fuel &amp; Power Bills
+                </a>
+              </div>
+            </div>
+
+            <div class="macro-grid-5" style="grid-template-columns: repeat(4, 1fr); margin-top:20px;">
+              <div class="macro-kpi-card" style="border-color:rgba(248,113,113,0.25);">
+                <div class="macro-kpi-label"><span></span> Scope 1 Fuel Emissions</div>
+                <div class="macro-kpi-num" style="color:#f87171;">113.9 <span style="font-size:13px; color:#8c8c94;">tCO₂e</span></div>
+                <div class="macro-kpi-sub">Diesel: 42,500 L (Factor 2.68 kg/L) · CNG: 3,200 kg</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(248,113,113,0.12); color:#f87171; font-size:10.5px;">Stationary Gensets &amp; Transport</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(96,165,250,0.25);">
+                <div class="macro-kpi-label"><span></span> Scope 2 Electricity Draw</div>
+                <div class="macro-kpi-num" style="color:#60a5fa;">85.4 <span style="font-size:13px; color:#8c8c94;">tCO₂e</span></div>
+                <div class="macro-kpi-sub">Thermal Grid: 119,250 kWh · Solar PPA: 65,750 kWh</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">35.5% Green Solar PPA</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+                <div class="macro-kpi-label"><span></span> Water Withdrawal &amp; STP</div>
+                <div class="macro-kpi-num" style="color:#34d399;">14,250 <span style="font-size:13px; color:#8c8c94;">KL</span></div>
+                <div class="macro-kpi-sub">Groundwater: 8,800 KL · Municipal: 5,450 KL</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">38.5% Recycled via STP/ETP</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(251,191,36,0.25);">
+                <div class="macro-kpi-label"><span></span> Hazardous Waste Manifests</div>
+                <div class="macro-kpi-num" style="color:#fbbf24;">12.4 <span style="font-size:13px; color:#8c8c94;">MT</span></div>
+                <div class="macro-kpi-sub">Spent Oil, Paint Sludge &amp; E-Waste</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">100% TSDF Form 10 Compliant</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:22px; background:#0c0c0e;">
+            <div class="card-title-row">
+              <div>
+                <h2>Site Environmental &amp; Climate Indicators (Principle 6)</h2>
+                <div class="sub">Disclosures under your direct custody for FY 2025-26 reporting</div>
+              </div>
+              <a href="data-entry.html" class="btn btn-primary btn-sm">Edit All in Data Entry →</a>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Indicator ID</th><th>Parameter</th><th>Physical Consumption</th><th>Emission Factor</th><th>Carbon Equivalent</th><th>Attached Evidence</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>C-P6-01</code></td>
+                    <td><strong>Total Scope 1 Direct GHG Emissions</strong></td>
+                    <td>42,500 L Diesel + 3,200 kg CNG</td>
+                    <td>2.68 kg/L (HSD) · 2.75 kg/kg (CNG)</td>
+                    <td><strong style="color:#f87171;">113.90 tCO₂e</strong></td>
+                    <td><span class="badge badge-success">EV0014 (HSD Bills)</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                  <tr>
+                    <td><code>C-P6-02</code></td>
+                    <td><strong>Total Scope 2 Indirect Grid GHG Emissions</strong></td>
+                    <td>119,250 kWh Grid Power</td>
+                    <td>0.716 kg/kWh (CEA Baseline V19)</td>
+                    <td><strong style="color:#60a5fa;">85.38 tCO₂e</strong></td>
+                    <td><span class="badge badge-success">EV0018 (DISCOM Bill)</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                  <tr>
+                    <td><code>C-P6-03</code></td>
+                    <td><strong>Total Water Withdrawal &amp; Recycled</strong></td>
+                    <td>14,250 KL withdrawn · 5,486 KL recycled</td>
+                    <td>Direct Flow Metering</td>
+                    <td><strong style="color:#34d399;">38.5% Recycled</strong></td>
+                    <td><span class="badge badge-success">EV0021 (Logbook)</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                  <tr>
+                    <td><code>C-P6-04</code></td>
+                    <td><strong>Hazardous Waste Generated (TSDF Disposed)</strong></td>
+                    <td>12.4 MT generated · 12.4 MT disposed</td>
+                    <td>Weighbridge Manifest Records</td>
+                    <td><strong style="color:#fbbf24;">100% Manifested</strong></td>
+                    <td><span class="badge badge-success">EV0025 (Form 10)</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- ROLE VIEW 3: HR & SOCIAL GOVERNANCE DESK (hr.owner)                       -->
+        <!-- ========================================================================= -->
+        <div id="hrDashboardSection" style="display:none;">
+          <div class="macro-command-center" style="background: linear-gradient(135deg, #150f1a 0%, #201328 100%); border-color: rgba(192,132,252,0.35);">
+            <div class="macro-header-row">
+              <div class="macro-title">
+                <h2>Olectra Greentech Ltd. · <span style="color:#c084fc;">HR &amp; Social Governance Desk</span></h2>
+                <div class="sub">Operating Unit: <strong>Plant 1 (Hyderabad Complex)</strong> · Assigned Officer: <strong>Suresh Reddy (HR Dept Owner)</strong></div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <a href="data-entry.html" class="btn btn-primary" style="background:#c084fc; color:#04150d; font-weight:700; font-size:12.5px; padding:8px 16px;">
+                  Enter Workforce Data
+                </a>
+                <a href="evidence.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 16px;">
+                  Upload Payroll &amp; POSH Evidence
+                </a>
+              </div>
+            </div>
+
+            <div class="macro-grid-5" style="grid-template-columns: repeat(4, 1fr); margin-top:20px;">
+              <div class="macro-kpi-card" style="border-color:rgba(192,132,252,0.25);">
+                <div class="macro-kpi-label"><span></span> Total Plant Workforce</div>
+                <div class="macro-kpi-num" style="color:#c084fc;">1,240 <span style="font-size:13px; color:#8c8c94;">Workers</span></div>
+                <div class="macro-kpi-sub">Permanent: 450 · Contractual / Site: 790</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(192,132,252,0.12); color:#c084fc; font-size:10.5px;">Active Roster Certified</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(244,114,182,0.25);">
+                <div class="macro-kpi-label"><span></span> Gender Diversity Ratio</div>
+                <div class="macro-kpi-num" style="color:#f472b6;">14.2% <span style="font-size:13px; color:#8c8c94;">Female</span></div>
+                <div class="macro-kpi-sub">176 Female Engineers &amp; Technicians</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(244,114,182,0.12); color:#f472b6; font-size:10.5px;">+2.4% vs FY25 Baseline</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+                <div class="macro-kpi-label"><span></span> Minimum Wage Compliance</div>
+                <div class="macro-kpi-num" style="color:#34d399;">100% <span style="font-size:13px; color:#8c8c94;">Compliant</span></div>
+                <div class="macro-kpi-sub">Equal Remuneration &amp; Statutory Benefits</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">PF / ESI Audit Clear</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(245,183,46,0.25);">
+                <div class="macro-kpi-label"><span></span> Safety &amp; POSH Cases</div>
+                <div class="macro-kpi-num" style="color:#f5b72e;">0 <span style="font-size:13px; color:#8c8c94;">Incidents</span></div>
+                <div class="macro-kpi-sub">0 Fatalities · 0 POSH Complaints</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">1,840 Hours Safety Training</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:22px; background:#0c0c0e;">
+            <div class="card-title-row">
+              <div>
+                <h2>Human Resources &amp; People Disclosures (Section A &amp; Principle 3)</h2>
+                <div class="sub">Disclosures under your direct HR custody for FY 2025-26 reporting</div>
+              </div>
+              <a href="data-entry.html" class="btn btn-primary btn-sm">Edit All in Data Entry →</a>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Indicator ID</th><th>Disclosure Name</th><th>Current FY Value</th><th>Previous FY</th><th>Audit Proof</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>A-06</code></td>
+                    <td><strong>Total Number of Employees &amp; Workers</strong></td>
+                    <td><strong style="color:#fff;">1,240 Total</strong> (450 Perm, 790 Contract)</td>
+                    <td>1,120 Total</td>
+                    <td><span class="badge badge-success">EV0002 (Payroll Extract)</span></td>
+                    <td><span class="badge badge-success">Approved</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                  <tr>
+                    <td><code>A-07</code></td>
+                    <td><strong>Differently Abled Employees &amp; Workers</strong></td>
+                    <td><strong style="color:#fff;">12 (0.97%)</strong></td>
+                    <td>9 (0.80%)</td>
+                    <td><span class="badge badge-success">EV0005 (HR Roster)</span></td>
+                    <td><span class="badge badge-success">Approved</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                  <tr>
+                    <td><code>C-P3-01</code></td>
+                    <td><strong>Well-being Measures &amp; Maternity/Paternity</strong></td>
+                    <td><strong style="color:#34d399;">100% Covered</strong></td>
+                    <td>100% Covered</td>
+                    <td><span class="badge badge-success">EV0032 (Insurance Policy)</span></td>
+                    <td><span class="badge badge-success">Approved</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                  <tr>
+                    <td><code>C-P3-03</code></td>
+                    <td><strong>Complaints filed under POSH (Sexual Harassment)</strong></td>
+                    <td><strong style="color:#34d399;">0 Filed / 0 Pending</strong></td>
+                    <td>0 Filed</td>
+                    <td><span class="badge badge-success">EV0036 (ICC Report)</span></td>
+                    <td><span class="badge badge-success">Approved</span></td>
+                    <td><a href="data-entry.html" class="btn btn-secondary btn-sm">Update</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- ROLE VIEW 4: EPC PROJECT SITE COMMAND CENTER (plant.owner)                -->
+        <!-- ========================================================================= -->
+        <div id="plantOwnerDashboardSection" style="display:none;">
+          <div class="macro-command-center" style="background: linear-gradient(135deg, #191206 0%, #261b0a 100%); border-color: rgba(245,183,46,0.35);">
+            <div class="macro-header-row">
+              <div class="macro-title">
+                <h2>EPC Project Site Command Center · <span style="color:#f5b72e;">Olectra EV Bus Complex</span></h2>
+                <div class="sub">Operating Unit: <strong>PLANT9 (Hyderabad)</strong> · Site In-Charge: <strong>Vikram Singh (Project Manager)</strong></div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <a href="data-entry.html" class="btn btn-primary" style="background:#f5b72e; color:#04150d; font-weight:700; font-size:12.5px; padding:8px 16px;">
+                  Review Site Submissions
+                </a>
+                <a href="assignments.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 16px;">
+                  Sign-Off Monthly Package
+                </a>
+              </div>
+            </div>
+
+            <div class="macro-grid-5" style="grid-template-columns: repeat(4, 1fr); margin-top:20px;">
+              <div class="macro-kpi-card" style="border-color:rgba(245,183,46,0.25);">
+                <div class="macro-kpi-label"><span></span> Site BRSR Completion</div>
+                <div class="macro-kpi-num" style="color:#f5b72e;">89.4%</div>
+                <div class="macro-kpi-sub">42 of 47 Site Indicators Recorded</div>
+                <div style="margin-top:8px;"><div class="progress-bar" style="height:5px;"><div style="width:89.4%;"></div></div></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+                <div class="macro-kpi-label"><span></span> EHS Department Package</div>
+                <div class="macro-kpi-num" style="color:#34d399;">Ready</div>
+                <div class="macro-kpi-sub">Diesel, Coal, Power &amp; Water Recorded</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">✓ Attached 8 Invoices</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(251,191,36,0.25);">
+                <div class="macro-kpi-label"><span></span> HR &amp; Social Package</div>
+                <div class="macro-kpi-num" style="color:#fbbf24;">Review</div>
+                <div class="macro-kpi-sub">Workforce &amp; Wages Verified</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(251,191,36,0.12); color:#fbbf24; font-size:10.5px;">Pending Final Headcount</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+                <div class="macro-kpi-label"><span></span> Monthly Ingestion Status</div>
+                <div class="macro-kpi-num" style="color:#34d399;">Month 10</div>
+                <div class="macro-kpi-sub">Cycle: Jan 2026 · Target: 15th Jan</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">Ready for Subsidiary HQ</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- ROLE VIEW 5: STATUTORY ESG ASSURANCE AUDITOR PORTAL (auditor)             -->
+        <!-- ========================================================================= -->
+        <div id="auditorDashboardSection" style="display:none;">
+          <div class="macro-command-center" style="background: linear-gradient(135deg, #09131d 0%, #0f1f2e 100%); border-color: rgba(96,165,250,0.35);">
+            <div class="macro-header-row">
+              <div class="macro-title">
+                <h2>Statutory ESG Assurance Desk · <span style="color:#60a5fa;">SEBI BRSR Core</span></h2>
+                <div class="sub">Auditor: <strong>Kavitha Iyer (Third-Party ESG Assurance Partner)</strong> · Standard: <strong>SEBI Circular Revised BRSR</strong></div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <a href="audit.html" class="btn btn-primary" style="background:#60a5fa; color:#04150d; font-weight:700; font-size:12.5px; padding:8px 16px;">
+                  Open Assurance Desk
+                </a>
+                <a href="evidence.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 16px;">
+                  Inspect Evidence Files
+                </a>
+                <a href="reports.html" class="btn btn-secondary" style="font-size:12.5px; padding:8px 16px;">
+                  Review Master BRSR
+                </a>
+              </div>
+            </div>
+
+            <div class="macro-grid-5" style="grid-template-columns: repeat(4, 1fr); margin-top:20px;">
+              <div class="macro-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+                <div class="macro-kpi-label"><span></span> Assurance Readiness</div>
+                <div class="macro-kpi-num" style="color:#34d399;">92.4%</div>
+                <div class="macro-kpi-sub">84 of 90 Core Indicator Samples Verified</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">Reasonable Assurance Feasible</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(245,183,46,0.25);">
+                <div class="macro-kpi-label"><span></span> Chain of Custody Proof</div>
+                <div class="macro-kpi-num" style="color:#f5b72e;">100%</div>
+                <div class="macro-kpi-sub">All Disclosed GHG &amp; Water Have Bills</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:10.5px;">SHA-256 Checksums Valid</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(248,113,113,0.25);">
+                <div class="macro-kpi-label"><span></span> Open Anomaly Flags</div>
+                <div class="macro-kpi-num" style="color:#f87171;">3 <span style="font-size:13px; color:#8c8c94;">Warnings</span></div>
+                <div class="macro-kpi-sub">Resolved: 18 · Pending Review: 3</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(251,191,36,0.12); color:#fbbf24; font-size:10.5px;">Minor Variance Tolerances</span></div>
+              </div>
+
+              <div class="macro-kpi-card" style="border-color:rgba(96,165,250,0.25);">
+                <div class="macro-kpi-label"><span></span> Statutory Certification</div>
+                <div class="macro-kpi-num" style="color:#60a5fa;">Stage 3/4</div>
+                <div class="macro-kpi-sub">Draft Assurance Statement Ready</div>
+                <div style="margin-top:8px;"><span class="chip" style="background:rgba(96,165,250,0.12); color:#60a5fa; font-size:10.5px;">Ready for Board ESG Review</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /#viewOverview -->
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 2: SCOPED COMPANY SUMMARY & PROJECTS                                 -->
+      <!-- ========================================================================= -->
+      <div id="viewCompany" style="display:none;">
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb-nav">
+          <a onclick="navigateToOverview()">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current" id="compBreadcrumbName">Company Summary</span>
+        </nav>
+
+        <!-- Company Header Card -->
+        <div class="card" style="margin-bottom:18px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+            <div>
+              <div class="tag-row" style="margin-bottom:8px;" id="compBadgeRow"></div>
+              <h1 style="margin:0 0 6px;color:var(--primary);font-size:22px;" id="compName">—</h1>
+              <div style="font-size:13.5px;color:var(--text-muted);" id="compDescription">—</div>
+            </div>
+            <div style="text-align:right;">
+              <button class="btn btn-secondary" onclick="navigateToOverview()">← Back to Overview</button>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:6px;" id="compPeriodTag">Period: FY 2025-26 vs FY 2024-25</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scoped Metrics Grid -->
+        <div class="grid grid-3" style="margin-bottom:18px;">
+          <div class="card">
+            <h3>Scoped BRSR Completion</h3>
+            <div class="kpi-value" id="compCompletionPct" style="color:#f5b72e;">0%</div>
+            <div class="progress-bar"><div id="compCompletionBar" style="width:0%"></div></div>
+            <div class="kpi-sub" id="compCompletionSub">Based on actual submitted &amp; approved entries</div>
+          </div>
+          <div class="card">
+            <h3>Disclosure Fields Status</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">
+              <span class="chip" style="background:rgba(52, 211, 153, 0.12);color:#34d399;border:1px solid rgba(52, 211, 153, 0.25);" id="compApprovedCount">Approved: 0</span>
+              <span class="chip" style="background:rgba(255, 255, 255, 0.08);color:#ffffff;border:1px solid rgba(255, 255, 255, 0.15);" id="compSubmittedCount">Submitted: 0</span>
+              <span class="chip" style="background:rgba(251, 191, 36, 0.12);color:#fbbf24;border:1px solid rgba(251, 191, 36, 0.25);" id="compInProgressCount">In Progress: 0</span>
+              <span class="chip" style="background:rgba(245, 183, 46, 0.12);color:#f5b72e;border:1px solid rgba(245, 183, 46, 0.25);" id="compNotStartedCount">Not Started: 0</span>
+            </div>
+            <div class="kpi-sub" style="margin-top:12px;" id="compTotalFields">Total Fields: 0</div>
+          </div>
+          <div class="card">
+            <h3>Operational Scope</h3>
+            <div class="kpi-value" id="compProjectsCount" style="font-size:24px;">0</div>
+            <div class="kpi-sub">Associated projects &amp; operational plant units</div>
+            <div style="margin-top:10px;">
+              <span class="badge" id="compStatusBadge">Status</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Principle-wise Summary (P1 - P9) -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-title-row">
+            <h2>Principle-Wise Performance Summary (P1 – P9)</h2>
+            <span class="muted" style="font-size:12px;">Scoped to this entity &amp; associated projects</span>
+          </div>
+          <div class="principle-grid" id="compPrinciplesGrid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Associated Projects Section with Working "View Detail Report" -->
+        <div class="card" id="projectsSection">
+          <div class="card-title-row">
+            <div>
+              <h2>Associated Projects &amp; Operational Units</h2>
+              <div class="muted" style="font-size:12.5px;margin-top:2px;">
+                Select a project below to inspect its detailed principle-wise disclosure report
+              </div>
+            </div>
+          </div>
+          <div id="compProjectsList">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 3: PROJECT DETAIL REPORT                                             -->
+      <!-- ========================================================================= -->
+      <div id="viewReport" style="display:none;">
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb-nav">
+          <a onclick="navigateToOverview()">Dashboard</a>
+          <span class="sep">/</span>
+          <a id="repBreadcrumbCompany" onclick="backToCompany()">Company</a>
+          <span class="sep">/</span>
+          <span class="current" id="repBreadcrumbProject">Project Report</span>
+        </nav>
+
+        <!-- Report Header Card -->
+        <div class="card" style="margin-bottom:18px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="badge badge-success">Project Detail Report</span>
+                <span class="chip" id="repPlantId">ID: —</span>
+                <span class="chip" id="repSubsidiary">Subsidiary: —</span>
+              </div>
+              <h1 style="margin:0 0 6px;color:var(--primary);font-size:22px;" id="repProjectName">—</h1>
+              <div style="font-size:13px;color:var(--text-muted);" id="repDepartments">Departments: —</div>
+            </div>
+            <div style="text-align:right;">
+              <button class="btn btn-secondary" onclick="backToCompany()">← Back to Company</button>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:6px;" id="repPeriodTag">Period: FY 2025-26 vs FY 2024-25</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Overview Row -->
+        <div class="grid grid-4" style="margin-bottom:18px;">
+          <div class="card">
+            <h3>Checklist Total</h3>
+            <div class="kpi-value" id="repTotalIndicators">106</div>
+            <div class="kpi-sub">Prescribed disclosure items</div>
+          </div>
+          <div class="card">
+            <h3>Recorded Indicators</h3>
+            <div class="kpi-value" style="color:var(--success);" id="repRecordedIndicators">0</div>
+            <div class="kpi-sub">With active data submitted</div>
+          </div>
+          <div class="card">
+            <h3>Pending / Unentered</h3>
+            <div class="kpi-value" style="color:#f5b72e;" id="repPendingIndicators">0</div>
+            <div class="kpi-sub">Marked as “Not entered”</div>
+          </div>
+          <div class="card">
+            <h3>Checklist Coverage</h3>
+            <div class="kpi-value" style="color:#f5b72e;" id="repCoveragePct">0%</div>
+            <div class="progress-bar"><div id="repCoverageBar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Principle Filter Tabs & Search -->
+        <div class="card" style="margin-bottom:18px;padding:14px 18px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+            <div class="search-wrapper" style="max-width:360px;">
+              <span class="icon"></span>
+              <input type="text" id="checklistSearch" placeholder="Search checklist indicators…">
+            </div>
+            <div style="font-size:12.5px;color:var(--text-muted);" id="repActiveFilterCount">
+              Showing all 9 Principles (106 items)
+            </div>
+          </div>
+          <div class="tabs" style="margin-bottom:0;overflow-x:auto;" id="principleTabs">
+            <button class="tab-btn active" data-pcode="all">All (106)</button>
+            <button class="tab-btn" data-pcode="P1">P1 (9)</button>
+            <button class="tab-btn" data-pcode="P2">P2 (9)</button>
+            <button class="tab-btn" data-pcode="P3">P3 (21)</button>
+            <button class="tab-btn" data-pcode="P4">P4 (7)</button>
+            <button class="tab-btn" data-pcode="P5">P5 (15)</button>
+            <button class="tab-btn" data-pcode="P6">P6 (21)</button>
+            <button class="tab-btn" data-pcode="P7">P7 (3)</button>
+            <button class="tab-btn" data-pcode="P8">P8 (10)</button>
+            <button class="tab-btn" data-pcode="P9">P9 (11)</button>
+          </div>
+        </div>
+
+        <!-- Principles Sections Container -->
+        <div id="principlesContainer">
+          <!-- Rendered via JS -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+// =============================================================================
+// GLOBAL STATE & ROUTING CONTROLLER
+// =============================================================================
+let ALL_ENTITIES = [];
+let CURRENT_COMPANY = null;
+let CURRENT_REPORT = null;
+let ACTIVE_SECTOR_FILTER = "all";
+let ACTIVE_BRANCH_FILTER = "all";
+let ACTIVE_SEARCH_QUERY = "";
+
+(async () => {
+  const user = await initLayout("dashboard.html");
+  if (!user) return;
+
+  // Apply Role-Specific View (Transform Entire Dashboard based on Login)
+  applyRoleDashboardView(user);
+
+  // Initialize Routing on Load and Hash Change
+  window.addEventListener("hashchange", handleHashRouting);
+  await loadEntities();
+  handleHashRouting();
+
+  // Setup Filter Listeners
+  document.getElementById("entitySearch").addEventListener("input", (e) => {
+    ACTIVE_SEARCH_QUERY = e.target.value.toLowerCase().trim();
+    renderEntityGrid();
+  });
+
+  document.getElementById("branchSelect").addEventListener("change", (e) => {
+    ACTIVE_BRANCH_FILTER = e.target.value;
+    renderEntityGrid();
+  });
+
+  document.querySelectorAll("#sectorChips .filter-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#sectorChips .filter-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      ACTIVE_SECTOR_FILTER = chip.dataset.cat;
+      renderEntityGrid();
+    });
+  });
+
+  // Setup Checklist Search and Tabs
+  document.getElementById("checklistSearch").addEventListener("input", () => {
+    renderProjectReportChecklist();
+  });
+
+  document.querySelectorAll("#principleTabs .tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#principleTabs .tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderProjectReportChecklist();
+    });
+  });
+
+  // Load Monthly Cadence and Conversion Factors
+  await loadCadenceAndFactors();
+})();
+
+// =============================================================================
+// ROLE-BASED DASHBOARD TRANSFORMATION ENGINE
+// =============================================================================
+function applyRoleDashboardView(user) {
+  const isEhs = user.username === "ehs.owner";
+  const isHr = user.username === "hr.owner";
+  const isPlant = user.username === "plant.owner";
+  const isAuditor = user.username === "auditor";
+  const isGroup = user.role === "Group Admin" || user.role === "Sustainability Lead" || user.role === "Management Viewer";
+
+  const groupSec = document.getElementById("groupAdminDashboardSection");
+  const ehsSec = document.getElementById("ehsDashboardSection");
+  const hrSec = document.getElementById("hrDashboardSection");
+  const plantSec = document.getElementById("plantOwnerDashboardSection");
+  const auditorSec = document.getElementById("auditorDashboardSection");
+
+  if (groupSec) groupSec.style.display = isGroup ? "block" : "none";
+  if (ehsSec) ehsSec.style.display = isEhs ? "block" : "none";
+  if (hrSec) hrSec.style.display = isHr ? "block" : "none";
+  if (plantSec) plantSec.style.display = isPlant ? "block" : "none";
+  if (auditorSec) auditorSec.style.display = isAuditor ? "block" : "none";
+
+  // Dynamic Topbar Customization
+  const tTitle = document.getElementById("topbarTitle");
+  const tSub = document.getElementById("topbarSub");
+  const tMeta = document.getElementById("topbarMeta");
+
+  if (isEhs) {
+    if (tTitle) tTitle.textContent = "EHS & Energy Portal — Olectra Greentech Unit";
+    if (tSub) tSub.textContent = "Site fuel combustion, electricity draw, carbon conversion equivalents & waste manifests";
+    if (tMeta) tMeta.innerHTML = `<span class="chip" style="background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3);">EHS Dept (Plant 1)</span><span class="chip">FY 2025-26</span>`;
+  } else if (isHr) {
+    if (tTitle) tTitle.textContent = "Human Resources & Social Governance Desk";
+    if (tSub) tSub.textContent = "Site workforce demographics, diversity, minimum wages, safety incidents & POSH governance";
+    if (tMeta) tMeta.innerHTML = `<span class="chip" style="background:rgba(192,132,252,0.15);color:#c084fc;border:1px solid rgba(192,132,252,0.3);">HR Dept (Plant 1)</span><span class="chip">FY 2025-26</span>`;
+  } else if (isPlant) {
+    if (tTitle) tTitle.textContent = "EPC Project Site Command Center — Plant 1";
+    if (tSub) tSub.textContent = "Monthly reporting package oversight & site signoff for 250+ project units";
+    if (tMeta) tMeta.innerHTML = `<span class="chip" style="background:rgba(245,183,46,0.15);color:#f5b72e;border:1px solid rgba(245,183,46,0.3);">Plant 1 (Olectra Complex)</span><span class="chip">FY 2025-26</span>`;
+  } else if (isAuditor) {
+    if (tTitle) tTitle.textContent = "Statutory ESG Assurance & Verification Portal";
+    if (tSub) tSub.textContent = "Third-party reasonable assurance, evidence traceability & audit seal desk";
+    if (tMeta) tMeta.innerHTML = `<span class="chip" style="background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);">Statutory Auditor</span><span class="chip">Reasonable Assurance</span>`;
+  } else {
+    if (tTitle) tTitle.textContent = "Dashboard — MEIL Group Command Center";
+    if (tSub) tSub.textContent = "Consolidated Group Performance across 42 Subsidiaries & 250+ Project Units";
+  }
+}
+
+// =============================================================================
+// LOAD & RENDER ENTITIES OVERVIEW (VIEW 1)
+// =============================================================================
+async function loadEntities() {
+  try {
+    ALL_ENTITIES = await api("/entities");
+    renderEntityGrid();
+  } catch (err) {
+    console.error("Failed to load entities:", err);
+    document.getElementById("entityGrid").innerHTML = `<div class="empty-state">Failed to load company catalog. Please try refreshing.</div>`;
+  }
+}
+
+function getSectorCategory(sector, type) {
+  const s = (sector || "").toLowerCase();
+  const t = (type || "").toLowerCase();
+  if (t.includes("parent") || t.includes("holding")) return "parent-holding";
+  if (s.includes("transport") || s.includes("bus") || s.includes("fleet") || s.includes("ev")) return "transport";
+  if (s.includes("power") || s.includes("energy") || s.includes("solar") || s.includes("hydro") || s.includes("thermal")) return "power";
+  if (s.includes("gas") || s.includes("water") || s.includes("utilities")) return "gas-utilities";
+  if (s.includes("road") || s.includes("expressway") || s.includes("highway") || t.includes("spv")) return "roadways";
+  if (s.includes("telecom") || s.includes("tech") || s.includes("electronics") || s.includes("communication")) return "telecom";
+  if (s.includes("manufacturing") || s.includes("pipes") || s.includes("engineering") || s.includes("rigs")) return "manufacturing";
+  if (s.includes("media") || s.includes("hr") || s.includes("support")) return "support";
+  return "all";
+}
+
+function getTypeBadgeClass(type) {
+  const t = (type || "").toLowerCase();
+  if (t.includes("parent")) return "badge-parent";
+  if (t.includes("holding")) return "badge-holding";
+  if (t.includes("spv") || t.includes("road")) return "badge-spv";
+  if (t.includes("power") || t.includes("energy")) return "badge-power";
+  if (t.includes("support") || t.includes("media")) return "badge-support";
+  if (t.includes("placeholder")) return "badge-placeholder";
+  return "badge-subsidiary";
+}
+
+function renderEntityGrid() {
+  const grid = document.getElementById("entityGrid");
+  const filtered = ALL_ENTITIES.filter(ent => {
+    // Search match
+    if (ACTIVE_SEARCH_QUERY) {
+      const q = ACTIVE_SEARCH_QUERY;
+      const matchName = ent.name.toLowerCase().includes(q);
+      const matchSector = (ent.sector || "").toLowerCase().includes(q);
+      const matchBranch = (ent.branch || "").toLowerCase().includes(q);
+      const matchDesc = (ent.description || "").toLowerCase().includes(q);
+      if (!matchName && !matchSector && !matchBranch && !matchDesc) return false;
+    }
+    // Branch filter
+    if (ACTIVE_BRANCH_FILTER !== "all") {
+      const branches = ent.branches || [ent.branch];
+      if (!branches.some(b => b.toLowerCase().includes(ACTIVE_BRANCH_FILTER.toLowerCase()))) return false;
+    }
+    // Category chip filter
+    if (ACTIVE_SECTOR_FILTER !== "all") {
+      const cat = getSectorCategory(ent.sector, ent.type);
+      if (cat !== ACTIVE_SECTOR_FILTER) return false;
+    }
+    return true;
+  });
+
+  document.getElementById("catalogCounter").innerHTML = `Showing <strong>${filtered.length}</strong> of ${ALL_ENTITIES.length} Entities in MEIL Corporate Catalog`;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No companies found matching your filters. Try clearing search or choosing "All Entities".</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(ent => {
+    const badgeCls = getTypeBadgeClass(ent.type);
+    const hasData = ent.totalFields > 0;
+    const completionPct = ent.completionPct || 0;
+    const projCount = ent.totalProjects || 0;
+
+    return `
+      <div class="company-card" data-entity-id="${ent.id}">
+        <div>
+          <div class="card-badge-row">
+            <span class="badge ${badgeCls}">${ent.type}</span>
+            <span class="chip" style="font-size:10.5px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${ent.branch}">${ent.branch}</span>
+          </div>
+
+          <h3 class="company-title">${ent.name}</h3>
+
+          <div class="sector-tag">
+            <span></span>
+            <span>${ent.sector}</span>
+          </div>
+
+          <div class="company-desc">
+            ${ent.description || "Corporate business entity under MEIL group consolidation."}
+          </div>
+        </div>
+
+        <div>
+          ${hasData ? `
+            <div style="margin-bottom: 12px;">
+              <div class="progress-row">
+                <span style="font-weight:600;color:var(--primary);">${completionPct}% Complete</span>
+                <span class="muted">${projCount} Project${projCount === 1 ? "" : "s"}</span>
+              </div>
+              <div class="progress-bar"><div style="width: ${completionPct}%;"></div></div>
+            </div>
+          ` : `
+            <div style="margin-bottom: 12px;">
+              <div class="progress-row">
+                <span class="status-not-entered">Pending Data Submission</span>
+                <span class="muted">${projCount} Project${projCount === 1 ? "" : "s"}</span>
+              </div>
+            </div>
+          `}
+
+          <div class="card-footer">
+            <span style="font-size:11.5px;color:var(--text-muted);">
+              ${hasData ? `Report Available` : `Structure Mapped`}
+            </span>
+            <button class="btn btn-primary" style="padding:6px 14px;font-size:12.5px;" onclick="navigateToCompany('${ent.id}')">
+              View →
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+  if (CURRENT_CATALOG_VIEW === "leaderboard") renderLeaderboard();
+}
+
+let CURRENT_CATALOG_VIEW = "grid";
+
+function switchCatalogView(mode) {
+  CURRENT_CATALOG_VIEW = mode;
+  document.getElementById("btnViewGrid").classList.toggle("active", mode === "grid");
+  document.getElementById("btnViewLeaderboard").classList.toggle("active", mode === "leaderboard");
+  if (mode === "grid") {
+    document.getElementById("entityGrid").style.display = "grid";
+    document.getElementById("leaderboardWrap").style.display = "none";
+    renderEntityGrid();
+  } else {
+    document.getElementById("entityGrid").style.display = "none";
+    document.getElementById("leaderboardWrap").style.display = "block";
+    renderLeaderboard();
+  }
+}
+
+function renderLeaderboard() {
+  const tbody = document.getElementById("leaderboardBody");
+  if (!tbody) return;
+
+  const filtered = ALL_ENTITIES.filter(ent => {
+    if (ACTIVE_SEARCH_QUERY) {
+      const q = ACTIVE_SEARCH_QUERY;
+      if (!ent.name.toLowerCase().includes(q) && !(ent.sector || "").toLowerCase().includes(q)) return false;
+    }
+    if (ACTIVE_BRANCH_FILTER !== "all") {
+      const branches = ent.branches || [ent.branch];
+      if (!branches.some(b => b.toLowerCase().includes(ACTIVE_BRANCH_FILTER.toLowerCase()))) return false;
+    }
+    if (ACTIVE_SECTOR_FILTER !== "all") {
+      const cat = getSectorCategory(ent.sector, ent.type);
+      if (cat !== ACTIVE_SECTOR_FILTER) return false;
+    }
+    return true;
+  });
+
+  // Sort by completion % descending
+  filtered.sort((a, b) => ((b.summary && b.summary.completionPct) || 0) - ((a.summary && a.summary.completionPct) || 0));
+
+  tbody.innerHTML = filtered.map((ent, idx) => {
+    const hasData = ent.summary && ent.summary.totalFields > 0;
+    const completionPct = hasData ? ent.summary.completionPct : 0;
+    const statusBadge = completionPct >= 60 
+      ? '<span class="badge badge-success">Approved</span>' 
+      : hasData 
+      ? '<span class="badge badge-warning">In Review</span>' 
+      : '<span class="status-not-entered">Pending Submission</span>';
+    const risk = completionPct >= 60 ? '<span style="color:#34d399;font-weight:600;">Low Risk</span>' : '<span style="color:#fbbf24;font-weight:600;">Medium Risk</span>';
+
+    return `
+      <tr>
+        <td style="font-weight:700;color:${idx < 3 ? '#f5b72e' : '#8c8c94'};">#${idx + 1}</td>
+        <td>
+          <strong style="color:#fff;">${ent.name}</strong>
+          <div style="font-size:11px;color:#8c8c94;">${ent.type}</div>
+        </td>
+        <td style="color:#cbd5e1;font-size:12px;">${ent.branch}</td>
+        <td><span class="chip" style="font-size:11px;">${ent.sector || "General"}</span></td>
+        <td>${statusBadge}</td>
+        <td style="min-width:120px;">
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px;">
+            <span style="font-weight:700;color:#f5b72e;">${completionPct}%</span>
+          </div>
+          <div class="progress-bar" style="height:5px;"><div style="width:${completionPct}%;"></div></div>
+        </td>
+        <td>${risk}</td>
+        <td>
+          <button class="btn btn-secondary" style="padding:4px 10px;font-size:11.5px;" onclick="navigateToCompany('${ent.id}')">
+            Inspect →
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// =============================================================================
+// SCOPED COMPANY SUMMARY CONTROLLER (VIEW 2)
+// =============================================================================
+async function showCompanyView(entityId) {
+  document.getElementById("viewOverview").style.display = "none";
+  document.getElementById("viewCompany").style.display = "block";
+  document.getElementById("viewReport").style.display = "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  try {
+    const data = await api(`/entities/${entityId}`);
+    CURRENT_COMPANY = data;
+
+    // Header info
+    document.getElementById("compBreadcrumbName").textContent = data.entity.name;
+    document.getElementById("compName").textContent = data.entity.name;
+    document.getElementById("compDescription").textContent = `${data.entity.sector} · ${data.entity.description || ""}`;
+    document.getElementById("compPeriodTag").textContent = `Reporting Period: ${data.reportingPeriod.currentFY} vs ${data.reportingPeriod.previousFY}`;
+
+    // Badges
+    const badgeCls = getTypeBadgeClass(data.entity.type);
+    document.getElementById("compBadgeRow").innerHTML = `
+      <span class="badge ${badgeCls}">${data.entity.type}</span>
+      <span class="chip">${data.entity.branch}</span>
+      <span class="chip">${data.entity.sector}</span>
+    `;
+
+    // Scoped Summary Numbers (Actual Values Only!)
+    document.getElementById("compCompletionPct").textContent = `${data.summary.completionPct}%`;
+    document.getElementById("compCompletionBar").style.width = "0%";
+    setTimeout(() => {
+      document.getElementById("compCompletionBar").style.width = `${data.summary.completionPct}%`;
+    }, 60);
+    document.getElementById("compCompletionSub").textContent = `Actual completion across ${data.summary.totalFields} scoped disclosure fields`;
+
+    document.getElementById("compTotalFields").textContent = `Total Fields: ${data.summary.totalFields}`;
+    document.getElementById("compApprovedCount").textContent = `Approved: ${data.summary.approved}`;
+    document.getElementById("compSubmittedCount").textContent = `Submitted: ${data.summary.submitted}`;
+    document.getElementById("compInProgressCount").textContent = `In Progress: ${data.summary.inProgress}`;
+    document.getElementById("compNotStartedCount").textContent = `Not Started: ${data.summary.notStarted}`;
+
+    document.getElementById("compProjectsCount").textContent = data.projects.length;
+    const statusCls = data.summary.completionPct >= 60 ? "badge-success" : data.summary.totalFields === 0 ? "badge-critical" : "badge-warning";
+    document.getElementById("compStatusBadge").className = `badge ${statusCls}`;
+    document.getElementById("compStatusBadge").textContent = data.summary.overallStatus;
+
+    // Principle Breakdown (P1-P9)
+    const principlesContainer = document.getElementById("compPrinciplesGrid");
+    principlesContainer.innerHTML = data.principleBreakdown.map(p => `
+      <div class="principle-mini-card">
+        <div class="header">
+          <span class="pcode">${p.code}</span>
+          <span class="badge ${p.total === 0 ? 'status-not-entered' : p.completionPct >= 60 ? 'badge-success' : 'badge-warning'}">
+            ${p.total === 0 ? 'No Data' : p.completionPct + '%'}
+          </span>
+        </div>
+        <div class="pname">${p.name}</div>
+        <div style="font-size:11.5px;color:var(--text-muted);display:flex;justify-content:space-between;">
+          <span>${p.completed}/${p.total} fields</span>
+          <span>${p.status}</span>
+        </div>
+        <div class="progress-bar" style="height:5px;margin-top:6px;">
+          <div style="width:${p.completionPct}%;"></div>
+        </div>
+      </div>
+    `).join("");
+
+    // Associated Projects List with Working View Detail Report
+    const projectsListEl = document.getElementById("compProjectsList");
+    if (!data.projects || data.projects.length === 0) {
+      projectsListEl.innerHTML = `
+        <div class="empty-projects-state">
+          <div class="icon"></div>
+          <h4 style="color:#f5b72e;font-size:16px;">No projects available</h4>
+          <p style="margin:4px 0 16px;font-size:13.5px;color:#f8fafc;">
+            No operational projects or plant facilities are recorded under <strong style="color:#f5b72e;">${data.entity.name}</strong> in the current reporting cycle.
+          </p>
+          <button class="btn btn-secondary" style="font-size:12px;" onclick="navigateToOverview()">
+            ← Return to Company Overview
+          </button>
+        </div>
+      `;
+    } else {
+      projectsListEl.innerHTML = data.projects.map(p => `
+        <div class="project-card">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <strong style="color:var(--primary);font-size:15px;">${p.name}</strong>
+              <span class="chip" style="font-size:11px;">Code: ${p.id}</span>
+              <span class="badge ${p.completionPct >= 60 ? 'badge-success' : 'badge-warning'}">${p.completionPct}% Complete</span>
+            </div>
+            <div style="font-size:12.5px;color:var(--text-muted);">
+              <strong>Business Unit:</strong> ${p.businessUnit || "—"} &nbsp;|&nbsp;
+              <strong>Departments:</strong> ${p.departments && p.departments.length ? p.departments.join(", ") : "HR, EHS, Finance, Compliance"}
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+              ${p.completedFields} of ${p.totalFields} indicators submitted &amp; verified
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-primary" style="white-space:nowrap;padding:8px 16px;font-size:13px;" onclick="navigateToProjectReport('${data.entity.id}', '${p.id}')">
+              View Detail Report →
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+  } catch (err) {
+    console.error("Error loading company summary:", err);
+    toast("Failed to load company details");
+  }
+}
+
+// =============================================================================
+// PROJECT DETAIL REPORT CONTROLLER (VIEW 3 - 1080.PDF CHECKLIST)
+// =============================================================================
+async function showProjectReportView(entityId, projectId) {
+  document.getElementById("viewOverview").style.display = "none";
+  document.getElementById("viewCompany").style.display = "none";
+  document.getElementById("viewReport").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  try {
+    // If current company isn't loaded yet, fetch it
+    if (!CURRENT_COMPANY || CURRENT_COMPANY.entity.id !== entityId) {
+      CURRENT_COMPANY = await api(`/entities/${entityId}`);
+    }
+
+    const report = await api(`/projects/${projectId}/report`);
+    CURRENT_REPORT = report;
+
+    // Header info
+    document.getElementById("repBreadcrumbCompany").textContent = CURRENT_COMPANY.entity.name;
+    document.getElementById("repBreadcrumbProject").textContent = report.project.name;
+    document.getElementById("repProjectName").textContent = report.project.name;
+    document.getElementById("repPlantId").textContent = `Plant Code: ${report.project.id}`;
+    document.getElementById("repSubsidiary").textContent = `Subsidiary: ${report.project.subsidiary || CURRENT_COMPANY.entity.branch}`;
+    document.getElementById("repDepartments").textContent = `Active Departments: ${report.project.departments.join(", ") || "General Operations"}`;
+    document.getElementById("repPeriodTag").textContent = `Reporting Period: ${report.reportingPeriod.currentFY} vs ${report.reportingPeriod.previousFY}`;
+
+    // Stats
+    document.getElementById("repTotalIndicators").textContent = report.stats.totalIndicators;
+    document.getElementById("repRecordedIndicators").textContent = report.stats.recordedIndicators;
+    document.getElementById("repPendingIndicators").textContent = report.stats.pendingIndicators;
+    document.getElementById("repCoveragePct").textContent = `${report.stats.completionPct}%`;
+    document.getElementById("repCoverageBar").style.width = "0%";
+    setTimeout(() => {
+      document.getElementById("repCoverageBar").style.width = `${report.stats.completionPct}%`;
+    }, 60);
+
+    renderProjectReportChecklist();
+
+  } catch (err) {
+    console.error("Error loading project detail report:", err);
+    toast("Failed to load project report");
+  }
+}
+
+function renderProjectReportChecklist() {
+  if (!CURRENT_REPORT) return;
+
+  const activeTabBtn = document.querySelector("#principleTabs .tab-btn.active");
+  const selectedPCode = activeTabBtn ? activeTabBtn.dataset.pcode : "all";
+  const searchQ = (document.getElementById("checklistSearch").value || "").toLowerCase().trim();
+
+  const container = document.getElementById("principlesContainer");
+  const filteredPrinciples = CURRENT_REPORT.principles.filter(p => selectedPCode === "all" || p.code === selectedPCode);
+
+  let totalVisibleItems = 0;
+
+  const html = filteredPrinciples.map(p => {
+    let items = p.items;
+    if (searchQ) {
+      items = items.filter(it => it.indicator.toLowerCase().includes(searchQ) || it.principleName.toLowerCase().includes(searchQ));
+    }
+    totalVisibleItems += items.length;
+
+    if (items.length === 0) return "";
+
+    return `
+      <div class="card" style="margin-bottom:20px;padding:0;overflow:hidden;">
+        <div style="background:#08080a;border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div>
+            <span class="badge badge-success" style="font-size:12px;margin-right:8px;">${p.code}</span>
+            <strong style="color:var(--primary);font-size:15px;">${p.name}</strong>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);">
+            ${items.filter(it => it.hasData && it.currentFY !== 'Not entered').length} of ${items.length} indicators with reported data
+          </div>
+        </div>
+
+        <div class="table-wrap" style="border:none;border-radius:0;">
+          <table class="checklist-table">
+            <thead>
+              <tr>
+                <th style="width:40px;">#</th>
+                <th>Indicator / Disclosure Area</th>
+                <th>Mapped Code</th>
+                <th>Current FY (${CURRENT_REPORT.reportingPeriod.currentFY})</th>
+                <th>Previous FY (${CURRENT_REPORT.reportingPeriod.previousFY})</th>
+                <th>Unit</th>
+                <th>Status</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map(it => {
+                const isEntered = it.hasData && it.currentFY !== "Not entered";
+                return `
+                  <tr>
+                    <td><strong>${it.seq}</strong></td>
+                    <td style="max-width:320px;">
+                      <div style="font-weight:${isEntered ? '600' : '500'};color:${isEntered ? '#ffffff' : '#ffd05b'};">${it.indicator}</div>
+                      ${it.validationState ? `
+                        <div style="margin-top:4px;">
+                          <span class="val-badge ${it.validationState.severity === 'Critical' ? 'badge-critical' : 'badge-warning'}">
+                            ${it.validationState.severity}: ${it.validationState.message}
+                          </span>
+                        </div>
+                      ` : ''}
+                    </td>
+                    <td><code>${it.indicatorId}</code></td>
+                    <td>
+                      ${isEntered ? `<strong style="color:var(--primary);">${fmtNum(it.currentFY)}</strong>` : `<span class="status-not-entered">Not entered</span>`}
+                    </td>
+                    <td>
+                      ${it.previousFY !== "No data available" ? fmtNum(it.previousFY) : `<span class="status-not-entered" style="font-size:10.5px;padding:2px 6px;">No data available</span>`}
+                    </td>
+                    <td><span class="muted">${it.unit}</span></td>
+                    <td>
+                      ${isEntered ? statusBadge(it.status) : `<span class="status-not-entered">Not entered</span>`}
+                    </td>
+                    <td>
+                      ${it.evidenceId ? `
+                        <a href="evidence.html" class="chip" style="background:rgba(245, 183, 46, 0.12);color:#f5b72e;border:1px solid rgba(245, 183, 46, 0.3);text-decoration:none;" title="Evidence: ${it.evidenceId}">
+                          ${it.evidenceId}
+                        </a>
+                      ` : `<span class="status-not-entered" style="font-size:10.5px;padding:2px 6px;">None</span>`}
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  document.getElementById("repActiveFilterCount").textContent = `Showing ${totalVisibleItems} indicators`;
+  container.innerHTML = html || `<div class="empty-state">No checklist indicators match your search query.</div>`;
+}
+
+// =============================================================================
+// NAVIGATION & HASH ROUTING HELPERS
+// =============================================================================
+function handleHashRouting() {
+  const hash = window.location.hash.replace("#", "");
+  const params = new URLSearchParams(hash);
+
+  const companyId = params.get("company");
+  const projectId = params.get("project");
+
+  if (companyId && projectId) {
+    showProjectReportView(companyId, projectId);
+  } else if (companyId) {
+    showCompanyView(companyId);
+  } else {
+    document.getElementById("viewOverview").style.display = "block";
+    document.getElementById("viewCompany").style.display = "none";
+    document.getElementById("viewReport").style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function navigateToOverview() {
+  window.location.hash = "";
+}
+
+function navigateToCompany(companyId) {
+  window.location.hash = `company=${companyId}`;
+}
+
+function navigateToProjectReport(companyId, projectId) {
+  window.location.hash = `company=${companyId}&project=${projectId}`;
+}
+
+function backToCompany() {
+  if (CURRENT_COMPANY) {
+    window.location.hash = `company=${CURRENT_COMPANY.entity.id}`;
+  } else {
+    navigateToOverview();
+  }
+}
+
+// =============================================================================
+// CADENCE TRACKER & EMISSION FACTORS LIBRARY
+// =============================================================================
+async function loadCadenceAndFactors() {
+  try {
+    const dash = await api("/dashboard");
+    if (dash && dash.monthlyCadence) {
+      const container = document.getElementById("dashboardCadenceGrid");
+      if (container) {
+        container.innerHTML = dash.monthlyCadence.map(m => {
+          const isClosed = m.status.includes("Closed");
+          const isActive = m.status.includes("Active");
+          const isOpen = m.status.includes("Open");
+          const color = isClosed ? "#34d399" : isActive ? "#f5b72e" : isOpen ? "#60a5fa" : "#8c8c94";
+          return `
+            <div style="background:#14141a; border:1px solid ${isActive ? 'rgba(245,183,46,0.45)' : 'rgba(255,255,255,0.06)'}; border-radius:8px; padding:10px 8px; text-align:center; min-width:85px; transition:transform 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              <div style="font-size:12px; font-weight:800; color:#fff;">${m.month} '${m.fyYear.slice(2)}</div>
+              <div style="font-size:16px; font-weight:800; color:${color}; margin:4px 0;">${m.submissionPct}%</div>
+              <div style="font-size:10px; color:#8c8c94;">${m.submittedUnits}/${m.totalUnits} Units</div>
+              <div style="font-size:9.5px; font-weight:700; color:${color}; margin-top:5px; padding:2px 4px; border-radius:4px; background:rgba(255,255,255,0.03);">${m.status}</div>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+  } catch (err) {
+    console.error("Failed to load cadence:", err);
+  }
+
+  // Setup Factors Modal Listeners
+  const modal = document.getElementById("factorsModal");
+  const openBtn = document.getElementById("btnOpenFactorsModal");
+  const closeBtn = document.getElementById("closeFactorsModal");
+  const closeBtn2 = document.getElementById("closeFactorsModalBtn");
+
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", async () => {
+      modal.style.display = "flex";
+      try {
+        const factors = await api("/conversion-factors");
+        const tbody = document.getElementById("factorsTableBody");
+        if (factors && tbody) {
+          tbody.innerHTML = factors.map(f => `
+            <tr>
+              <td><span class="badge" style="background:rgba(245,183,46,0.12); color:#f5b72e; border:1px solid rgba(245,183,46,0.3); font-weight:700;">${f.id}</span></td>
+              <td><strong>${f.name}</strong><div style="font-size:11px; color:#8c8c94; margin-top:2px;">${f.description}</div></td>
+              <td><span class="badge" style="background:${f.scope === 'Scope 1' ? 'rgba(248,113,113,0.15)' : f.scope === 'Scope 2' ? 'rgba(96,165,250,0.15)' : 'rgba(52,211,153,0.15)'}; color:${f.scope === 'Scope 1' ? '#f87171' : f.scope === 'Scope 2' ? '#60a5fa' : '#34d399'}; font-weight:700;">${f.scope}</span></td>
+              <td><strong style="color:#f5b72e;">${f.factorPerUnitDisplay}</strong></td>
+              <td><span style="font-size:11.5px; color:#94a3b8;">${f.standard}</span></td>
+            </tr>
+          `).join("");
+        }
+      } catch (e) {
+        console.error("Failed to load factors:", e);
+      }
+    });
+  }
+
+  if (closeBtn && modal) closeBtn.addEventListener("click", () => modal.style.display = "none");
+  if (closeBtn2 && modal) closeBtn2.addEventListener("click", () => modal.style.display = "none");
+  if (modal) modal.addEventListener("click", (e) => { if (e.target.id === "factorsModal") modal.style.display = "none"; });
+}
+</script>
+
+<!-- ========================================================================= -->
+<!-- SCIENTIFIC EMISSION FACTORS LIBRARY MODAL                                 -->
+<!-- ========================================================================= -->
+<div class="modal-backdrop" id="factorsModal" style="display: none; z-index: 1000;">
+  <div class="modal-card" style="max-width: 820px; max-height: 90vh; overflow-y: auto;">
+    <div class="modal-header">
+      <div>
+        <h2 style="display:flex; align-items:center; gap:8px;"><span></span> MEIL Conglomerate Emission Factor Library</h2>
+        <div class="modal-meta">Scientific conversion parameters verified against IPCC 2006, CEA Baseline V19 &amp; GHG Protocol</div>
+      </div>
+      <button class="modal-close-btn" id="closeFactorsModal">&times;</button>
+    </div>
+    <div class="modal-body" style="padding: 16px 20px;">
+      <div style="background: rgba(245,183,46,0.06); border: 1px solid rgba(245,183,46,0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 12px; color: #d1d5db; line-height: 1.5;">
+        <strong>Corporate Technical &amp; EHS Directive:</strong> <em>"Raw physical consumption of diesel, lignite/anthracite coal, CNG, and grid power must be translated into standardized tCO₂e using recognized scientific equivalents."</em>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Factor ID</th>
+              <th>Fuel / Activity</th>
+              <th>GHG Scope</th>
+              <th>Conversion Factor</th>
+              <th>Standard Citation</th>
+            </tr>
+          </thead>
+          <tbody id="factorsTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="closeFactorsModalBtn">Close Library</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

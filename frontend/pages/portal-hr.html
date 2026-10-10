@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR &amp; Social Governance Ledger — MEIL People Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .hr-hero {
+    background: linear-gradient(135deg, #180f20 0%, #291438 100%);
+    border: 1px solid rgba(192, 132, 252, 0.3);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+  .hr-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #c084fc, #f472b6, transparent);
+  }
+  .hr-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+  @media (max-width: 900px) {
+    .hr-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .hr-kpi-card {
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hr-kpi-label {
+    font-size: 11.5px;
+    color: #8c8c94;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hr-kpi-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin: 8px 0 4px;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1>Human Resources &amp; Social Governance Ledger</h1>
+        <div class="sub">Section A &amp; Principle 3 Custody · Workforce Demographics, Diversity, Fair Wages &amp; POSH Records</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span class="chip" style="background:rgba(192, 132, 252, 0.15); color:#c084fc; border:1px solid rgba(192, 132, 252, 0.3); font-weight:700;">
+          Suresh Reddy (HR Dept Owner)
+        </span>
+        <span class="chip">FY 2025-26</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- HR Hero Banner -->
+      <div class="hr-hero">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span class="chip" style="background:#c084fc; color:#04150d; font-weight:800; font-size:11px;">HR &amp; SOCIAL CUSTODY</span>
+              <span style="font-size:12px; color:#94a3b8;">Olectra Greentech Unit · SEBI Workforce &amp; Social Governance</span>
+            </div>
+            <h2 style="margin:0 0 4px; font-size:22px; font-weight:800; color:#fff;">Workforce, Inclusion &amp; POSH Governance</h2>
+            <div style="color:#94a3b8; font-size:13px;">Direct statutory custody over employee headcount, contractor minimum wages, gender representation &amp; ICC compliance</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <a href="hr-ledger.html" class="btn btn-primary" style="background:#c084fc; color:#120721; font-weight:700; padding:8px 16px; text-decoration:none;">
+              Social Ledger (P3)
+            </a>
+            <a href="hr-evidence.html" class="btn btn-secondary" style="border-color:rgba(192, 132, 252, 0.3); color:#c084fc; font-weight:700; padding:8px 16px; text-decoration:none;">
+              Payroll &amp; POSH Proofs
+            </a>
+          </div>
+        </div>
+
+        <div class="hr-kpi-grid">
+          <div class="hr-kpi-card" style="border-color:rgba(192,132,252,0.25);">
+            <div class="hr-kpi-label"><span></span> Total Plant Workforce</div>
+            <div class="hr-kpi-val" style="color:#c084fc;">1,240 <span style="font-size:13px; color:#8c8c94;">Roster</span></div>
+            <div style="font-size:11px; color:#8c8c94;">Permanent: 450 · Contractual / Site: 790</div>
+          </div>
+          <div class="hr-kpi-card" style="border-color:rgba(244,114,182,0.25);">
+            <div class="hr-kpi-label"><span></span> Female Diversity Ratio</div>
+            <div class="hr-kpi-val" style="color:#f472b6;">14.2% <span style="font-size:13px; color:#8c8c94;">Ratio</span></div>
+            <div style="font-size:11px; color:#8c8c94;">176 Female Engineers &amp; Technicians (+2.4% YoY)</div>
+          </div>
+          <div class="hr-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+            <div class="hr-kpi-label"><span></span> Minimum Wage Compliance</div>
+            <div class="hr-kpi-val" style="color:#34d399;">100% <span style="font-size:13px; color:#8c8c94;">Compliant</span></div>
+            <div style="font-size:11px; color:#8c8c94;">Equal Remuneration &amp; PF/ESI Audit Cleared</div>
+          </div>
+          <div class="hr-kpi-card" style="border-color:rgba(245,183,46,0.25);">
+            <div class="hr-kpi-label"><span></span> POSH Complaints Disposed</div>
+            <div class="hr-kpi-val" style="color:#f5b72e;">0 <span style="font-size:13px; color:#8c8c94;">Pending</span></div>
+            <div style="font-size:11px; color:#8c8c94;">0 Filed · 0 Pending (&gt;90 Days Clean Record)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Human Resources Disclosures Ledger Table -->
+      <div class="card" style="margin-bottom:22px;">
+        <div class="card-title-row" style="margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 2px;">Section A &amp; Principle 3 Human Capital Disclosures Ledger</h2>
+            <div style="font-size:12px; color:#8c8c94;">Workforce demographics, employee well-being, diversity, safety training &amp; POSH compliance</div>
+          </div>
+          <a href="data-entry.html" class="btn btn-primary btn-sm">Open Full Data Entry Table →</a>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicator ID</th><th>Disclosed HR Parameter</th><th>Current FY Value</th><th>Previous FY</th><th>Attached Proof</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>A-06</code></td>
+                <td><strong>Total Employees &amp; Workers Headcount</strong></td>
+                <td><strong style="color:#fff;">1,240 Total</strong> (450 Perm, 790 Contract)</td>
+                <td>1,120 Total</td>
+                <td><span class="badge badge-success">EV0002 (Payroll Extract)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>A-07</code></td>
+                <td><strong>Differently Abled Employees &amp; Workers</strong></td>
+                <td><strong style="color:#fff;">12 (0.97%)</strong></td>
+                <td>9 (0.80%)</td>
+                <td><span class="badge badge-success">EV0005 (HR Roster)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P3-01</code></td>
+                <td><strong>Well-being Measures &amp; Maternity/Paternity</strong></td>
+                <td><strong style="color:#34d399;">100% Covered</strong></td>
+                <td>100% Covered</td>
+                <td><span class="badge badge-success">EV0032 (Insurance Policy)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P3-02</code></td>
+                <td><strong>Health &amp; Accident Insurance Coverage</strong></td>
+                <td><strong style="color:#34d399;">100% of Workforce</strong></td>
+                <td>100% of Workforce</td>
+                <td><span class="badge badge-success">EV0034 (ESI/Mediclaim)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P3-03</code></td>
+                <td><strong>Complaints filed under POSH (Sexual Harassment)</strong></td>
+                <td><strong style="color:#34d399;">0 Filed / 0 Pending</strong></td>
+                <td>0 Filed</td>
+                <td><span class="badge badge-success">EV0036 (ICC Report)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P5-01</code></td>
+                <td><strong>Human Rights &amp; Minimum Wage Training</strong></td>
+                <td><strong style="color:#c084fc;">1,840 Training Man-Hours</strong></td>
+                <td>1,420 Man-Hours</td>
+                <td><span class="badge badge-success">EV0040 (Attendance Log)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+(async () => {
+  const user = await initLayout("portal-hr.html");
+  if (!user) return;
+})();
+</script>
+</body>
+</html>

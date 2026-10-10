@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EHS &amp; Energy Ledger — MEIL Environmental Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .ehs-hero {
+    background: linear-gradient(135deg, #071510 0%, #0d241c 100%);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+  .ehs-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #34d399, #10b981, transparent);
+  }
+  .ehs-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+  @media (max-width: 900px) {
+    .ehs-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .ehs-kpi-card {
+    background: #09090c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .ehs-kpi-label {
+    font-size: 11.5px;
+    color: #8c8c94;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ehs-kpi-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin: 8px 0 4px;
+  }
+  .calc-container {
+    background: #0c0c0e;
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1>EHS &amp; Environmental Operational Ledger</h1>
+        <div class="sub">Principle 6 (Environment) Custody · Scope 1 &amp; 2 Carbon GHG, Water Balance &amp; Waste Manifests</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span class="chip" style="background:rgba(52, 211, 153, 0.15); color:#34d399; border:1px solid rgba(52, 211, 153, 0.3); font-weight:700;">
+          Priya Nair (EHS Dept Owner)
+        </span>
+        <span class="chip">FY 2025-26</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- EHS Hero Banner -->
+      <div class="ehs-hero">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span class="chip" style="background:#34d399; color:#04150d; font-weight:800; font-size:11px;">EHS CUSTODY</span>
+              <span style="font-size:12px; color:#94a3b8;">Olectra Greentech Unit · SEBI Principle 6 Dedicated Ledger</span>
+            </div>
+            <h2 style="margin:0 0 4px; font-size:22px; font-weight:800; color:#fff;">Environmental &amp; GHG Emissions Control</h2>
+            <div style="color:#94a3b8; font-size:13px;">Direct statutory custody over fossil fuels, grid power draw, water STP balance and hazardous scrap disposal</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <a href="ehs-ledger.html" class="btn btn-primary" style="background:#34d399; color:#04150d; font-weight:700; padding:8px 16px; text-decoration:none;">
+              Principle 6 Ledger
+            </a>
+            <a href="ehs-evidence.html" class="btn btn-secondary" style="border-color:rgba(52,211,153,0.3); color:#34d399; font-weight:700; padding:8px 16px; text-decoration:none;">
+              EHS Invoices &amp; Slips
+            </a>
+          </div>
+        </div>
+
+        <div class="ehs-kpi-grid">
+          <div class="ehs-kpi-card" style="border-color:rgba(248,113,113,0.25);">
+            <div class="ehs-kpi-label"><span></span> Scope 1 Direct Emissions</div>
+            <div class="ehs-kpi-val" style="color:#f87171;" id="portalScope1Val">113.90 <span style="font-size:13px; color:#8c8c94;">tCO₂e</span></div>
+            <div style="font-size:11px; color:#8c8c94;" id="portalDieselSub">42,500 L Diesel (2.68 kg/L) + 3,200 kg CNG</div>
+          </div>
+          <div class="ehs-kpi-card" style="border-color:rgba(96,165,250,0.25);">
+            <div class="ehs-kpi-label"><span></span> Scope 2 Grid Emissions</div>
+            <div class="ehs-kpi-val" style="color:#60a5fa;" id="portalScope2Val">85.38 <span style="font-size:13px; color:#8c8c94;">tCO₂e</span></div>
+            <div style="font-size:11px; color:#8c8c94;" id="portalGridSub">119,250 kWh Thermal Grid (0.716 kg/kWh)</div>
+          </div>
+          <div class="ehs-kpi-card" style="border-color:rgba(52,211,153,0.25);">
+            <div class="ehs-kpi-label"><span></span> Water Withdrawal &amp; STP</div>
+            <div class="ehs-kpi-val" style="color:#34d399;" id="portalWaterVal">14,250 <span style="font-size:13px; color:#8c8c94;">KL</span></div>
+            <div style="font-size:11px; color:#8c8c94;">38.5% Recycled via On-Site STP Plant</div>
+          </div>
+          <div class="ehs-kpi-card" style="border-color:rgba(251,191,36,0.25);">
+            <div class="ehs-kpi-label"><span></span> Hazardous TSDF Waste</div>
+            <div class="ehs-kpi-val" style="color:#fbbf24;" id="portalWasteVal">12.40 <span style="font-size:13px; color:#8c8c94;">MT</span></div>
+            <div style="font-size:11px; color:#8c8c94;">100% Manifested to TSDF HWMP Plant</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive IPCC Carbon Conversion Engine -->
+      <div class="calc-container" id="carbonCalc">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div>
+            <h3 style="margin:0 0 4px; font-size:16px; color:#fff;">Scientific IPCC &amp; CEA Carbon Conversion Engine</h3>
+            <div style="font-size:12px; color:#8c8c94;">Convert physical fuel litres and electricity units to verifiable tCO₂e for BRSR Section C Principle 6</div>
+          </div>
+          <span class="chip" style="background:rgba(52,211,153,0.12); color:#34d399; font-size:11px; font-weight:700;">IPCC AR6 &amp; CEA Baseline V19</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; align-items:flex-end;">
+          <div>
+            <label style="font-size:11.5px; color:#8c8c94; font-weight:700; text-transform:uppercase; margin-bottom:6px; display:block;">Fuel / Energy Source</label>
+            <select id="calcFuel" style="width:100%; background:#141416; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:9px 12px; border-radius:8px; font-size:13px; outline:none;">
+              <option value="diesel" data-factor="2.68" data-unit="Litres">High Speed Diesel (HSD) — 2.68 kg/L</option>
+              <option value="petrol" data-factor="2.31" data-unit="Litres">Motor Gasoline (Petrol) — 2.31 kg/L</option>
+              <option value="grid" data-factor="0.716" data-unit="kWh">Grid Electricity (CEA V19) — 0.716 kg/kWh</option>
+              <option value="png" data-factor="2.69" data-unit="SCM">Piped Natural Gas (PNG) — 2.69 kg/SCM</option>
+              <option value="lpg" data-factor="2.98" data-unit="kg">Commercial LPG — 2.98 kg/kg</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:11.5px; color:#8c8c94; font-weight:700; text-transform:uppercase; margin-bottom:6px; display:block;">Physical Quantity (<span id="unitLabel">Litres</span>)</label>
+            <input type="number" id="calcQty" value="10000" style="width:100%; background:#141416; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:9px 12px; border-radius:8px; font-size:13px; outline:none;">
+          </div>
+
+          <div>
+            <label style="font-size:11.5px; color:#8c8c94; font-weight:700; text-transform:uppercase; margin-bottom:6px; display:block;">Calculated Emissions</label>
+            <div style="background:#141416; border:1px solid rgba(52,211,153,0.3); padding:8px 12px; border-radius:8px; font-size:16px; font-weight:800; color:#34d399;" id="calcOutput">
+              26.80 tCO₂e
+            </div>
+          </div>
+
+          <div>
+            <button class="btn btn-primary" id="btnApplyCarbon" style="width:100%; background:#34d399; color:#04150d; font-weight:700; padding:10px 14px;">
+              Apply to P6-01 Ledger
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Principle 6 Environmental Indicators Ledger -->
+      <div class="card" style="margin-bottom:22px;">
+        <div class="card-title-row" style="margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 2px;">Principle 6 Environmental Disclosures Ledger</h2>
+            <div style="font-size:12px; color:#8c8c94;">Auditor-verified Scope 1, Scope 2, water, effluent &amp; waste parameters</div>
+          </div>
+          <a href="data-entry.html" class="btn btn-primary btn-sm">Open Full Data Entry Table →</a>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicator ID</th><th>Disclosure Parameter</th><th>Physical Consumption</th><th>Emission Factor</th><th>Carbon Equivalent</th><th>Attached Proof</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>C-P6-01</code></td>
+                <td><strong>Total Scope 1 Direct GHG Emissions</strong></td>
+                <td>42,500 L Diesel + 3,200 kg CNG</td>
+                <td>2.68 kg/L (HSD) · 2.75 kg/kg (CNG)</td>
+                <td><strong style="color:#f87171;">113.90 tCO₂e</strong></td>
+                <td><span class="badge badge-success">EV0014 (HSD Slips)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P6-02</code></td>
+                <td><strong>Total Scope 2 Indirect Grid Power GHG</strong></td>
+                <td>119,250 kWh Grid Power</td>
+                <td>0.716 kg/kWh (CEA Baseline V19)</td>
+                <td><strong style="color:#60a5fa;">85.38 tCO₂e</strong></td>
+                <td><span class="badge badge-success">EV0018 (DISCOM Bill)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P6-03</code></td>
+                <td><strong>Total Water Withdrawal &amp; Recycled</strong></td>
+                <td>14,250 KL withdrawn · 5,486 KL recycled</td>
+                <td>Flowmeter Logbooks</td>
+                <td><strong style="color:#34d399;">38.5% Recycled</strong></td>
+                <td><span class="badge badge-success">EV0021 (STP Logs)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P6-04</code></td>
+                <td><strong>Hazardous Waste Generated (TSDF Disposed)</strong></td>
+                <td>12.40 MT generated · 12.40 MT disposed</td>
+                <td>Weighbridge Form 10</td>
+                <td><strong style="color:#fbbf24;">100% Manifested</strong></td>
+                <td><span class="badge badge-success">EV0025 (Form 10)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+              <tr>
+                <td><code>C-P6-05</code></td>
+                <td><strong>Renewable Energy Share (Solar Rooftop)</strong></td>
+                <td>65,750 kWh Solar PPA Generated</td>
+                <td>Zero Direct Emission</td>
+                <td><strong style="color:#34d399;">35.5% Renewable</strong></td>
+                <td><span class="badge badge-success">EV0029 (Solar Log)</span></td>
+                <td><span class="badge badge-success">Approved</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+(async () => {
+  const user = await initLayout("portal-ehs.html");
+  if (!user) return;
+
+  try {
+    const res = await api("/operations/state");
+    if (res && res.ehs && res.plant) {
+      document.getElementById("portalScope1Val").innerHTML = `${res.ehs.scope1_tCO2e.toFixed(2)} <span style="font-size:13px; color:#8c8c94;">tCO₂e</span>`;
+      document.getElementById("portalScope2Val").innerHTML = `${res.ehs.scope2_tCO2e.toFixed(2)} <span style="font-size:13px; color:#8c8c94;">tCO₂e</span>`;
+      document.getElementById("portalDieselSub").textContent = `${res.plant.dieselBunkeredL.toLocaleString()} L Diesel (2.68 kg/L) + 3,200 kg CNG`;
+      document.getElementById("portalGridSub").textContent = `${res.plant.gridKwh.toLocaleString()} kWh Thermal Grid (0.716 kg/kWh)`;
+      document.getElementById("portalWaterVal").innerHTML = `${res.plant.waterInflowKL.toLocaleString()} <span style="font-size:13px; color:#8c8c94;">KL</span>`;
+      document.getElementById("portalWasteVal").innerHTML = `${res.plant.wasteHazardousMT.toFixed(2)} <span style="font-size:13px; color:#8c8c94;">MT</span>`;
+    }
+  } catch(e) {}
+
+  const fuelSel = document.getElementById("calcFuel");
+  const qtyInput = document.getElementById("calcQty");
+  const unitLabel = document.getElementById("unitLabel");
+  const calcOutput = document.getElementById("calcOutput");
+
+  function recalculate() {
+    const opt = fuelSel.options[fuelSel.selectedIndex];
+    const factor = parseFloat(opt.dataset.factor);
+    const unit = opt.dataset.unit;
+    const qty = parseFloat(qtyInput.value) || 0;
+    unitLabel.textContent = unit;
+
+    const tco2e = (qty * factor) / 1000;
+    calcOutput.textContent = tco2e.toFixed(2) + " tCO₂e";
+  }
+
+  fuelSel.addEventListener("change", recalculate);
+  qtyInput.addEventListener("input", recalculate);
+  recalculate();
+
+  document.getElementById("btnApplyCarbon").addEventListener("click", () => {
+    toast(`Calculated ${calcOutput.textContent} synchronized to C-P6-01 Ledger & audit trail!`);
+  });
+})();
+</script>
+</body>
+</html>

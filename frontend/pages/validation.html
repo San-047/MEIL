@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validation Exceptions &amp; Reconciliation Desk — MEIL Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+/* Validation Desk Styles */
+.val-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.val-title-wrap h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.val-title-wrap .sub {
+  color: #8c8c94;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* KPI Banner */
+.val-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.val-kpi-card {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.val-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 183, 46, 0.3);
+}
+.val-kpi-card.active-filter {
+  border-color: #f5b72e;
+  background: rgba(245, 183, 46, 0.04);
+}
+.val-kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.val-kpi-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8c8c94;
+}
+.val-kpi-val {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+}
+.val-kpi-sub {
+  font-size: 11.5px;
+  color: #8c8c94;
+  margin-top: 6px;
+}
+
+/* Filter Toolbar */
+.val-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.val-search-box {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+}
+.val-search-box input {
+  width: 100%;
+  padding: 9px 14px 9px 38px;
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+.val-search-box input:focus {
+  border-color: #f5b72e;
+}
+.val-search-box .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 14px;
+}
+
+.val-select {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  padding: 9px 14px;
+  outline: none;
+  cursor: pointer;
+}
+.val-select:focus {
+  border-color: #f5b72e;
+}
+
+/* Quick Filter Pills */
+.val-pills {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.val-pill-btn {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.val-pill-btn:hover {
+  border-color: rgba(245, 183, 46, 0.3);
+  color: #fff;
+}
+.val-pill-btn.active {
+  background: #f5b72e;
+  color: #000;
+  font-weight: 700;
+  border-color: #f5b72e;
+}
+
+/* Exception Row Highlights */
+.badge-critical-pulse {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.badge-critical-pulse::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f87171;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.action-btn-sm {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+}
+.action-btn-fix {
+  background: rgba(245, 183, 46, 0.15);
+  color: #f5b72e;
+  border-color: rgba(245, 183, 46, 0.3);
+}
+.action-btn-fix:hover {
+  background: #f5b72e;
+  color: #000;
+}
+.action-btn-resolve {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.3);
+}
+.action-btn-resolve:hover {
+  background: #34d399;
+  color: #000;
+}
+
+/* Modal styles */
+.val-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+.val-modal {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  width: 540px;
+  max-width: 95vw;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.val-modal h3 {
+  margin: 0 0 6px;
+  color: #fff;
+  font-size: 18px;
+}
+.val-modal-sub {
+  font-size: 12px;
+  color: #8c8c94;
+  margin-bottom: 18px;
+}
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="val-header-row">
+        <div class="val-title-wrap">
+          <h1>Validation Exceptions &amp; Reconciliation Desk</h1>
+          <div class="sub">Automated integrity checks, YoY variance anomalies &amp; missing audit proof detection</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button class="btn btn-primary" id="runBtn" style="background:#f5b72e; color:#000; font-weight:700; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+            <span>▶</span><span>Run Validation Sweep Now</span>
+          </button>
+          <span class="chip" style="font-weight:700; border-color:rgba(255,255,255,0.15);">
+            FY 2026 Reporting Cycle
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content" style="padding: 24px 28px;">
+      
+      <!-- KPI Cards -->
+      <div class="val-kpi-grid">
+        <div class="val-kpi-card" id="kpiCardCrit" onclick="filterByPill('Critical')">
+          <div class="val-kpi-top">
+            <span class="val-kpi-label">Critical Exceptions</span>
+            <span style="font-size:18px;"></span>
+          </div>
+          <div class="val-kpi-val" id="cCritical" style="color:#f87171;">—</div>
+          <div class="val-kpi-sub">Negative values &amp; threshold breaches</div>
+        </div>
+
+        <div class="val-kpi-card" id="kpiCardWarn" onclick="filterByPill('Warning')">
+          <div class="val-kpi-top">
+            <span class="val-kpi-label">YoY Variances</span>
+            <span style="font-size:18px;"></span>
+          </div>
+          <div class="val-kpi-val" id="cWarning" style="color:#fbbf24;">—</div>
+          <div class="val-kpi-sub">&gt;40% variance vs previous reporting year</div>
+        </div>
+
+        <div class="val-kpi-card" id="kpiCardInfo" onclick="filterByPill('Info')">
+          <div class="val-kpi-top">
+            <span class="val-kpi-label">Advisory Alerts</span>
+            <span style="font-size:18px;"></span>
+          </div>
+          <div class="val-kpi-val" id="cInfo" style="color:#60a5fa;">—</div>
+          <div class="val-kpi-sub">Benchmark alignments &amp; notices</div>
+        </div>
+
+        <div class="val-kpi-card" id="kpiCardRes" onclick="filterByPill('Resolved')">
+          <div class="val-kpi-top">
+            <span class="val-kpi-label">Resolved / Cleared</span>
+            <span style="font-size:18px;"></span>
+          </div>
+          <div class="val-kpi-val" id="cResolved" style="color:#34d399;">0</div>
+          <div class="val-kpi-sub">Justified with auditor verification notes</div>
+        </div>
+      </div>
+
+      <!-- Quick Filter Pills -->
+      <div class="val-pills" id="pillsBar">
+        <button class="val-pill-btn active" data-pill="all">All Exceptions (<span id="countAll">0</span>)</button>
+        <button class="val-pill-btn" data-pill="Critical">Critical Only</button>
+        <button class="val-pill-btn" data-pill="Warning">YoY Variances</button>
+        <button class="val-pill-btn" data-pill="Core">Core KPIs Only</button>
+        <button class="val-pill-btn" data-pill="Resolved">Resolved Only</button>
+      </div>
+
+      <!-- Filter Toolbar -->
+      <div class="val-toolbar">
+        <div class="val-search-box">
+          <span class="search-icon"></span>
+          <input type="text" id="valSearch" placeholder="Search exceptions by indicator, entity, check type, or error message...">
+        </div>
+
+        <select class="val-select" id="fSeverity">
+          <option value="">All Severities</option>
+          <option value="Critical">Critical</option>
+          <option value="Warning">Warning</option>
+          <option value="Info">Info</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+
+        <select class="val-select" id="fCheckType">
+          <option value="">All Check Types</option>
+        </select>
+      </div>
+
+      <!-- Table Card -->
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div class="table-wrap">
+          <table style="width:100%;">
+            <thead>
+              <tr>
+                <th style="width:110px;">Severity</th>
+                <th style="width:170px;">Check Type</th>
+                <th>Indicator &amp; ID</th>
+                <th>Entity / Plant</th>
+                <th style="min-width:320px;">Diagnostic Rule Output</th>
+                <th style="width:80px; text-align:center;">Core</th>
+                <th style="width:160px; text-align:right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="valTableBody">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="muted" id="rowCount" style="margin-top:14px; font-size:12.5px; color:#8c8c94;"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- INLINE FIX MODAL -->
+<div id="fixModalContainer" style="display:none;"></div>
+
+<script src="../js/common.js"></script>
+<script>
+let ALL_EXCEPTIONS = [];
+let ACTIVE_PILL = "all";
+let SEARCH_QUERY = "";
+let SEVERITY_FILTER = "";
+let CHECK_TYPE_FILTER = "";
+
+(async () => {
+  const user = await initLayout("validation.html");
+  if (!user) return;
+
+  await loadExceptions();
+  setupEventListeners();
+})();
+
+async function loadExceptions() {
+  try {
+    ALL_EXCEPTIONS = await api("/validation");
+    if (!ALL_EXCEPTIONS || ALL_EXCEPTIONS.length === 0) {
+      await runValidation();
+      return;
+    }
+    populateCheckTypes();
+    updateKpis();
+    renderTable();
+  } catch (err) {
+    console.error("Failed to load validation:", err);
+    toast("Failed to load validation exceptions");
+  }
+}
+
+function populateCheckTypes() {
+  const types = [...new Set(ALL_EXCEPTIONS.map(v => v.checkType).filter(Boolean))];
+  const sel = document.getElementById("fCheckType");
+  sel.innerHTML = `<option value="">All Check Types</option>` + types.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
+}
+
+function updateKpis() {
+  const crit = ALL_EXCEPTIONS.filter(v => v.severity === "Critical" && !v.resolved).length;
+  const warn = ALL_EXCEPTIONS.filter(v => v.severity === "Warning" && !v.resolved).length;
+  const info = ALL_EXCEPTIONS.filter(v => v.severity === "Info" && !v.resolved).length;
+  const resolved = ALL_EXCEPTIONS.filter(v => v.resolved).length;
+
+  document.getElementById("cCritical").textContent = crit;
+  document.getElementById("cWarning").textContent = warn;
+  document.getElementById("cInfo").textContent = info;
+  document.getElementById("cResolved").textContent = resolved;
+  document.getElementById("countAll").textContent = ALL_EXCEPTIONS.length;
+}
+
+function getFilteredExceptions() {
+  return ALL_EXCEPTIONS.filter(v => {
+    // 1. Pill Filter
+    if (ACTIVE_PILL === "Critical" && (v.severity !== "Critical" || v.resolved)) return false;
+    if (ACTIVE_PILL === "Warning" && (v.severity !== "Warning" || v.resolved)) return false;
+    if (ACTIVE_PILL === "Core" && !v.coreKpi) return false;
+    if (ACTIVE_PILL === "Resolved" && !v.resolved) return false;
+
+    // 2. Severity Dropdown
+    if (SEVERITY_FILTER === "Resolved") {
+      if (!v.resolved) return false;
+    } else if (SEVERITY_FILTER && v.severity !== SEVERITY_FILTER) {
+      return false;
+    }
+
+    // 3. Check Type Dropdown
+    if (CHECK_TYPE_FILTER && v.checkType !== CHECK_TYPE_FILTER) return false;
+
+    // 4. Search Query
+    if (SEARCH_QUERY) {
+      const q = SEARCH_QUERY.toLowerCase();
+      const matchInd = (v.indicator || "").toLowerCase().includes(q);
+      const matchId = (v.indicatorId || "").toLowerCase().includes(q);
+      const matchEnt = (v.entity || "").toLowerCase().includes(q);
+      const matchMsg = (v.message || "").toLowerCase().includes(q);
+      const matchCt = (v.checkType || "").toLowerCase().includes(q);
+      if (!matchInd && !matchId && !matchEnt && !matchMsg && !matchCt) return false;
+    }
+
+    return true;
+  });
+}
+
+function renderTable() {
+  const tbody = document.getElementById("valTableBody");
+  const rowCountEl = document.getElementById("rowCount");
+  const filtered = getFilteredExceptions();
+
+  rowCountEl.textContent = `Showing ${filtered.length} of ${ALL_EXCEPTIONS.length} validation exceptions`;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center; padding:36px; color:#8c8c94;">
+          No exceptions found matching the current filter criteria.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.slice(0, 200).map(v => {
+    const isResolved = !!v.resolved;
+    const sevBadge = isResolved
+      ? `<span class="badge badge-success" style="font-weight:700;">Resolved</span>`
+      : v.severity === "Critical"
+      ? `<span class="badge-critical-pulse">Critical</span>`
+      : v.severity === "Warning"
+      ? `<span class="badge badge-warning" style="font-weight:700;">Warning</span>`
+      : `<span class="badge" style="background:rgba(96,165,250,0.12);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);font-weight:700;">Advisory</span>`;
+
+    return `
+      <tr style="${isResolved ? 'opacity:0.65;' : ''}">
+        <td>${sevBadge}</td>
+        <td>
+          <span class="chip" style="font-size:11px; white-space:nowrap;">${esc(v.checkType || "General Check")}</span>
+        </td>
+        <td>
+          <div style="font-weight:700; color:#fff; font-size:13px;">${esc(v.indicator)}</div>
+          <div style="font-size:11px; color:#f5b72e; font-weight:700; margin-top:2px;">${esc(v.indicatorId)}</div>
+        </td>
+        <td>
+          <div style="font-size:12px; color:#cbd5e1;">${esc(v.entity)}</div>
+        </td>
+        <td>
+          <div style="font-size:12.5px; color:#e2e8f0; line-height:1.45;">${esc(v.message)}</div>
+          ${v.resolutionNote ? `
+            <div style="margin-top:6px; font-size:11px; color:#34d399; background:rgba(52,211,153,0.08); padding:4px 8px; border-radius:4px; display:inline-block;">
+              ✓ Note: ${esc(v.resolutionNote)} (${esc(v.resolvedBy || 'Officer')})
+            </div>
+          ` : ""}
+        </td>
+        <td style="text-align:center;">
+          ${v.coreKpi ? `<span class="badge badge-gold">Core</span>` : `<span style="color:#64748b;font-size:11px;">Standard</span>`}
+        </td>
+        <td style="text-align:right; white-space:nowrap;">
+          ${isResolved ? `
+            <span style="font-size:11.5px; color:#34d399; font-weight:600;">Cleared</span>
+          ` : `
+            <button class="action-btn-sm action-btn-fix" onclick="openFixModal('${v.id}')" title="Edit metric value directly">
+              Fix
+            </button>
+            <button class="action-btn-sm action-btn-resolve" onclick="resolveException('${v.id}')" title="Mark resolved with justification">
+              Resolve
+            </button>
+          `}
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+window.filterByPill = function(pill) {
+  ACTIVE_PILL = pill;
+  document.querySelectorAll(".val-pill-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.pill === pill);
+  });
+  renderTable();
+};
+
+function setupEventListeners() {
+  // Pills
+  document.querySelectorAll(".val-pill-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".val-pill-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      ACTIVE_PILL = btn.dataset.pill;
+      renderTable();
+    });
+  });
+
+  // Search
+  document.getElementById("valSearch").addEventListener("input", (e) => {
+    SEARCH_QUERY = e.target.value.trim();
+    renderTable();
+  });
+
+  // Severity Dropdown
+  document.getElementById("fSeverity").addEventListener("change", (e) => {
+    SEVERITY_FILTER = e.target.value;
+    renderTable();
+  });
+
+  // Check Type Dropdown
+  document.getElementById("fCheckType").addEventListener("change", (e) => {
+    CHECK_TYPE_FILTER = e.target.value;
+    renderTable();
+  });
+
+  // Run Button
+  document.getElementById("runBtn").addEventListener("click", runValidation);
+}
+
+async function runValidation() {
+  const btn = document.getElementById("runBtn");
+  btn.innerHTML = `<span></span><span>Running Validation Sweep…</span>`;
+  btn.disabled = true;
+
+  try {
+    ALL_EXCEPTIONS = await api("/validation/run", { method: "POST" });
+    populateCheckTypes();
+    updateKpis();
+    renderTable();
+    toast(`Validation sweep complete: ${ALL_EXCEPTIONS.length} diagnostic results.`);
+  } catch (err) {
+    console.error("Run validation error:", err);
+    toast("Failed to run validation sweep");
+  } finally {
+    btn.innerHTML = `<span>▶</span><span>Run Validation Sweep Now</span>`;
+    btn.disabled = false;
+  }
+}
+
+// =============================================================================
+// INLINE RESOLVE ACTION
+// =============================================================================
+window.resolveException = async function(id) {
+  const note = prompt("Enter verification remarks / justification note to clear this exception:", "Variance verified against raw EB meter invoice and physical weighbridge registers.");
+  if (!note) return;
+
+  try {
+    const res = await api(`/validation/${id}/resolve`, {
+      method: "POST",
+      body: { note }
+    });
+    const item = ALL_EXCEPTIONS.find(v => v.id === id);
+    if (item) {
+      item.resolved = true;
+      item.resolutionNote = note;
+      item.resolvedBy = "Compliance Lead";
+    }
+    updateKpis();
+    renderTable();
+    toast("Exception cleared with justification note!");
+  } catch (err) {
+    console.error("Resolve error:", err);
+    toast("Failed to resolve exception");
+  }
+};
+
+// =============================================================================
+// INLINE FIX METRIC MODAL
+// =============================================================================
+window.openFixModal = async function(exceptionId) {
+  const exc = ALL_EXCEPTIONS.find(v => v.id === exceptionId);
+  if (!exc || !exc.entryId) {
+    toast("Could not link to entry record");
+    return;
+  }
+
+  // Fetch actual entry
+  let entry = null;
+  try {
+    const entries = await api(`/entries?q=${encodeURIComponent(exc.indicatorId)}`);
+    entry = entries.find(e => e.id === exc.entryId) || entries[0];
+  } catch (err) {
+    console.error(err);
+  }
+
+  if (!entry) {
+    toast("Entry not found");
+    return;
+  }
+
+  const container = document.getElementById("fixModalContainer");
+  container.style.display = "block";
+  container.innerHTML = `
+    <div class="val-modal-overlay" id="valModalOverlay">
+      <div class="val-modal">
+        <h3>Quick Correction: ${esc(entry.indicatorId)}</h3>
+        <div class="val-modal-sub">${esc(entry.indicator)} · ${esc(entry.entityLabel || 'Group')}</div>
+
+        <div style="background:rgba(245,183,46,0.06); border:1px solid rgba(245,183,46,0.25); border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; color:#e2e8f0;">
+          <strong>Diagnostic Anomaly:</strong> ${esc(exc.message)}
+        </div>
+
+        <div style="display:flex; gap:14px; margin-bottom:14px;">
+          <div style="flex:1;">
+            <label style="display:block; font-size:11.5px; font-weight:700; color:#8c8c94; margin-bottom:4px;">Current FY Value (${entry.unit || 'unit'})</label>
+            <input type="number" id="modalFixCurrent" value="${entry.currentFY !== null ? entry.currentFY : ''}" step="any" style="width:100%; padding:9px 12px; background:#141416; border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:14px; font-weight:700; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="flex:1;">
+            <label style="display:block; font-size:11.5px; font-weight:700; color:#8c8c94; margin-bottom:4px;">Previous FY Value</label>
+            <input type="number" id="modalFixPrevious" value="${entry.previousFY !== null ? entry.previousFY : ''}" step="any" style="width:100%; padding:9px 12px; background:#141416; border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:14px; font-weight:700; outline:none; box-sizing:border-box;">
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="display:block; font-size:11.5px; font-weight:700; color:#8c8c94; margin-bottom:4px;">Reconciliation Correction Remarks</label>
+          <textarea id="modalFixRemarks" style="width:100%; height:70px; padding:8px 12px; background:#141416; border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:12.5px; outline:none; box-sizing:border-box;">[Reconciled via Validation Desk] ${entry.remarks || ''}</textarea>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button class="btn btn-secondary" onclick="closeFixModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveFixEntry('${entry.id}', '${exc.id}')" style="background:#f5b72e; color:#000; font-weight:700;">Save &amp; Reconcile</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("valModalOverlay").addEventListener("click", (e) => {
+    if (e.target.id === "valModalOverlay") closeFixModal();
+  });
+};
+
+window.closeFixModal = function() {
+  const container = document.getElementById("fixModalContainer");
+  container.style.display = "none";
+  container.innerHTML = "";
+};
+
+window.saveFixEntry = async function(entryId, exceptionId) {
+  const currentVal = parseFloat(document.getElementById("modalFixCurrent").value);
+  const prevVal = parseFloat(document.getElementById("modalFixPrevious").value);
+  const remarks = document.getElementById("modalFixRemarks").value.trim();
+
+  try {
+    await api(`/entries/${entryId}`, {
+      method: "PUT",
+      body: {
+        currentFY: isNaN(currentVal) ? null : currentVal,
+        previousFY: isNaN(prevVal) ? null : prevVal,
+        remarks: remarks,
+        status: "Approved"
+      }
+    });
+
+    // Automatically resolve the exception
+    await api(`/validation/${exceptionId}/resolve`, {
+      method: "POST",
+      body: { note: `Value corrected to ${currentVal} and reconciled.` }
+    });
+
+    const item = ALL_EXCEPTIONS.find(v => v.id === exceptionId);
+    if (item) {
+      item.resolved = true;
+      item.resolutionNote = `Value corrected to ${currentVal}`;
+      item.resolvedBy = "Compliance Lead";
+    }
+
+    closeFixModal();
+    updateKpis();
+    renderTable();
+    toast("Entry updated & anomaly reconciled successfully!");
+  } catch (err) {
+    console.error("Save fix error:", err);
+    toast("Failed to update entry");
+  }
+};
+
+function esc(str) {
+  const d = document.createElement("div");
+  d.textContent = str || "";
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>

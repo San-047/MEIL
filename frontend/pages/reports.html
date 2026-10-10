@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Master SEBI BRSR Report Publisher — MEIL Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  /* Report Publisher Custom Styles */
+  .report-hero {
+    background: linear-gradient(135deg, #0e0e12 0%, #15151c 100%);
+    border: 1px solid rgba(245, 183, 46, 0.25);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .report-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #f5b72e, #e09f1a, transparent);
+  }
+  .report-hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .report-hero-title h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 4px 0;
+  }
+  .report-hero-title h1 .gold { color: #f5b72e; }
+  .report-hero-title .sub {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .report-meta-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Document Preview Container (Official SEBI Look) */
+  .doc-container {
+    background: #0d0d10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 18px;
+  }
+  .doc-header-strip {
+    background: #14141a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .doc-tabs-bar {
+    display: flex;
+    gap: 6px;
+    background: #09090c;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow-x: auto;
+  }
+  .doc-tab-btn {
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #8c8c94;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .doc-tab-btn.active {
+    background: #1f1f28;
+    color: #f5b72e;
+    border: 1px solid rgba(245, 183, 46, 0.3);
+  }
+
+  /* Section Body */
+  .doc-body {
+    padding: 22px;
+  }
+  .sebi-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 800px) {
+    .sebi-info-grid { grid-template-columns: 1fr; }
+  }
+  .sebi-info-card {
+    background: #08080a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .sebi-info-card .label {
+    font-size: 11.5px;
+    color: #8c8c94;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .sebi-info-card .val {
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* UN SDG Table */
+  .sdg-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .sdg-report-table th {
+    background: #141419;
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 12px;
+    color: #8c8c94;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .sdg-report-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .sdg-report-table tr:hover td {
+    background: rgba(245, 183, 46, 0.02);
+  }
+
+  @media print {
+    body {
+      background: #fff !important;
+      color: #111 !important;
+    }
+    .sidebar, .topbar, .report-hero, .doc-tabs-bar, .doc-header-strip button, #voice-copilot-container, .btn, .tag-row {
+      display: none !important;
+    }
+    .app-shell, .main, .content {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      background: #fff !important;
+    }
+    .doc-container {
+      background: #fff !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .sebi-info-card {
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    .sebi-info-card .label {
+      color: #475569 !important;
+    }
+    .sebi-info-card .val {
+      color: #0f172a !important;
+    }
+    .sdg-report-table th, #previewCard table th {
+      background: #0f172a !important;
+      color: #fff !important;
+    }
+    .sdg-report-table td, #previewCard table td {
+      color: #1e293b !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    .doc-header-strip {
+      background: #fff !important;
+      border-bottom: 2px solid #0f172a !important;
+      padding: 10px 0 !important;
+    }
+    #docTitle {
+      color: #0f172a !important;
+      font-size: 18px !important;
+    }
+    #previewMeta {
+      color: #475569 !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1>Master SEBI BRSR Report Publisher</h1>
+        <div class="sub">Annual Business Responsibility &amp; Sustainability Report · SEBI Circular Compliant</div>
+      </div>
+      <div class="tag-row">
+        <span class="chip" style="background:rgba(245, 183, 46, 0.15);color:var(--accent);border:1px solid rgba(245, 183, 46, 0.3);">
+          MEIL Group Level
+        </span>
+        <span class="chip">FY 2025-26</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- HERO BANNER -->
+      <div class="report-hero">
+        <div class="report-hero-header">
+          <div class="report-hero-title">
+            <h1>Consolidated <span class="gold">SEBI BRSR Master Filing</span></h1>
+            <div class="sub">
+              Megha Engineering &amp; Infrastructures Limited (MEIL) · Group-level consolidation covering 42 Subsidiaries &amp; 250+ project units
+            </div>
+          </div>
+          <div class="report-meta-chips">
+            <span class="chip" style="background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.3);">
+              SEBI Annexure-1 Format
+            </span>
+            <span class="chip" style="background:rgba(245,183,46,0.12);color:#f5b72e;border:1px solid rgba(245,183,46,0.3);">
+              Reasonable Assurance Ready
+            </span>
+          </div>
+        </div>
+
+        <!-- Filter / Configure Grid -->
+        <div class="grid grid-3" style="gap:14px;margin-bottom:16px;">
+          <div class="form-field">
+            <label style="font-size:12px;color:#8c8c94;font-weight:600;margin-bottom:6px;display:block;">Reporting Scope</label>
+            <select id="scope" style="background:#09090c;color:#fff;border:1px solid rgba(255,255,255,0.12);padding:9px 12px;border-radius:8px;font-size:13px;width:100%;">
+              <option value="comprehensive">Comprehensive (All Essential + Leadership Indicators)</option>
+              <option value="core">BRSR Core (SEBI Mandated 9 ESG Attributes)</option>
+              <option value="lite">Lite (Essential Indicators Only)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label style="font-size:12px;color:#8c8c94;font-weight:600;margin-bottom:6px;display:block;">Granularity Level</label>
+            <select id="granularitySelect" style="background:#09090c;color:#fff;border:1px solid rgba(255,255,255,0.12);padding:9px 12px;border-radius:8px;font-size:13px;width:100%;">
+              <option value="group">Group Consolidated (All 42 Entities &amp; 250+ Units)</option>
+              <option value="mhl">MEIL Holdings Limited (MHL) &amp; EV Mobility</option>
+              <option value="tech">MEIL Advanced Technologies &amp; Telecom</option>
+              <option value="spv">Infrastructure &amp; Roadway SPVs</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label style="font-size:12px;color:#8c8c94;font-weight:600;margin-bottom:6px;display:block;">Reporting Period</label>
+            <div style="background:#09090c;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);padding:9px 12px;border-radius:8px;font-size:13px;font-weight:600;">
+              Current FY 2025-26 vs Previous FY 2024-25
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:6px;">
+          <button class="btn btn-primary" id="previewBtn" style="padding:8px 18px;">
+            Load / Refresh Preview
+          </button>
+          <a class="btn btn-secondary" id="pdfDownloadBtn" target="_blank" style="padding:8px 16px;background:rgba(212,163,64,0.18);border-color:#d4a340;color:#f5b72e;font-weight:700;">
+            Download SEBI PDF
+          </a>
+          <button class="btn btn-secondary" id="directPrintBtn" style="padding:8px 16px;border-color:rgba(52,211,153,0.3);color:#34d399;font-weight:700;">
+            Print / Save as PDF
+          </button>
+          <a class="btn btn-secondary" id="htmlBtn" target="_blank" style="padding:8px 16px;border-color:rgba(245,183,46,0.3);color:#f5b72e;">
+            Official SEBI Annexure
+          </a>
+          <a class="btn btn-secondary" id="jsonBtn" style="padding:8px 16px;">
+            Export SEBI JSON
+          </a>
+          <a class="btn btn-secondary" id="csvBtn" style="padding:8px 16px;">
+            Export CSV
+          </a>
+          <button class="btn btn-secondary" onclick="toast('Report locked and archived for SEBI/Stock Exchange filing.')" style="margin-left:auto;padding:8px 16px;background:rgba(52,211,153,0.1);color:#34d399;border:1px solid rgba(52,211,153,0.3);">
+            Final Sign-Off &amp; Lock
+          </button>
+        </div>
+      </div>
+
+      <!-- OFFICIAL SEBI BRSR REPORT DOCUMENT VIEWER -->
+      <div class="doc-container" id="previewCard">
+        <div class="doc-header-strip">
+          <div>
+            <strong style="color:#fff;font-size:14.5px;" id="docTitle">SEBI BRSR Annual Report — Megha Engineering &amp; Infrastructures Ltd.</strong>
+            <div style="font-size:11.5px;color:#8c8c94;" id="previewMeta">Consolidated Group Scope · Standalone &amp; Subsidiaries</div>
+          </div>
+          <div class="doc-tabs-bar">
+            <button class="doc-tab-btn active" data-tab="general">Corporate Details</button>
+            <button class="doc-tab-btn" data-tab="A">Section A (General)</button>
+            <button class="doc-tab-btn" data-tab="B">Section B (Governance)</button>
+            <button class="doc-tab-btn" data-tab="C">Section C (Principles P1–P9)</button>
+            <button class="doc-tab-btn" data-tab="sdg">UN SDG Mapping</button>
+          </div>
+        </div>
+
+        <div class="doc-body">
+
+          <!-- TAB 1: CORPORATE GENERAL DETAILS -->
+          <div id="tabContentGeneral">
+            <h3 style="color:#f5b72e;font-size:16px;margin-bottom:14px;">I. Corporate &amp; Entity Identification</h3>
+            <div class="sebi-info-grid">
+              <div class="sebi-info-card">
+                <div class="label">Corporate Identity Number (CIN)</div>
+                <div class="val">U45200TG2006PLC050271</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Name of the Listed Entity</div>
+                <div class="val">Megha Engineering &amp; Infrastructures Limited (MEIL)</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Registered Office Address</div>
+                <div class="val">S-2, Technocrat Industrial Estate, Balanagar, Hyderabad - 500037, Telangana</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Corporate Website &amp; ESG Contact</div>
+                <div class="val">www.meil.in · esg.reporting@meil.in</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Paid-up Capital &amp; Group Turnover</div>
+                <div class="val">₹ 142.5 Cr Paid-up · ₹ 29,840 Cr Consolidated Turnover</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Reporting Boundary</div>
+                <div class="val">Consolidated (Parent + 42 Subsidiaries + 250+ Project Units)</div>
+              </div>
+            </div>
+
+            <h3 style="color:#f5b72e;font-size:16px;margin:20px 0 14px;">II. Operations &amp; Project Footprint</h3>
+            <div class="sebi-info-grid">
+              <div class="sebi-info-card">
+                <div class="label">National Locations (States &amp; UTs)</div>
+                <div class="val">28 States &amp; 3 UTs across India</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">International Project Units</div>
+                <div class="val">5 Countries (Italy, Kuwait, Jordan, Mongolia, Tanzania)</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Total Operational Business Units &amp; Plants</div>
+                <div class="val">250+ Active Infrastructure &amp; Industrial Sites</div>
+              </div>
+              <div class="sebi-info-card">
+                <div class="label">Key Sectors of Operation</div>
+                <div class="val">Power &amp; Hydro, EV Transport, Defense, Oil &amp; Gas, Roads &amp; Irrigation</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2, 3, 4: SECTION A, B, C DATA TABLES -->
+          <div id="tabContentTables" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span style="font-size:13px;color:#8c8c94;" id="sectionTableSub">Showing disclosures</span>
+              <input type="text" id="secSearch" placeholder="Filter indicators by keyword…" style="background:#09090c;color:#fff;border:1px solid rgba(255,255,255,0.1);padding:6px 12px;border-radius:6px;font-size:12px;width:240px;">
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Principle</th>
+                    <th>Disclosure Indicator</th>
+                    <th>Type</th>
+                    <th>Core KPI</th>
+                    <th>Entity Scope</th>
+                    <th>Current FY</th>
+                    <th>Previous FY</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="previewBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 5: UN SDG MAPPING ANNEXURE -->
+          <div id="tabContentSDG" style="display:none;">
+            <div style="margin-bottom:16px;">
+              <h3 style="color:#f5b72e;font-size:16px;margin-bottom:4px;">Annexure: United Nations SDGs Mapping Matrix</h3>
+              <p style="font-size:12.5px;color:#94a3b8;margin:0;">
+                Demonstrating alignment of MEIL Group ESG initiatives with UN Sustainable Development Goals (SDGs) 2030 Agenda
+              </p>
+            </div>
+            <div class="table-wrap">
+              <table class="sdg-report-table">
+                <thead>
+                  <tr>
+                    <th>UN SDG Goal</th>
+                    <th>BRSR Principle</th>
+                    <th>MEIL Program / Focus Area</th>
+                    <th>Performance Metric</th>
+                    <th>Target &amp; Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color:#f5b72e;">SDG 6</strong> · Clean Water</td>
+                    <td>P6 (Environment)</td>
+                    <td>Effluent Treatment &amp; Zero Liquid Discharge</td>
+                    <td>3.2 Million KL Recycled Water</td>
+                    <td><span class="badge badge-success">On Track</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#f5b72e;">SDG 7</strong> · Clean Energy</td>
+                    <td>P6 (Environment)</td>
+                    <td>Solar &amp; Hydro Power Project SPVs</td>
+                    <td>34.8% Renewable Electricity Mix</td>
+                    <td><span class="badge badge-success">45% by FY28</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#f5b72e;">SDG 8</strong> · Decent Work</td>
+                    <td>P3 (Employee Well-being)</td>
+                    <td>Fair Wages, EHS Training &amp; Zero Fatalities</td>
+                    <td>100% Minimum Wage &amp; 0.14 LTIFR</td>
+                    <td><span class="badge badge-success">Verified</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#f5b72e;">SDG 9</strong> · Sustainable Infra</td>
+                    <td>P2 (Safe Goods/Services)</td>
+                    <td>Olectra E-Buses &amp; Green Civil Concrete</td>
+                    <td>1,200+ Electric Buses in Operation</td>
+                    <td><span class="badge badge-success">Expanded</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#f5b72e;">SDG 12</strong> · Responsible Consumption</td>
+                    <td>P2 &amp; P6</td>
+                    <td>Steel/Cement Recycling &amp; Hazardous Waste</td>
+                    <td>88.2% Waste Diverted from Landfill</td>
+                    <td><span class="badge badge-success">On Track</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#f5b72e;">SDG 13</strong> · Climate Action</td>
+                    <td>P6 (Environment)</td>
+                    <td>Scope 1 &amp; Scope 2 Carbon Emissions Reduction</td>
+                    <td>-12.4% Intensity per ₹ Cr Turnover</td>
+                    <td><span class="badge badge-success">SEBI Aligned</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+let REPORT = null;
+let ACTIVE_TAB = "general";
+let ACTIVE_SEC_SEARCH = "";
+
+(async () => {
+  const user = await initLayout("reports.html");
+  if (!user) return;
+
+  function updateLinks() {
+    const scope = document.getElementById("scope").value;
+    const pdfBtn = document.getElementById("pdfDownloadBtn");
+    if (pdfBtn) pdfBtn.href = `/api/report?scope=${scope}&format=pdf`;
+    document.getElementById("htmlBtn").href = `/api/report?scope=${scope}&format=html`;
+    document.getElementById("jsonBtn").href = `/api/report?scope=${scope}&format=json`;
+    document.getElementById("csvBtn").href = `/api/report?scope=${scope}&format=csv`;
+  }
+  document.getElementById("scope").addEventListener("change", updateLinks);
+  updateLinks();
+
+  async function loadReport() {
+    const scope = document.getElementById("scope").value;
+    try {
+      REPORT = await api(`/report?scope=${scope}&format=json`);
+      document.getElementById("previewMeta").textContent = `${REPORT.meta.entity} · ${REPORT.meta.currentFY} vs ${REPORT.meta.previousFY} · Scope: ${REPORT.meta.scope.toUpperCase()}`;
+      renderCurrentTab();
+    } catch (err) {
+      console.error("Report fetch error:", err);
+    }
+  }
+
+  document.getElementById("previewBtn").addEventListener("click", loadReport);
+  document.getElementById("directPrintBtn").addEventListener("click", () => {
+    window.print();
+  });
+  await loadReport();
+
+  // Tab switching
+  document.querySelectorAll(".doc-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".doc-tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      ACTIVE_TAB = btn.dataset.tab;
+      renderCurrentTab();
+    });
+  });
+
+  // Table search
+  document.getElementById("secSearch").addEventListener("input", (e) => {
+    ACTIVE_SEC_SEARCH = e.target.value.toLowerCase().trim();
+    renderCurrentTab();
+  });
+
+  function renderCurrentTab() {
+    const generalEl = document.getElementById("tabContentGeneral");
+    const tablesEl = document.getElementById("tabContentTables");
+    const sdgEl = document.getElementById("tabContentSDG");
+
+    generalEl.style.display = "none";
+    tablesEl.style.display = "none";
+    sdgEl.style.display = "none";
+
+    if (ACTIVE_TAB === "general") {
+      generalEl.style.display = "block";
+    } else if (ACTIVE_TAB === "sdg") {
+      sdgEl.style.display = "block";
+    } else {
+      tablesEl.style.display = "block";
+      renderSectionTable(ACTIVE_TAB);
+    }
+  }
+
+  function renderSectionTable(sec) {
+    if (!REPORT) return;
+    const secName = sec === "A" ? "Section A (General Disclosures)" : sec === "B" ? "Section B (Management & Process)" : "Section C (Principle-wise Performance P1–P9)";
+    document.getElementById("sectionTableSub").textContent = `Viewing ${secName}`;
+
+    let rows = sec === "A" ? REPORT.sectionA : sec === "B" ? REPORT.sectionB : REPORT.sectionC;
+    if (ACTIVE_SEC_SEARCH) {
+      rows = rows.filter(r => 
+        (r.indicatorId && r.indicatorId.toLowerCase().includes(ACTIVE_SEC_SEARCH)) ||
+        (r.indicator && r.indicator.toLowerCase().includes(ACTIVE_SEC_SEARCH)) ||
+        (r.principle && r.principle.toLowerCase().includes(ACTIVE_SEC_SEARCH))
+      );
+    }
+
+    const tbody = document.getElementById("previewBody");
+    if (!rows || rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:#8c8c94;">No indicators matching criteria.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.slice(0, 150).map(e => `
+      <tr>
+        <td><code style="color:#f5b72e;">${e.indicatorId}</code></td>
+        <td style="font-size:12px;color:#cbd5e1;">${e.principle || "—"}</td>
+        <td style="max-width:280px;font-weight:600;color:#fff;">${e.indicator}</td>
+        <td><span class="chip" style="font-size:11px;">${e.type}</span></td>
+        <td>${e.coreKpi ? '<span class="badge badge-gold">Core</span>' : '<span style="color:#64748b;font-size:11px;">Standard</span>'}</td>
+        <td style="font-size:12px;color:#94a3b8;">${e.entityLabel}</td>
+        <td style="font-weight:700;color:#f5b72e;">${fmtNum(e.currentFY)}</td>
+        <td style="color:#94a3b8;">${fmtNum(e.previousFY)}</td>
+        <td>${statusBadge(e.status)}</td>
+      </tr>
+    `).join("");
+  }
+})();
+</script>
+</body>
+</html>

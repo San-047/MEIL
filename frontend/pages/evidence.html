@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence Repository — MEIL BRSR Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+/* ===== Evidence Page Styles ===== */
+.ev-header {
+  display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+}
+.ev-header h1 { margin: 0; font-size: 24px; font-weight: 800; color: #fff; }
+.ev-header .badge {
+  display: inline-block; padding: 3px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; background: rgba(245,183,46,0.15);
+  color: #f5b72e; border: 1px solid rgba(245,183,46,0.3); vertical-align: middle;
+}
+.ev-header .sub { color: #8c8c94; font-size: 13px; margin-top: 4px; }
+
+/* KPI Row */
+.ev-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-top: 20px;
+}
+.ev-kpi {
+  background: #0c0c0e; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color 0.2s;
+}
+.ev-kpi:hover { border-color: rgba(245,183,46,0.3); }
+.ev-kpi-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.ev-kpi-icon.total { background: rgba(245,183,46,0.15); color: #f5b72e; }
+.ev-kpi-icon.verified { background: rgba(52,211,153,0.15); color: #34d399; }
+.ev-kpi-icon.pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.ev-kpi-icon.rejected { background: rgba(248,113,113,0.15); color: #f87171; }
+.ev-kpi-label { font-size: 12px; color: #8c8c94; font-weight: 600; }
+.ev-kpi-value { font-size: 28px; font-weight: 800; color: #fff; margin-top: 2px; }
+
+/* Main layout: cards + review queue */
+.ev-body {
+  display: flex; gap: 20px; margin-top: 24px; align-items: flex-start;
+}
+.ev-main { flex: 1; min-width: 0; }
+.ev-sidebar { width: 300px; flex-shrink: 0; }
+
+/* Section title + filter */
+.ev-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+}
+.ev-section-header h2 { margin: 0; font-size: 18px; font-weight: 700; color: #fff; }
+
+.ev-filters {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.ev-chip {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+  background: transparent; color: #8c8c94; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.ev-chip:hover { border-color: rgba(245,183,46,0.3); color: #ccc; }
+.ev-chip.active { background: #f5b72e; color: #000; border-color: #f5b72e; }
+
+.ev-search {
+  padding: 8px 14px 8px 36px; background: #0c0c0e; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; color: #fff; font-size: 13px; outline: none; width: 320px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: 12px center;
+}
+.ev-search:focus { border-color: #f5b72e; }
+.ev-search::placeholder { color: #555; }
+
+/* Evidence cards grid */
+.ev-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+
+.ev-card {
+  background: #0c0c0e; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: border-color 0.2s; cursor: default;
+}
+.ev-card:hover { border-color: rgba(245,183,46,0.25); }
+
+.ev-card-top {
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ev-file-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(245,183,46,0.12); color: #f5b72e;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; margin-top: 2px;
+}
+.ev-file-info { flex: 1; min-width: 0; }
+.ev-file-name {
+  font-size: 13px; font-weight: 700; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ev-file-size { font-size: 11px; color: #666; margin-top: 1px; }
+.ev-status-badge {
+  padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0;
+}
+.ev-status-badge.verified { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+.ev-status-badge.pending { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.ev-status-badge.rejected { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+
+.ev-card-field { font-size: 11px; color: #666; }
+.ev-card-field strong { color: #8c8c94; font-weight: 600; }
+.ev-card-indicator {
+  font-size: 12.5px; color: #ccc; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ev-card-meta {
+  display: flex; gap: 24px; font-size: 11px; color: #666;
+  border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;
+}
+.ev-card-meta span strong { color: #8c8c94; font-weight: 600; }
+
+/* Review Queue Sidebar */
+.ev-queue {
+  background: #0c0c0e; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 18px; position: sticky; top: 20px;
+}
+.ev-queue h3 {
+  margin: 0 0 14px; font-size: 15px; font-weight: 700; color: #fff;
+}
+.ev-queue-list { display: flex; flex-direction: column; gap: 10px; }
+.ev-queue-item {
+  background: #111113; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  cursor: pointer; transition: border-color 0.15s;
+}
+.ev-queue-item:hover { border-color: rgba(245,183,46,0.3); }
+.ev-queue-item .ev-file-icon { width: 30px; height: 30px; font-size: 13px; }
+.ev-queue-info { flex: 1; min-width: 0; }
+.ev-queue-name { font-size: 12px; font-weight: 700; color: #fff; }
+.ev-queue-field { font-size: 11px; color: #8c8c94; margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev-queue-meta {
+  display: flex; justify-content: space-between; font-size: 10px; color: #666; margin-top: 6px;
+}
+.ev-queue-arrow { color: #555; font-size: 18px; align-self: center; flex-shrink: 0; }
+
+.ev-empty {
+  text-align: center; padding: 40px; color: #666; font-size: 14px;
+}
+
+/* Card actions */
+.ev-card-actions {
+  display: flex; gap: 6px; border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 10px; margin-top: 2px; justify-content: space-between;
+}
+.ev-action-btn {
+  padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+  background: #111113; color: #aaa; font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 4px;
+}
+.ev-action-btn:hover { border-color: rgba(245,183,46,0.4); color: #f5b72e; }
+.ev-action-btn.view-btn { border-color: rgba(245,183,46,0.3); color: #f5b72e; }
+.ev-action-btn.view-btn:hover { background: rgba(245,183,46,0.1); }
+
+/* Dropdown wrapper */
+.ev-dropdown-wrap { position: relative; }
+.ev-dropdown {
+  position: absolute; bottom: 110%; right: 0;
+  background: #111113; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px; min-width: 170px; padding: 6px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  z-index: 100; display: none;
+  animation: evDropIn 0.15s ease;
+}
+.ev-dropdown.open { display: block; }
+@keyframes evDropIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+.ev-dropdown-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; font-size: 12px; color: #ccc;
+  cursor: pointer; transition: background 0.1s; border: none;
+  background: none; width: 100%; text-align: left; font-weight: 500;
+}
+.ev-dropdown-item:hover { background: rgba(255,255,255,0.05); }
+.ev-dropdown-item.d-verify { color: #34d399; }
+.ev-dropdown-item.d-pending { color: #fbbf24; }
+.ev-dropdown-item.d-reject { color: #f87171; }
+.ev-dropdown-item.active-item { font-weight: 800; }
+.ev-dropdown-item.active-item::after { content: "✓"; margin-left: auto; font-size: 13px; }
+
+/* Evidence Detail Modal */
+.ev-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; animation: evFadeIn 0.2s;
+}
+@keyframes evFadeIn { from{opacity:0} to{opacity:1} }
+.ev-modal {
+  background: #0c0c0e; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 0; width: 560px; max-width: 92vw;
+  max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;
+}
+.ev-modal-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.ev-modal-header .ev-file-icon { width: 44px; height: 44px; font-size: 20px; }
+.ev-modal-header-info { flex: 1; }
+.ev-modal-header-info h3 { margin: 0; font-size: 15px; color: #fff; font-weight: 700; }
+.ev-modal-header-info p { margin: 2px 0 0; font-size: 12px; color: #666; }
+.ev-modal-close {
+  width: 32px; height: 32px; border-radius: 8px; border: none;
+  background: rgba(255,255,255,0.05); color: #888; font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.ev-modal-close:hover { background: rgba(248,113,113,0.15); color: #f87171; }
+.ev-modal-body {
+  padding: 20px 24px; overflow-y: auto; flex: 1;
+}
+.ev-modal-row {
+  display: flex; gap: 16px; margin-bottom: 14px;
+}
+.ev-modal-field {
+  flex: 1;
+}
+.ev-modal-field label {
+  display: block; font-size: 11px; color: #666; font-weight: 600;
+  margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.ev-modal-field .val {
+  font-size: 14px; color: #fff; font-weight: 500;
+}
+.ev-modal-field .val.muted { color: #8c8c94; }
+.ev-modal-status-btns {
+  display: flex; gap: 8px; margin-top: 18px; padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.ev-modal-status-btn {
+  flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+  background: #111113; color: #aaa; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.ev-modal-status-btn:hover { border-color: rgba(255,255,255,0.2); }
+.ev-modal-status-btn.s-verified { border-color: rgba(52,211,153,0.4); color: #34d399; }
+.ev-modal-status-btn.s-verified:hover, .ev-modal-status-btn.s-verified.active { background: rgba(52,211,153,0.15); border-color: #34d399; }
+.ev-modal-status-btn.s-pending { border-color: rgba(251,191,36,0.4); color: #fbbf24; }
+.ev-modal-status-btn.s-pending:hover, .ev-modal-status-btn.s-pending.active { background: rgba(251,191,36,0.15); border-color: #fbbf24; }
+.ev-modal-status-btn.s-rejected { border-color: rgba(248,113,113,0.4); color: #f87171; }
+.ev-modal-status-btn.s-rejected:hover, .ev-modal-status-btn.s-rejected.active { background: rgba(248,113,113,0.15); border-color: #f87171; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .ev-body { flex-direction: column; }
+  .ev-sidebar { width: 100%; }
+  .ev-queue { position: static; }
+}
+@media (max-width: 768px) {
+  .ev-kpis { grid-template-columns: repeat(2, 1fr); }
+  .ev-grid { grid-template-columns: 1fr; }
+  .ev-search { width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    <div class="topbar">
+      <div class="ev-header" style="justify-content: space-between; width: 100%;">
+        <div>
+          <h1>Evidence Repository <span class="badge">MEIL</span> <span class="badge" id="fyBadge">FY 2025-26</span></h1>
+          <div class="sub">Company-submitted documents linked to BRSR disclosures</div>
+        </div>
+        <button class="btn btn-primary" id="openUploadEvBtn" style="background:#f5b72e; color:#000; font-weight:700; border:none; padding:9px 18px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+          <span></span><span>Upload Supporting Evidence</span>
+        </button>
+      </div>
+    </div>
+    <div class="content" style="padding: 24px 28px;">
+      <!-- KPI Row -->
+      <div class="ev-kpis">
+        <div class="ev-kpi">
+          <div class="ev-kpi-icon total"></div>
+          <div><div class="ev-kpi-label">Total files</div><div class="ev-kpi-value" id="kpiTotal">0</div></div>
+        </div>
+        <div class="ev-kpi">
+          <div class="ev-kpi-icon verified"></div>
+          <div><div class="ev-kpi-label">Verified</div><div class="ev-kpi-value" id="kpiVerified">0</div></div>
+        </div>
+        <div class="ev-kpi">
+          <div class="ev-kpi-icon pending"></div>
+          <div><div class="ev-kpi-label">Pending review</div><div class="ev-kpi-value" id="kpiPending">0</div></div>
+        </div>
+        <div class="ev-kpi">
+          <div class="ev-kpi-icon rejected">✕</div>
+          <div><div class="ev-kpi-label">Rejected</div><div class="ev-kpi-value" id="kpiRejected">0</div></div>
+        </div>
+      </div>
+
+      <!-- Body: cards + review queue -->
+      <div class="ev-body">
+        <div class="ev-main">
+          <div class="ev-section-header">
+            <h2>Company evidence</h2>
+            <input type="text" class="ev-search" id="evSearch" placeholder="Search by file name, disclosure field or submitter...">
+          </div>
+          <div style="font-size:11px; font-weight:700; color:#8c8c94; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em;">Department &amp; Workflow Desk:</div>
+          <div class="ev-filters" id="evDeptFilters" style="margin-bottom:12px;">
+            <button class="ev-chip active" data-dept="">All Enterprise Evidence</button>
+            <button class="ev-chip" data-dept="Plant">🏭 Plant Operations Desk</button>
+            <button class="ev-chip" data-dept="EHS">🌱 EHS Environmental Vault</button>
+            <button class="ev-chip" data-dept="HR">👥 HR Social Vault</button>
+            <button class="ev-chip" data-dept="Corporate">🏛️ Corporate Governance</button>
+          </div>
+          <div style="font-size:11px; font-weight:700; color:#8c8c94; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em;">Auditor Verification Status:</div>
+          <div class="ev-filters" id="evFilters">
+            <button class="ev-chip active" data-filter="">All Status</button>
+            <button class="ev-chip" data-filter="Verified">Verified</button>
+            <button class="ev-chip" data-filter="Pending Review">Pending review</button>
+            <button class="ev-chip" data-filter="Rejected">Rejected</button>
+          </div>
+          <div class="ev-grid" id="evGrid" style="margin-top: 16px;">
+            <!-- Cards rendered by JS -->
+          </div>
+        </div>
+        <div class="ev-sidebar">
+          <div class="ev-queue">
+            <h3>Review queue</h3>
+            <div class="ev-queue-list" id="evQueue">
+              <!-- Queue items rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Evidence Modal -->
+<div class="ev-modal-overlay" id="uploadModalOverlay" style="display:none;">
+  <div class="ev-modal" style="width: 580px;">
+    <div class="ev-modal-header">
+      <div class="ev-file-icon"></div>
+      <div class="ev-modal-header-info">
+        <h3>Upload Supporting Evidence Document</h3>
+        <p>Chain-of-custody verification under SEBI BRSR Core Mandate</p>
+      </div>
+      <button class="ev-modal-close" id="closeUploadModalBtn">✕</button>
+    </div>
+    <form id="evUploadForm" style="display:flex; flex-direction:column;">
+      <div class="ev-modal-body">
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:11px; font-weight:700; color:#8c8c94; margin-bottom:5px; text-transform:uppercase;">Select Disclosure Indicator</label>
+          <select id="uEntryId" required style="width:100%; padding:9px 12px; background:#141416; border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px; outline:none;">
+            <option value="">Choose BRSR Indicator Field...</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:11px; font-weight:700; color:#8c8c94; margin-bottom:5px; text-transform:uppercase;">Evidence Category</label>
+          <select id="uEvidenceType" style="width:100%; padding:9px 12px; background:#141416; border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px; outline:none;">
+            <option value="Fuel Delivery Chit / Diesel Invoice">Fuel Delivery Chit / Diesel Invoice</option>
+            <option value="Electricity Board (EB) Meter Bill">Electricity Board (EB) Meter Bill</option>
+            <option value="Water STP &amp; Meter Log">Water STP &amp; Meter Log</option>
+            <option value="TSDF Hazardous Waste Manifest">TSDF Hazardous Waste Manifest</option>
+            <option value="Safety Induction &amp; Attendance Register">Safety Induction &amp; Attendance Register</option>
+            <option value="POSH Internal Committee Minutes">POSH Internal Committee Minutes</option>
+            <option value="Payroll &amp; Minimum Wage Register">Payroll &amp; Minimum Wage Register</option>
+            <option value="Third-Party Lab Test Certificate">Third-Party Lab Test Certificate</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:11px; font-weight:700; color:#8c8c94; margin-bottom:5px; text-transform:uppercase;">Upload Document (PDF, Image, Excel)</label>
+          <input type="file" id="uFile" required style="width:100%; padding:10px; background:#141416; border:1px dashed rgba(245,183,46,0.4); border-radius:8px; color:#cbd5e1; font-size:12.5px;">
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <label style="display:block; font-size:11px; font-weight:700; color:#8c8c94; margin-bottom:5px; text-transform:uppercase;">Remarks / Invoice Number</label>
+          <input type="text" id="uRemarks" placeholder="e.g. Weighbridge Slip #49201 - Invoice Verified" style="width:100%; padding:9px 12px; background:#141416; border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px; outline:none; box-sizing:border-box;">
+        </div>
+      </div>
+      <div style="padding:16px 24px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-secondary" id="cancelUploadBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnSubmitUpload" style="background:#f5b72e; color:#000; font-weight:700;">Upload &amp; Generate SHA-256</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="../js/common.js"></script>
+<script>
+let ALL = [];
+let ALL_ENTRIES = [];
+let activeFilter = "";
+let searchQuery = "";
+let CURRENT_USER = null;
+
+(async () => {
+  const user = await initLayout("evidence.html");
+  if (!user) return;
+  CURRENT_USER = user;
+
+  const uname = user.username || "";
+  const subEl = document.querySelector(".ev-header .sub");
+  if (uname.includes("ehs")) {
+    if (subEl) subEl.innerHTML = `<span style="color:#34d399;font-weight:700;">EHS Department Scope:</span> Fuel Delivery Chits, Electricity EB Bills, Water STP Logs &amp; TSDF Manifests`;
+  } else if (uname.includes("hr")) {
+    if (subEl) subEl.innerHTML = `<span style="color:#c084fc;font-weight:700;">HR Department Scope:</span> Payroll Extracts, Attendance Registers, POSH Minutes &amp; Welfare Policies`;
+  } else if (user.role === "Plant/Project Owner") {
+    if (subEl) subEl.innerHTML = `<span style="color:#f5b72e;font-weight:700;">Plant 1 Site Scope:</span> On-Site Invoices, Fuel Receipts &amp; Weighbridge Slips`;
+  } else if (user.role === "Auditor") {
+    if (subEl) subEl.innerHTML = `<span style="color:#60a5fa;font-weight:700;">Statutory Assurance Desk:</span> Verification &amp; Cryptographic SHA-256 Audit Trail`;
+  }
+
+  ALL = await api("/evidence");
+
+  try {
+    ALL_ENTRIES = await api("/entries");
+    populateIndicatorSelect();
+  } catch (err) {
+    console.warn("Could not load entries list:", err);
+  }
+
+  updateKPIs();
+  renderCards();
+  renderQueue();
+  setupFilters();
+  setupUploadModal();
+})();
+
+function populateIndicatorSelect() {
+  const sel = document.getElementById("uEntryId");
+  if (!sel || !ALL_ENTRIES.length) return;
+
+  let filtered = ALL_ENTRIES;
+  const uname = CURRENT_USER ? (CURRENT_USER.username || "") : "";
+  if (uname.includes("ehs")) {
+    filtered = ALL_ENTRIES.filter(e => e.section === "C" && (e.principle === "P6" || e.principle === "P3"));
+  } else if (uname.includes("hr")) {
+    filtered = ALL_ENTRIES.filter(e => e.section === "A" || e.principle === "P3" || e.principle === "P5");
+  } else if (CURRENT_USER && CURRENT_USER.role === "Plant/Project Owner") {
+    filtered = ALL_ENTRIES.filter(e => e.entityPath && (e.entityPath.plantId === "PLANT1" || e.entityPath.plantId === "PLANT9"));
+  }
+
+  sel.innerHTML = '<option value="">Choose BRSR Indicator Field...</option>' + 
+    filtered.slice(0, 100).map(e => `
+      <option value="${e.id}">[${e.indicatorId || 'BRSR'}] ${esc(e.indicator)} - ${esc(e.entityLabel || 'MEIL Unit')}</option>
+    `).join("");
+}
+
+function setupUploadModal() {
+  const overlay = document.getElementById("uploadModalOverlay");
+  const openBtn = document.getElementById("openUploadEvBtn");
+  const closeBtn = document.getElementById("closeUploadModalBtn");
+  const cancelBtn = document.getElementById("cancelUploadBtn");
+  const form = document.getElementById("evUploadForm");
+  const submitBtn = document.getElementById("btnSubmitUpload");
+
+  if (!overlay) return;
+
+  function openModal() {
+    overlay.style.display = "flex";
+  }
+
+  function closeModal() {
+    overlay.style.display = "none";
+    if (form) form.reset();
+  }
+
+  if (openBtn) openBtn.addEventListener("click", openModal);
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById("uFile");
+      const entryId = document.getElementById("uEntryId").value;
+      const evType = document.getElementById("uEvidenceType").value;
+      const remarks = document.getElementById("uRemarks").value;
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        toast("Please select a file to upload");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Hashing & Uploading...";
+
+      try {
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+        formData.append("entryId", entryId);
+        formData.append("evidenceType", evType);
+        formData.append("remarks", remarks);
+
+        const newRec = await api("/evidence/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        ALL.unshift(newRec);
+        updateKPIs();
+        renderCards();
+        renderQueue();
+        closeModal();
+        toast(`Uploaded! Tamper-proof SHA-256: ${newRec.sha256}`);
+      } catch (err) {
+        console.error("Upload failed", err);
+        toast("Upload failed: " + (err.message || "Server error"));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Upload & Generate SHA-256";
+      }
+    });
+  }
+}
+
+function getScopedAll() {
+  const uname = CURRENT_USER ? (CURRENT_USER.username || "") : "";
+  if (uname.includes("ehs")) {
+    return ALL.filter(e => {
+      const f = (e.fileName + " " + e.linkedIndicator + " " + (e.evidenceType || "")).toLowerCase();
+      return f.includes("fuel") || f.includes("diesel") || f.includes("power") || f.includes("water") || f.includes("waste") || f.includes("hsd") || f.includes("cng") || f.includes("emission") || f.includes("meter") || f.includes("eb") || f.includes("stp") || f.includes("hazardous");
+    });
+  } else if (uname.includes("hr")) {
+    return ALL.filter(e => {
+      const f = (e.fileName + " " + e.linkedIndicator + " " + (e.evidenceType || "")).toLowerCase();
+      return f.includes("payroll") || f.includes("wage") || f.includes("employee") || f.includes("posh") || f.includes("training") || f.includes("attendance") || f.includes("worker") || f.includes("roster") || f.includes("safety") || f.includes("welfare");
+    });
+  }
+  return ALL;
+}
+
+let activeDept = "";
+
+function updateKPIs() {
+  const scoped = getScopedAll();
+  document.getElementById("kpiTotal").textContent = scoped.length;
+  document.getElementById("kpiVerified").textContent = scoped.filter(e => e.verificationStatus === "Verified" || e.verificationStatus === "Verified by Auditor").length;
+  document.getElementById("kpiPending").textContent = scoped.filter(e => e.verificationStatus === "Pending Review").length;
+  document.getElementById("kpiRejected").textContent = scoped.filter(e => e.verificationStatus === "Rejected").length;
+}
+
+function getFiltered() {
+  let rows = getScopedAll();
+  if (activeDept) {
+    rows = rows.filter(e => (e.department || "").toLowerCase() === activeDept.toLowerCase());
+  }
+  if (activeFilter) {
+    rows = rows.filter(e => {
+      if (activeFilter === "Verified") return e.verificationStatus === "Verified" || e.verificationStatus === "Verified by Auditor";
+      return e.verificationStatus === activeFilter;
+    });
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    rows = rows.filter(e =>
+      (e.fileName || "").toLowerCase().includes(q) ||
+      (e.title || "").toLowerCase().includes(q) ||
+      (e.linkedIndicator || "").toLowerCase().includes(q) ||
+      (e.uploadedBy || "").toLowerCase().includes(q) ||
+      (e.vendor || "").toLowerCase().includes(q) ||
+      (e.issuer || "").toLowerCase().includes(q)
+    );
+  }
+  return rows;
+}
+
+function getStatusClass(status) {
+  if (status === "Verified" || status === "Verified by Auditor") return "verified";
+  if (status === "Rejected") return "rejected";
+  return "pending";
+}
+
+function getStatusLabel(status) {
+  if (status === "Verified" || status === "Verified by Auditor") return "Verified";
+  if (status === "Rejected") return "Rejected";
+  return "Pending review";
+}
+
+function getDeptBadge(dept) {
+  if (dept === 'Plant') return `<span style="padding:2px 7px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(245,183,46,0.14); color:#f5b72e; border:1px solid rgba(245,183,46,0.3);">🏭 Plant</span>`;
+  if (dept === 'EHS') return `<span style="padding:2px 7px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(52,211,153,0.14); color:#34d399; border:1px solid rgba(52,211,153,0.3);">🌱 EHS</span>`;
+  if (dept === 'HR') return `<span style="padding:2px 7px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(192,132,252,0.14); color:#c084fc; border:1px solid rgba(192,132,252,0.3);">👥 HR</span>`;
+  return `<span style="padding:2px 7px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(59,130,246,0.14); color:#60a5fa; border:1px solid rgba(59,130,246,0.3);">🏛️ Corp</span>`;
+}
+
+function getWorkflowAction(dept) {
+  if (dept === 'Plant') return `<a href="plant-evidence.html" class="ev-action-btn" style="text-decoration:none; color:#f5b72e; font-size:11.5px; padding:6px 10px;" title="Open Plant Operations Desk">Plant Desk ↗</a>`;
+  if (dept === 'EHS') return `<a href="ehs-evidence.html" class="ev-action-btn" style="text-decoration:none; color:#34d399; font-size:11.5px; padding:6px 10px;" title="Open EHS Bills & Manifests Vault">EHS Vault ↗</a>`;
+  if (dept === 'HR') return `<a href="hr-evidence.html" class="ev-action-btn" style="text-decoration:none; color:#c084fc; font-size:11.5px; padding:6px 10px;" title="Open HR Social Evidence Vault">HR Vault ↗</a>`;
+  return `<a href="audit.html" class="ev-action-btn" style="text-decoration:none; color:#8c8c94; font-size:11.5px; padding:6px 10px;" title="Audit Trail">Audit Trail ↗</a>`;
+}
+
+function fakeSize(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = ((h << 5) - h + name.charCodeAt(i)) | 0;
+  const mb = (Math.abs(h) % 40 + 10) / 10;
+  return mb.toFixed(1) + " MB";
+}
+
+function renderCards() {
+  const grid = document.getElementById("evGrid");
+  const rows = getFiltered();
+
+  if (rows.length === 0) {
+    grid.innerHTML = '<div class="ev-empty">No evidence files match your filters.</div>';
+    return;
+  }
+
+  grid.innerHTML = rows.map(e => `
+    <div class="ev-card" id="card-${e.id}">
+      <div class="ev-card-top">
+        <div class="ev-file-icon"></div>
+        <div class="ev-file-info">
+          <div class="ev-file-name" title="${esc(e.title || e.fileName)}">${esc(e.title || e.fileName)}</div>
+          <div class="ev-file-size" style="display:flex; align-items:center; gap:6px;">
+            <span>${e.fileSize || fakeSize(e.fileName)}</span>
+            ${e.sha256 ? `<span style="font-size:10px; color:#34d399; background:rgba(52,211,153,0.1); padding:1px 6px; border-radius:4px; font-weight:600;">SHA-256</span>` : ''}
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          ${getDeptBadge(e.department)}
+          <span class="ev-status-badge ${getStatusClass(e.verificationStatus)}">${getStatusLabel(e.verificationStatus)}</span>
+        </div>
+      </div>
+      <div>
+        <div class="ev-card-field">BRSR disclosure field</div>
+        <div class="ev-card-indicator" title="${esc(e.linkedIndicator)}">${esc(e.linkedIndicator)}</div>
+      </div>
+      <div class="ev-card-meta">
+        <span><strong>Submitted by / Vendor</strong><br>${esc(e.vendor || e.issuer || e.uploadedBy)}</span>
+        <span><strong>Submission date</strong><br>${e.uploadedDate || "—"}</span>
+      </div>
+      <div class="ev-card-actions">
+        <button class="ev-action-btn view-btn" onclick="openEvDetail('${e.id}')">View</button>
+        ${getWorkflowAction(e.department)}
+        <div class="ev-dropdown-wrap">
+          <button class="ev-action-btn" onclick="toggleDropdown(event, '${e.id}')">Actions ▾</button>
+          <div class="ev-dropdown" id="dd-${e.id}">
+            <button class="ev-dropdown-item d-verify ${e.verificationStatus === 'Verified' ? 'active-item' : ''}" onclick="updateStatus('${e.id}','Verified')">Verify</button>
+            <button class="ev-dropdown-item d-pending ${e.verificationStatus === 'Pending Review' ? 'active-item' : ''}" onclick="updateStatus('${e.id}','Pending Review')">Pending Review</button>
+            <button class="ev-dropdown-item d-reject ${e.verificationStatus === 'Rejected' ? 'active-item' : ''}" onclick="updateStatus('${e.id}','Rejected')">✕ Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function updateStatus(id, newStatus) {
+  try {
+    closeAllDropdowns();
+    await api("/evidence/" + id, { method: "PUT", body: { verificationStatus: newStatus } });
+    const rec = ALL.find(x => x.id === id);
+    if (rec) rec.verificationStatus = newStatus;
+    updateKPIs();
+    renderCards();
+    renderQueue();
+    toast("Status updated to " + newStatus);
+  } catch (err) {
+    toast("Failed to update status");
+  }
+}
+
+function toggleDropdown(event, id) {
+  event.stopPropagation();
+  const dd = document.getElementById("dd-" + id);
+  const wasOpen = dd.classList.contains("open");
+  closeAllDropdowns();
+  if (!wasOpen) dd.classList.add("open");
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll(".ev-dropdown.open").forEach(d => d.classList.remove("open"));
+}
+
+// Close dropdown on outside click
+document.addEventListener("click", () => closeAllDropdowns());
+
+function openEvDetail(id) {
+  const e = ALL.find(x => x.id === id);
+  if (!e) return;
+
+  // Remove existing modal
+  const existing = document.getElementById("evModalOverlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "ev-modal-overlay";
+  overlay.id = "evModalOverlay";
+  overlay.addEventListener("click", ev => { if (ev.target === overlay) overlay.remove(); });
+
+  overlay.innerHTML = `
+    <div class="ev-modal">
+      <div class="ev-modal-header">
+        <div class="ev-file-icon"></div>
+        <div class="ev-modal-header-info">
+          <h3>${esc(e.fileName)}</h3>
+          <p>${fakeSize(e.fileName)} • ${e.evidenceType || "Supporting Document"}</p>
+        </div>
+        <button class="ev-modal-close" onclick="document.getElementById('evModalOverlay').remove()">✕</button>
+      </div>
+      <div class="ev-modal-body">
+        <div class="ev-modal-row">
+          <div class="ev-modal-field">
+            <label>Evidence ID</label>
+            <div class="val">${esc(e.id)}</div>
+          </div>
+          <div class="ev-modal-field">
+            <label>Linked Entry ID</label>
+            <div class="val">${esc(e.linkedEntryId || "—")}</div>
+          </div>
+        </div>
+        <div class="ev-modal-row">
+          <div class="ev-modal-field" style="flex:2;">
+            <label>BRSR Disclosure Field</label>
+            <div class="val">${esc(e.linkedIndicator)}</div>
+          </div>
+        </div>
+        <div class="ev-modal-row">
+          <div class="ev-modal-field">
+            <label>Uploaded By</label>
+            <div class="val">${esc(e.uploadedBy)}</div>
+          </div>
+          <div class="ev-modal-field">
+            <label>Upload Date</label>
+            <div class="val">${e.uploadedDate || "—"}</div>
+          </div>
+        </div>
+        <div class="ev-modal-row">
+          <div class="ev-modal-field">
+            <label>Evidence Type</label>
+            <div class="val">${esc(e.evidenceType || "Supporting Document")}</div>
+          </div>
+          <div class="ev-modal-field">
+            <label>Current Status</label>
+            <div class="val"><span class="ev-status-badge ${getStatusClass(e.verificationStatus)}">${getStatusLabel(e.verificationStatus)}</span></div>
+          </div>
+        </div>
+        ${e.sha256 ? `
+        <div class="ev-modal-row">
+          <div class="ev-modal-field" style="flex:2;">
+            <label>Cryptographic Proof (SHA-256 Checksum)</label>
+            <div class="val" style="font-family:monospace; color:#34d399; font-size:12px; background:rgba(52,211,153,0.08); padding:6px 10px; border-radius:6px; border:1px solid rgba(52,211,153,0.2); word-break:break-all;">
+              ${esc(e.sha256)} <span style="font-size:11px; color:#8c8c94;">(BRSR Core Tamper-Proof Stamp)</span>
+            </div>
+          </div>
+        </div>` : ''}
+        <div class="ev-modal-row">
+          <div class="ev-modal-field">
+            <label>File</label>
+            <div class="val">${e.storedAs
+              ? `<a href="/api/evidence/${e.id}/download" style="color:#f5b72e;text-decoration:underline;font-size:13px;">⬇ Download ${esc(e.fileName)}</a>`
+              : `<span class="muted" style="color:#666;">Document securely archived on server</span>`
+            }</div>
+          </div>
+        </div>
+
+        <div class="ev-modal-status-btns">
+          <button class="ev-modal-status-btn s-verified ${e.verificationStatus === 'Verified' ? 'active' : ''}" onclick="modalUpdateStatus('${e.id}','Verified')">Verify</button>
+          <button class="ev-modal-status-btn s-pending ${e.verificationStatus === 'Pending Review' ? 'active' : ''}" onclick="modalUpdateStatus('${e.id}','Pending Review')">Pending</button>
+          <button class="ev-modal-status-btn s-rejected ${e.verificationStatus === 'Rejected' ? 'active' : ''}" onclick="modalUpdateStatus('${e.id}','Rejected')">✕ Reject</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+async function modalUpdateStatus(id, newStatus) {
+  await updateStatus(id, newStatus);
+  // Re-open modal to reflect changes
+  openEvDetail(id);
+}
+
+function renderQueue() {
+  const queue = document.getElementById("evQueue");
+  const pending = ALL.filter(e => e.verificationStatus === "Pending Review").slice(0, 8);
+
+  if (pending.length === 0) {
+    queue.innerHTML = '<div style="color:#666;font-size:12px;text-align:center;padding:16px;">No pending reviews </div>';
+    return;
+  }
+
+  queue.innerHTML = pending.map(e => `
+    <div class="ev-queue-item" onclick="scrollToCard('${e.id}')">
+      <div class="ev-file-icon"></div>
+      <div class="ev-queue-info">
+        <div class="ev-queue-name">${esc(e.fileName)}</div>
+        <div class="ev-queue-field" title="${esc(e.linkedIndicator)}">${esc(e.linkedIndicator)}</div>
+        <div class="ev-queue-meta">
+          <span><strong>Submitted by</strong> ${esc(e.uploadedBy)}</span>
+          <span><strong>Submitted on</strong> ${e.uploadedDate || "—"}</span>
+        </div>
+      </div>
+      <span class="ev-queue-arrow">›</span>
+    </div>
+  `).join("");
+}
+
+function setupFilters() {
+  // Department filters
+  document.querySelectorAll("#evDeptFilters .ev-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#evDeptFilters .ev-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeDept = chip.dataset.dept || "";
+      renderCards();
+    });
+  });
+
+  // Status filters
+  document.querySelectorAll("#evFilters .ev-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#evFilters .ev-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeFilter = chip.dataset.filter;
+      renderCards();
+    });
+  });
+
+  // Search
+  document.getElementById("evSearch").addEventListener("input", (e) => {
+    searchQuery = e.target.value.trim();
+    renderCards();
+  });
+}
+
+function scrollToCard(id) {
+  openEvDetail(id);
+}
+
+function esc(str) {
+  const d = document.createElement("div");
+  d.textContent = str || "";
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>

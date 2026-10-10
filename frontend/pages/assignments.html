@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignments &amp; Workflow — MEIL BRSR Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+/* ==========================================================================
+   ASSIGNMENTS & WORKFLOW — EXACT SCREENSHOT DESIGN REPLICATION
+   ========================================================================== */
+
+/* Breadcrumb & Subtitle */
+.asgn-breadcrumb {
+  font-size: 12.5px;
+  color: #8c8c94;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.asgn-breadcrumb a {
+  color: #8c8c94;
+  text-decoration: none;
+}
+.asgn-breadcrumb a:hover {
+  color: #fff;
+}
+.asgn-breadcrumb .sep {
+  color: #555;
+}
+.asgn-breadcrumb .current {
+  color: #ccc;
+}
+
+.asgn-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.asgn-title-wrap h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+.asgn-title-wrap .sub {
+  color: #8c8c94;
+  font-size: 13.5px;
+  margin-top: 4px;
+}
+
+/* Cycle Pill Button */
+.cycle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cycle-pill:hover {
+  border-color: rgba(245, 183, 46, 0.4);
+  color: #f5b72e;
+}
+.cycle-pill .calendar-icon {
+  font-size: 14px;
+}
+.cycle-pill .chevron {
+  color: #8c8c94;
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   KPI SUMMARY HERO BANNER
+   ========================================================================== */
+.asgn-banner {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 22px 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+/* Glowing gold accent bar at top right */
+.asgn-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f5b72e, #ffda79);
+  opacity: 0.85;
+}
+
+.asgn-banner-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: #f5b72e;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.asgn-banner-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Metric Divider */
+.banner-metric {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+.banner-metric:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+/* Circular Donut Gauge */
+.donut-gauge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.donut-svg-box {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  flex-shrink: 0;
+}
+.donut-svg-box svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+.donut-center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.donut-center-text .pct {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+.donut-center-text .lbl {
+  font-size: 9px;
+  color: #8c8c94;
+  margin-top: 2px;
+  text-transform: lowercase;
+}
+
+.submitted-fraction-box {
+  display: flex;
+  flex-direction: column;
+}
+.submitted-fraction {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+}
+.submitted-fraction .of-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #8c8c94;
+  margin-left: 2px;
+}
+.submitted-label {
+  font-size: 12.5px;
+  color: #8c8c94;
+  margin-top: 4px;
+}
+
+/* Icon Metrics */
+.metric-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.metric-icon-box.blue {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.metric-icon-box.gold {
+  background: rgba(245, 183, 46, 0.12);
+  color: #f5b72e;
+  border: 1px solid rgba(245, 183, 46, 0.25);
+}
+.metric-icon-box.red {
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+.metric-details {
+  display: flex;
+  flex-direction: column;
+}
+.metric-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+}
+.metric-lbl {
+  font-size: 12.5px;
+  color: #8c8c94;
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   TABS FILTER ROW (PILLS)
+   ========================================================================== */
+.tab-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+}
+.tab-pill-btn {
+  background: transparent;
+  border: none;
+  color: #8c8c94;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+.tab-pill-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+.tab-pill-btn.active {
+  background: #f5b72e;
+  color: #000000;
+  font-weight: 700;
+}
+.tab-pill-count {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+.tab-pill-btn.active .tab-pill-count {
+  background: rgba(0, 0, 0, 0.2);
+  color: #000000;
+  font-weight: 800;
+}
+
+/* ==========================================================================
+   FILTER TOOLBAR
+   ========================================================================== */
+.asgn-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.asgn-search-box {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+}
+.asgn-search-box input {
+  width: 100%;
+  padding: 9px 14px 9px 38px;
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+.asgn-search-box input:focus {
+  border-color: #f5b72e;
+}
+.asgn-search-box .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.asgn-filter-select {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 13px;
+  padding: 9px 14px;
+  outline: none;
+  min-width: 135px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.asgn-filter-select:focus {
+  border-color: #f5b72e;
+}
+
+.btn-clear-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #8c8c94;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: color 0.15s ease;
+}
+.btn-clear-filters:hover {
+  color: #f5b72e;
+}
+
+/* ==========================================================================
+   ASSIGNMENTS DATA TABLE
+   ========================================================================== */
+.asgn-table-card {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.asgn-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+.asgn-table th {
+  background: #070708;
+  color: #8c8c94;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+.asgn-table th .sort-arrow {
+  font-size: 10px;
+  color: #555;
+  margin-left: 4px;
+}
+
+.asgn-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+  color: #e2e8f0;
+}
+.asgn-table tr:hover td {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* Highlighted Row (e.g. Needs Correction row like in screenshot) */
+.asgn-table tr.highlight-warning td {
+  background: rgba(245, 158, 11, 0.035);
+}
+.asgn-table tr.highlight-warning:hover td {
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.td-index {
+  color: #8c8c94;
+  font-size: 12px;
+  font-weight: 600;
+  width: 32px;
+}
+
+/* Indicator & Task Description */
+.task-title {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 13.5px;
+  margin-bottom: 2px;
+}
+.task-subtitle {
+  font-size: 12px;
+  color: #8c8c94;
+}
+
+/* Entity & Owner */
+.td-entity {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+.td-owner {
+  color: #cbd5e1;
+}
+
+/* Due Date column */
+.due-date-main {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 13px;
+}
+.due-date-sub {
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+.due-date-sub.overdue {
+  color: #f87171;
+  font-weight: 600;
+}
+.due-date-sub.future {
+  color: #8c8c94;
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.status-pill .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.status-pill.not-started {
+  background: rgba(245, 183, 46, 0.12);
+  color: #f5b72e;
+  border: 1px solid rgba(245, 183, 46, 0.3);
+}
+.status-pill.not-started .dot {
+  background: #f5b72e;
+}
+
+.status-pill.in-progress {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+.status-pill.in-progress .dot {
+  background: #38bdf8;
+}
+
+.status-pill.submitted {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+.status-pill.submitted .dot {
+  background: #34d399;
+}
+
+.status-pill.approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.status-pill.approved .dot {
+  background: #10b981;
+}
+
+.status-pill.needs-correction {
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+.status-pill.needs-correction .dot {
+  background: #f87171;
+}
+
+/* Inline Reviewer Alert / Notice */
+.inline-notice {
+  display: inline-block;
+  font-size: 11.5px;
+  color: #d1d5db;
+  margin-left: 14px;
+  max-width: 200px;
+  vertical-align: middle;
+}
+
+/* Actions Column Button */
+.btn-row-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-row-action:hover {
+  background: #f5b72e;
+  border-color: #f5b72e;
+  color: #000000;
+  transform: translateX(2px);
+}
+
+.asgn-empty-state {
+  padding: 48px 24px;
+  text-align: center;
+  color: #8c8c94;
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   WORKFLOW EDIT MODAL
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: modalFadeIn 0.2s ease;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal-card {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  width: 520px;
+  max-width: 92vw;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.modal-header .btn-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: #8c8c94;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-header .btn-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+  padding: 24px;
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #8c8c94;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 13.5px;
+  outline: none;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #f5b72e;
+}
+.form-group textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #08080a;
+}
+.btn-secondary {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background: #1e1e22;
+}
+.btn-primary {
+  background: #f5b72e;
+  border: none;
+  color: #000000;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.btn-primary:hover {
+  background: #e5a71f;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .asgn-banner-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .banner-metric {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+@media (max-width: 600px) {
+  .asgn-banner-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="asgn-breadcrumb">
+          <a href="dashboard.html">Home</a>
+          <span class="sep">&gt;</span>
+          <span class="current">Assignments &amp; Workflow</span>
+        </div>
+        <div class="asgn-header-row">
+          <div class="asgn-title-wrap">
+            <h1>Assignments &amp; Workflow</h1>
+            <div class="sub">Track ownership of BRSR fields across departments and plants</div>
+          </div>
+          <button class="cycle-pill" id="cyclePill" title="Switch Reporting Cycle">
+            <span class="calendar-icon">📅</span>
+            <span>FY 2026 Reporting Cycle</span>
+            <span class="chevron">▾</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="content" style="padding: 24px 28px;">
+      
+      <!-- =====================================================================
+           KPI SUMMARY BANNER (EXACT TO SCREENSHOT)
+           ===================================================================== -->
+      <div class="asgn-banner">
+        <div class="asgn-banner-tag">FY 2026 REPORTING CYCLE</div>
+        <div class="asgn-banner-grid">
+          
+          <!-- Metric 1: Circular Gauge + Submission Fraction -->
+          <div class="banner-metric">
+            <div class="donut-gauge-wrap">
+              <div class="donut-svg-box">
+                <svg viewBox="0 0 36 36">
+                  <!-- Background Ring -->
+                  <path stroke="rgba(255, 255, 255, 0.08)" stroke-width="3.6" fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <!-- Gold Progress Ring -->
+                  <path id="donutRing" stroke="#f5b72e" stroke-dasharray="76, 100" stroke-width="3.6"
+                        stroke-linecap="round" fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <div class="donut-center-text">
+                  <span class="pct" id="gaugePct">76%</span>
+                  <span class="lbl">completion</span>
+                </div>
+              </div>
+              <div class="submitted-fraction-box">
+                <div class="submitted-fraction">
+                  <span id="submittedCount">18</span>
+                  <span class="of-text">of <span id="totalCount">24</span></span>
+                </div>
+                <div class="submitted-label">fields submitted</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metric 2: In Progress -->
+          <div class="banner-metric">
+            <div class="metric-icon-box blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-val" id="kpiInProgress">8</div>
+              <div class="metric-lbl">In progress</div>
+            </div>
+          </div>
+
+          <!-- Metric 3: Awaiting Review -->
+          <div class="banner-metric">
+            <div class="metric-icon-box gold">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-val" id="kpiAwaiting">5</div>
+              <div class="metric-lbl">Awaiting review</div>
+            </div>
+          </div>
+
+          <!-- Metric 4: Overdue -->
+          <div class="banner-metric">
+            <div class="metric-icon-box red">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-val" id="kpiOverdue">3</div>
+              <div class="metric-lbl">Overdue</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           TABS FILTER PILLS
+           ===================================================================== -->
+      <div class="tab-pills-row">
+        <button class="tab-pill-btn active" data-tab="all">
+          <span>All</span>
+          <span class="tab-pill-count" id="pillCountAll">24</span>
+        </button>
+        <button class="tab-pill-btn" data-tab="my">
+          <span>My items</span>
+          <span class="tab-pill-count" id="pillCountMy">6</span>
+        </button>
+        <button class="tab-pill-btn" data-tab="review">
+          <span>Needs review</span>
+          <span class="tab-pill-count" id="pillCountReview">5</span>
+        </button>
+        <button class="tab-pill-btn" data-tab="overdue">
+          <span>Overdue</span>
+          <span class="tab-pill-count" id="pillCountOverdue">3</span>
+        </button>
+        <button class="tab-pill-btn" data-tab="submissions">
+          <span>🏛️ Subsidiary Submissions</span>
+          <span class="tab-pill-count" id="pillCountSubs" style="background:rgba(245,183,46,0.18);color:#f5b72e;font-weight:700;">4</span>
+        </button>
+      </div>
+
+      <!-- =====================================================================
+           SEARCH & FILTER TOOLBAR
+           ===================================================================== -->
+      <div class="asgn-toolbar" id="asgnToolbar">
+        <div class="asgn-search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="asgnSearch" placeholder="Search assignments, indicators, owners...">
+        </div>
+
+        <select class="asgn-filter-select" id="fEntity">
+          <option value="">Entity: All</option>
+        </select>
+
+        <select class="asgn-filter-select" id="fStatus">
+          <option value="">Status: All</option>
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Submitted">Submitted</option>
+          <option value="Needs Correction">Needs Correction</option>
+          <option value="Approved">Approved</option>
+        </select>
+
+        <select class="asgn-filter-select" id="fDueDate">
+          <option value="">Due date: All</option>
+          <option value="overdue">Overdue only</option>
+          <option value="due-week">Due this week</option>
+          <option value="due-month">Due this month</option>
+        </select>
+
+        <button class="btn-clear-filters" id="btnClearFilters">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="21" x2="4" y2="14"/>
+            <line x1="4" y1="10" x2="4" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12" y2="3"/>
+            <line x1="20" y1="21" x2="20" y2="16"/>
+            <line x1="20" y1="12" x2="20" y2="3"/>
+            <line x1="1" y1="14" x2="7" y2="14"/>
+            <line x1="9" y1="8" x2="15" y2="8"/>
+            <line x1="17" y1="16" x2="23" y2="16"/>
+          </svg>
+          <span>Clear filters</span>
+        </button>
+      </div>
+
+      <!-- =====================================================================
+           DATA TABLE (EXACT COLUMNS TO SCREENSHOT)
+           ===================================================================== -->
+      <div class="asgn-table-card" id="asgnTableCard">
+        <table class="asgn-table">
+          <thead>
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>INDICATOR / TASK <span class="sort-arrow">↕</span></th>
+              <th>ENTITY <span class="sort-arrow">↕</span></th>
+              <th>OWNER <span class="sort-arrow">↕</span></th>
+              <th>DUE DATE <span class="sort-arrow">↕</span></th>
+              <th>STATUS <span class="sort-arrow">↕</span></th>
+              <th style="text-align: right; width: 60px;">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="asgnTableBody">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- =====================================================================
+           SUBSIDIARY SUBMISSIONS INBOX (GROUP APPROVAL HUB)
+           ===================================================================== -->
+      <div class="asgn-table-card" id="subsTableCard" style="display:none;">
+        <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08);background:#121217;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <strong style="color:#fff;font-size:15px;">Subsidiary BRSR Data Submission &amp; Roll-up Approvals</strong>
+            <div style="font-size:12px;color:#8c8c94;margin-top:2px;">
+              Review data packages submitted by subsidiary ESG teams before final consolidation into MEIL Group Annual Report
+            </div>
+          </div>
+          <span class="chip" style="background:rgba(245,183,46,0.1);color:#f5b72e;border:1px solid rgba(245,183,46,0.3);font-size:11.5px;">
+            Consolidation Gatekeeper Active
+          </span>
+        </div>
+        <table class="asgn-table">
+          <thead>
+            <tr>
+              <th>SUBSIDIARY ENTITY</th>
+              <th>BRANCH &amp; SECTOR</th>
+              <th>SUBMISSION METRICS</th>
+              <th>EVIDENCE VAULT</th>
+              <th>SUBMITTED BY</th>
+              <th>STATUS</th>
+              <th style="text-align: right; width: 220px;">GROUP ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="subsTableBody">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     WORKFLOW EDIT MODAL
+     ========================================================================= -->
+<div id="modalContainer" style="display: none;"></div>
+
+<script src="../js/common.js"></script>
+<script>
+let ALL = [];
+let CURRENT_USER = null;
+let activeTab = "all";
+let searchQuery = "";
+let entityFilter = "";
+let statusFilter = "";
+let dueDateFilter = "";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  CURRENT_USER = await initLayout("assignments.html");
+  if (!CURRENT_USER) return;
+
+  const isGroupAdmin = CURRENT_USER.role === "Group Admin" || CURRENT_USER.username === "group.admin";
+  const isAuditor = CURRENT_USER.role === "Auditor" || CURRENT_USER.username === "auditor";
+  const isOwner = (CURRENT_USER.username || "").includes("owner") || CURRENT_USER.role === "Plant/Project Owner" || CURRENT_USER.role === "Department Owner";
+
+  if (isGroupAdmin) {
+    activeTab = "submissions";
+  } else if (isAuditor) {
+    activeTab = "review";
+  } else if (isOwner) {
+    activeTab = "my";
+  } else {
+    activeTab = "all";
+  }
+
+  // Set active tab button
+  document.querySelectorAll(".tab-pill-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.tab === activeTab);
+  });
+
+  const isSubmissions = activeTab === "submissions";
+  document.getElementById("asgnToolbar").style.display = isSubmissions ? "none" : "flex";
+  document.getElementById("asgnTableCard").style.display = isSubmissions ? "none" : "block";
+  document.getElementById("subsTableCard").style.display = isSubmissions ? "block" : "none";
+
+  await loadAssignments();
+  setupEventListeners();
+
+  if (isSubmissions) {
+    renderSubmissions();
+  }
+});
+
+async function loadAssignments() {
+  try {
+    ALL = await api("/assignments");
+    populateEntityDropdown();
+    updateKpisAndPills();
+    renderTable();
+  } catch (err) {
+    console.error("Failed to load assignments:", err);
+    toast("Failed to load assignments");
+  }
+}
+
+function populateEntityDropdown() {
+  const sel = document.getElementById("fEntity");
+  const uniqueEntities = new Set();
+  ALL.forEach(a => {
+    uniqueEntities.add(entityStr(a.entityPath));
+  });
+  
+  sel.innerHTML = '<option value="">Entity: All</option>';
+  Array.from(uniqueEntities).sort().forEach(ent => {
+    const opt = document.createElement("option");
+    opt.value = ent;
+    opt.textContent = `Entity: ${ent}`;
+    sel.appendChild(opt);
+  });
+}
+
+function entityStr(ep) {
+  if (!ep) return "Group";
+  return ep.plantId ? ep.plantId : "Group";
+}
+
+// Generate descriptive task subtitle matching the screenshot
+function getTaskSubtitle(a) {
+  if (a.taskSubtitle) return a.taskSubtitle;
+  const ind = (a.indicator || "").toLowerCase();
+  if (ind.includes("frequency of policy review")) return "Track annual policy review frequency";
+  if (ind.includes("compliance with statutory")) return "Verify and document compliance";
+  if (ind.includes("goals/targets adopted")) return "Document adopted goals and targets";
+  if (ind.includes("governance responsibility")) return "Identify governance ownership";
+  if (ind.includes("anti-corruption")) return "Share training plan and evidence";
+  if (ind.includes("wage") || ind.includes("salary")) return "Reconcile payroll registers and evidence";
+  if (ind.includes("water")) return "Verify utility meter logs and consumption";
+  if (ind.includes("energy")) return "Cross-check EB bills and renewable certificates";
+  if (ind.includes("emission") || ind.includes("ghg")) return "Calculate fuel combustion and emission factors";
+  if (ind.includes("waste")) return "Collate hazardous manifest and recycling receipts";
+  if (ind.includes("training")) return "Verify attendance logs and HR certification";
+  return "BRSR disclosure tracking & compliance review";
+}
+
+// Calculate relative due dates (overdue vs future)
+function formatDueDate(dateStr) {
+  if (!dateStr) return { formatted: "—", relative: "", isOverdue: false };
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return { formatted: dateStr, relative: "", isOverdue: false };
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = String(d.getDate()).padStart(2, "0");
+  const formatted = `${day} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+  // Anchor relative time reference
+  const now = new Date();
+  const refTime = (now.getFullYear() >= 2026) ? now.getTime() : new Date("2026-09-20").getTime();
+  const diffTime = d.getTime() - refTime;
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) {
+    return { formatted, relative: `Overdue by ${Math.abs(diffDays)} days`, isOverdue: true };
+  } else if (diffDays === 0) {
+    return { formatted, relative: "Due today", isOverdue: false };
+  } else {
+    return { formatted, relative: `in ${diffDays} days`, isOverdue: false };
+  }
+}
+
+function isTaskAssignedToUser(a, user) {
+  if (!user) return true;
+  const role = user.role || "";
+  const uname = user.username || "";
+  if (role === "Group Admin" || role === "Sustainability Lead") return true;
+
+  const o = (a.owner || "").toLowerCase();
+  const ind = (a.indicator || "").toLowerCase();
+  const ent = (entityStr(a.entityPath) || "").toLowerCase();
+
+  if (uname.includes("ehs")) {
+    return o.includes("ehs") || o.includes("priya") || ind.includes("emission") || ind.includes("fuel") || ind.includes("water") || ind.includes("energy") || ind.includes("waste");
+  }
+  if (uname.includes("hr")) {
+    return o.includes("hr") || o.includes("suresh") || ind.includes("wage") || ind.includes("employee") || ind.includes("posh") || ind.includes("training") || ind.includes("worker") || ind.includes("diversity");
+  }
+  if (role === "Plant/Project Owner" || uname.includes("plant")) {
+    return o.includes("plant") || o.includes("vikram") || ent.includes("plant1") || ent.includes("plant9") || ent.includes("olectra");
+  }
+  return true;
+}
+
+function updateKpisAndPills() {
+  const total = ALL.length;
+  const submitted = ALL.filter(a => a.status === "Submitted" || a.status === "Approved").length;
+  const inProgress = ALL.filter(a => a.status === "In Progress").length;
+  const awaitingReview = ALL.filter(a => a.status === "Submitted").length;
+  const overdue = ALL.filter(a => {
+    const dueInfo = formatDueDate(a.dueDate);
+    return dueInfo.isOverdue && a.status !== "Approved";
+  }).length;
+
+  const pct = total > 0 ? Math.round((submitted / total) * 100) : 0;
+
+  // Donut Gauge Animated Fill
+  document.getElementById("gaugePct").textContent = pct + "%";
+  document.getElementById("donutRing").setAttribute("stroke-dasharray", "0, 100");
+  setTimeout(() => {
+    document.getElementById("donutRing").setAttribute("stroke-dasharray", `${pct}, 100`);
+  }, 60);
+  document.getElementById("submittedCount").textContent = submitted;
+  document.getElementById("totalCount").textContent = total;
+
+  // Metrics
+  document.getElementById("kpiInProgress").textContent = inProgress;
+  document.getElementById("kpiAwaiting").textContent = awaitingReview;
+  document.getElementById("kpiOverdue").textContent = overdue;
+
+  // Tab Pill Counts
+  const myItemsCount = ALL.filter(a => isTaskAssignedToUser(a, CURRENT_USER)).length;
+  document.getElementById("pillCountAll").textContent = total;
+  document.getElementById("pillCountMy").textContent = myItemsCount;
+  document.getElementById("pillCountReview").textContent = awaitingReview;
+  document.getElementById("pillCountOverdue").textContent = overdue;
+}
+
+function getFilteredRows() {
+  return ALL.filter(a => {
+    // 1. Tab Filter
+    if (activeTab === "my") {
+      if (!isTaskAssignedToUser(a, CURRENT_USER)) return false;
+    } else if (activeTab === "review") {
+      if (a.status !== "Submitted") return false;
+    } else if (activeTab === "overdue") {
+      const dueInfo = formatDueDate(a.dueDate);
+      if (!dueInfo.isOverdue || a.status === "Approved") return false;
+    }
+
+    // 2. Search Query
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchInd = (a.indicator || "").toLowerCase().includes(q);
+      const matchOwner = (a.owner || "").toLowerCase().includes(q);
+      const matchSub = getTaskSubtitle(a).toLowerCase().includes(q);
+      const matchEnt = entityStr(a.entityPath).toLowerCase().includes(q);
+      if (!matchInd && !matchOwner && !matchSub && !matchEnt) return false;
+    }
+
+    // 3. Entity Dropdown
+    if (entityFilter) {
+      if (entityStr(a.entityPath) !== entityFilter) return false;
+    }
+
+    // 4. Status Dropdown
+    if (statusFilter) {
+      if (a.status !== statusFilter) return false;
+    }
+
+    // 5. Due Date Dropdown
+    if (dueDateFilter === "overdue") {
+      const dueInfo = formatDueDate(a.dueDate);
+      if (!dueInfo.isOverdue || a.status === "Approved") return false;
+    }
+
+    return true;
+  });
+}
+
+function renderTable() {
+  const tbody = document.getElementById("asgnTableBody");
+  const rows = getFilteredRows();
+
+  if (rows.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="asgn-empty-state">
+          No assignments found matching the active filters.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = rows.map((a, idx) => {
+    const dueInfo = formatDueDate(a.dueDate);
+    const subtitle = getTaskSubtitle(a);
+    const ent = entityStr(a.entityPath);
+
+    // Status class mapping
+    let statusClass = "not-started";
+    let statusLabel = a.status || "Not Started";
+    if (statusLabel === "In Progress") statusClass = "in-progress";
+    else if (statusLabel === "Submitted") statusClass = "submitted";
+    else if (statusLabel === "Approved") statusClass = "approved";
+    else if (statusLabel === "Needs Correction") statusClass = "needs-correction";
+
+    const isCorrection = (a.status === "Needs Correction");
+    const highlightClass = isCorrection ? "highlight-warning" : "";
+
+    return `
+      <tr class="${highlightClass}">
+        <td class="td-index">${idx + 1}</td>
+        <td>
+          <div class="task-title">${esc(a.indicator)}</div>
+          <div class="task-subtitle">${esc(subtitle)}</div>
+        </td>
+        <td class="td-entity">${esc(ent)}</td>
+        <td class="td-owner">${esc(a.owner || "—")}</td>
+        <td>
+          <div class="due-date-main">${dueInfo.formatted}</div>
+          <div class="due-date-sub ${dueInfo.isOverdue ? 'overdue' : 'future'}">${dueInfo.relative}</div>
+        </td>
+        <td>
+          <span class="status-pill ${statusClass}">
+            <span class="dot"></span>
+            <span>${esc(statusLabel)}</span>
+          </span>
+          ${a.reviewerComments ? `<span class="inline-notice">${esc(a.reviewerComments)}</span>` : ""}
+        </td>
+        <td style="text-align: right;">
+          <button class="btn-row-action" onclick="openAssignmentModal('${a.id}')" title="Edit status & workflow">
+            →
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// =========================================================================
+// SUBSIDIARY SUBMISSIONS CONTROLLER (GROUP APPROVAL INBOX)
+// =========================================================================
+let SUBS_SUBMISSIONS = [
+  {
+    id: "SUB-01",
+    entity: "Olectra Greentech Ltd.",
+    branch: "MEIL Holdings Limited (MHL)",
+    sector: "Transport & EV Mobility",
+    indicatorsDone: 106,
+    totalIndicators: 106,
+    evidenceCount: 48,
+    submittedBy: "R. K. Sharma (EHS Lead)",
+    submittedDate: "Oct 04, 2026",
+    status: "Awaiting Group Review"
+  },
+  {
+    id: "SUB-02",
+    entity: "ICOMM Tele Limited",
+    branch: "MEIL Advanced Technologies",
+    sector: "Telecom & Defense",
+    indicatorsDone: 102,
+    totalIndicators: 106,
+    evidenceCount: 39,
+    submittedBy: "P. Venkat (Sustainability Mgr)",
+    submittedDate: "Oct 03, 2026",
+    status: "Awaiting Group Review"
+  },
+  {
+    id: "SUB-03",
+    entity: "Megha City Gas Distribution Holding",
+    branch: "Gas & Utilities",
+    sector: "City Gas Distribution",
+    indicatorsDone: 106,
+    totalIndicators: 106,
+    evidenceCount: 52,
+    submittedBy: "A. Sengupta (Compliance Officer)",
+    submittedDate: "Oct 02, 2026",
+    status: "Approved"
+  },
+  {
+    id: "SUB-04",
+    entity: "KU Power Projects Ltd.",
+    branch: "Power & Energy Entities",
+    sector: "Power & Hydro SPVs",
+    indicatorsDone: 88,
+    totalIndicators: 106,
+    evidenceCount: 26,
+    submittedBy: "M. Reddy (Plant Head)",
+    submittedDate: "Oct 01, 2026",
+    status: "Awaiting Group Review"
+  }
+];
+
+function renderSubmissions() {
+  const tbody = document.getElementById("subsTableBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = SUBS_SUBMISSIONS.map(s => {
+    const isApproved = s.status === "Approved";
+    const statusPill = isApproved 
+      ? '<span class="badge badge-success">✅ Approved & Consolidated</span>' 
+      : s.status === "Revision Requested"
+      ? '<span class="badge badge-critical">🔄 Revision Requested</span>'
+      : '<span class="badge badge-warning">⏳ Awaiting Group Review</span>';
+
+    return `
+      <tr>
+        <td>
+          <strong style="color:#fff;font-size:14px;">${s.entity}</strong>
+          <div style="font-size:11px;color:#8c8c94;">Submission ID: ${s.id}</div>
+        </td>
+        <td>
+          <div style="color:#cbd5e1;font-size:12.5px;">${s.branch}</div>
+          <span class="chip" style="font-size:11px;margin-top:3px;">${s.sector}</span>
+        </td>
+        <td>
+          <div style="font-weight:700;color:#f5b72e;font-size:13px;">${s.indicatorsDone}/${s.totalIndicators} Indicators</div>
+          <div class="progress-bar" style="width:110px;height:5px;margin-top:4px;"><div style="width:${Math.round(s.indicatorsDone/s.totalIndicators*100)}%;"></div></div>
+        </td>
+        <td>
+          <a href="evidence.html" class="chip" style="color:#38bdf8;border-color:rgba(56,189,248,0.3);text-decoration:none;font-size:11.5px;">
+            📎 ${s.evidenceCount} Files Attached
+          </a>
+        </td>
+        <td>
+          <div style="color:#fff;font-size:12px;">${s.submittedBy}</div>
+          <div style="font-size:11px;color:#8c8c94;">${s.submittedDate}</div>
+        </td>
+        <td>${statusPill}</td>
+        <td style="text-align:right;">
+          ${isApproved ? `
+            <span style="font-size:11.5px;color:#34d399;font-weight:600;">Consolidated in FY26</span>
+          ` : `
+            <button class="btn btn-primary" style="padding:5px 10px;font-size:11.5px;margin-right:4px;" onclick="approveSubmission('${s.id}')">
+              ✅ Approve
+            </button>
+            <button class="btn btn-secondary" style="padding:5px 10px;font-size:11.5px;" onclick="requestSubmissionRevision('${s.id}')">
+              🔄 Revise
+            </button>
+          `}
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+window.approveSubmission = function(id) {
+  const item = SUBS_SUBMISSIONS.find(s => s.id === id);
+  if (item) {
+    item.status = "Approved";
+    renderSubmissions();
+    toast(`✅ Approved ${item.entity}! Data consolidated into MEIL Group Report.`);
+  }
+};
+
+window.requestSubmissionRevision = function(id) {
+  const reason = prompt("Enter feedback / revision remarks for the subsidiary officer:", "Please verify Scope 2 grid emission factor and re-attach verification certificate.");
+  if (reason) {
+    const item = SUBS_SUBMISSIONS.find(s => s.id === id);
+    if (item) {
+      item.status = "Revision Requested";
+      renderSubmissions();
+      toast(`🔄 Revision request sent to ${item.entity} with comments.`);
+    }
+  }
+};
+
+function setupEventListeners() {
+  // Tabs
+  document.querySelectorAll(".tab-pill-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-pill-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeTab = btn.dataset.tab;
+
+      const isSubmissions = activeTab === "submissions";
+      document.getElementById("asgnToolbar").style.display = isSubmissions ? "none" : "flex";
+      document.getElementById("asgnTableCard").style.display = isSubmissions ? "none" : "block";
+      document.getElementById("subsTableCard").style.display = isSubmissions ? "block" : "none";
+
+      if (isSubmissions) {
+        renderSubmissions();
+      } else {
+        renderTable();
+      }
+    });
+  });
+
+  // Search input
+  document.getElementById("asgnSearch").addEventListener("input", (e) => {
+    searchQuery = e.target.value.trim();
+    renderTable();
+  });
+
+  // Entity filter
+  document.getElementById("fEntity").addEventListener("change", (e) => {
+    entityFilter = e.target.value;
+    renderTable();
+  });
+
+  // Status filter
+  document.getElementById("fStatus").addEventListener("change", (e) => {
+    statusFilter = e.target.value;
+    renderTable();
+  });
+
+  // Due Date filter
+  document.getElementById("fDueDate").addEventListener("change", (e) => {
+    dueDateFilter = e.target.value;
+    renderTable();
+  });
+
+  // Clear filters button
+  document.getElementById("btnClearFilters").addEventListener("click", () => {
+    searchQuery = "";
+    entityFilter = "";
+    statusFilter = "";
+    dueDateFilter = "";
+    activeTab = "all";
+
+    document.getElementById("asgnSearch").value = "";
+    document.getElementById("fEntity").value = "";
+    document.getElementById("fStatus").value = "";
+    document.getElementById("fDueDate").value = "";
+
+    document.querySelectorAll(".tab-pill-btn").forEach(b => b.classList.remove("active"));
+    document.querySelector('.tab-pill-btn[data-tab="all"]').classList.add("active");
+
+    renderTable();
+    toast("Filters reset");
+  });
+}
+
+// =========================================================================
+// ASSIGNMENT EDIT / WORKFLOW MODAL
+// =========================================================================
+function openAssignmentModal(id) {
+  const a = ALL.find(x => x.id === id);
+  if (!a) return;
+
+  const container = document.getElementById("modalContainer");
+  container.style.display = "block";
+  container.innerHTML = `
+    <div class="modal-overlay" id="asgnModalOverlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Workflow &amp; Status Review</h3>
+          <button class="btn-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Indicator / Task</label>
+            <input type="text" value="${esc(a.indicator)}" readonly style="color:#aaa;">
+          </div>
+          <div style="display:flex; gap:14px;">
+            <div class="form-group" style="flex:1;">
+              <label>Entity</label>
+              <input type="text" value="${esc(entityStr(a.entityPath))}" readonly style="color:#aaa;">
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Owner</label>
+              <input type="text" id="mOwner" value="${esc(a.owner || '')}">
+            </div>
+          </div>
+          <div style="display:flex; gap:14px;">
+            <div class="form-group" style="flex:1;">
+              <label>Due Date</label>
+              <input type="date" id="mDueDate" value="${a.dueDate || ''}">
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Workflow Status</label>
+              <select id="mStatus">
+                <option value="Not Started" ${a.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
+                <option value="In Progress" ${a.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Submitted" ${a.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
+                <option value="Needs Correction" ${a.status === 'Needs Correction' ? 'selected' : ''}>Needs Correction</option>
+                <option value="Approved" ${a.status === 'Approved' ? 'selected' : ''}>Approved</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Reviewer / Compliance Comments</label>
+            <textarea id="mComments" placeholder="Add remarks or corrections needed...">${esc(a.reviewerComments || '')}</textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn-primary" onclick="saveAssignment('${a.id}')">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("asgnModalOverlay").addEventListener("click", (e) => {
+    if (e.target.id === "asgnModalOverlay") closeModal();
+  });
+}
+
+function closeModal() {
+  const container = document.getElementById("modalContainer");
+  container.style.display = "none";
+  container.innerHTML = "";
+}
+
+async function saveAssignment(id) {
+  const status = document.getElementById("mStatus").value;
+  const owner = document.getElementById("mOwner").value.trim();
+  const dueDate = document.getElementById("mDueDate").value;
+  const reviewerComments = document.getElementById("mComments").value.trim();
+
+  try {
+    const updated = await api(`/assignments/${id}`, {
+      method: "PUT",
+      body: { status, owner, dueDate, reviewerComments }
+    });
+
+    // Update local memory record
+    const rec = ALL.find(x => x.id === id);
+    if (rec) {
+      rec.status = status;
+      rec.owner = owner;
+      rec.dueDate = dueDate;
+      rec.reviewerComments = reviewerComments;
+    }
+
+    closeModal();
+    updateKpisAndPills();
+    renderTable();
+    toast("Assignment updated successfully!");
+  } catch (err) {
+    console.error("Failed to update assignment:", err);
+    toast("Error saving changes");
+  }
+}
+
+function esc(str) {
+  const div = document.createElement("div");
+  div.textContent = str || "";
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
