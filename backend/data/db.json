@@ -26029,6 +26029,41 @@
   ],
   "auditTrail": [
     {
+      "id": "AUD00102",
+      "timestamp": "2026-10-10T23:08:24.270Z",
+      "user": "Ramesh Kumar",
+      "action": "Value Updated",
+      "field": "Legal name of the entity",
+      "indicatorId": "A-01",
+      "entity": "Group",
+      "oldValue": 48500,
+      "newValue": 48500,
+      "evidenceLink": "EV0150",
+      "entryId": "E0001"
+    },
+    {
+      "id": "AUD00101",
+      "timestamp": "2026-10-10T23:08:24.208Z",
+      "user": "Kavitha Iyer",
+      "action": "Value Updated",
+      "field": "Legal name of the entity",
+      "indicatorId": "A-01",
+      "entity": "Group",
+      "oldValue": 48500,
+      "newValue": 48500,
+      "evidenceLink": "EV0150",
+      "entryId": "E0001"
+    },
+    {
+      "id": "AT-04174",
+      "timestamp": "2026-10-10T23:08:24.174Z",
+      "user": "Kavitha Iyer",
+      "role": "Auditor",
+      "action": "STATUTORY_SEAL_ISSUED",
+      "details": "10% ISAE 3000 Stratified Assurance Seal Issued across 42 Subsidiaries",
+      "sha256": "88b75299739966573443d1a17a4d3bf3a0db2eb6a72c64198b20d3ef3711a47b"
+    },
+    {
       "id": "AUD00099",
       "timestamp": "2026-10-10T22:19:02.937Z",
       "user": "Ramesh Kumar",
@@ -29850,7 +29885,7 @@
       "coreKpi": true
     }
   ],
-  "validationLastRun": "2026-10-10T22:19:03.111Z",
+  "validationLastRun": "2026-10-10T23:08:24.515Z",
   "enterpriseState": {
     "plant": {
       "dieselBunkeredL": 42500,
@@ -29977,7 +30012,7 @@
       "samplesTested": 15,
       "materialDiscrepancyPct": 0.04,
       "sealStatus": "STATUTORY SEAL ISSUED - CLEAN OPINION",
-      "sealHash": "SEAL-ISAE-3000-BSR-MEIL-2025-Q3: 039c56126642e4ef4cb8835380b79348dd9d602aba1b2aa7ccc9695d97efbcd8",
+      "sealHash": "SEAL-ISAE-3000-BSR-MEIL-2025-Q3: 88b75299739966573443d1a17a4d3bf3a0db2eb6a72c64198b20d3ef3711a47b",
       "samples": [
         {
           "id": "SMP-1322",
