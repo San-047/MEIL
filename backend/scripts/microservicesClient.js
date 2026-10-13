@@ -286,7 +286,28 @@ async function chatEnvironmental({ message, sessionId, projectId }) {
     };
   }
 
-  // Transparent error reporting (No fabricated or fake AI replies)
+  // Fallback to Groq Cloud LLM if Railway upstream container is unavailable
+  const groqKey = (process.env.GROQ_API_KEY || '').trim();
+  if (groqKey) {
+    try {
+      const groqRes = await callGroqDirect({
+        message,
+        systemPrompt: getSystemPromptForRole('environmental'),
+        apiKey: groqKey
+      });
+      if (groqRes && groqRes.ok) {
+        return {
+          ok: true,
+          service: 'Environmental AI Copilot (Groq Cloud LLM Fallback)',
+          reply: groqRes.reply,
+          sessionId: sessionId || 'groq-env-' + Date.now(),
+          success: true
+        };
+      }
+    } catch (_) {}
+  }
+
+  // Transparent error reporting if no fallback available
   return {
     ok: false,
     service: 'Environmental Chatbot',
