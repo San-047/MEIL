@@ -820,6 +820,9 @@ if (gCustomSubmit) {
 }
 
 function playLoginAnimation(user) {
+  if (user) {
+    try { sessionStorage.setItem("meil_user", JSON.stringify(user)); } catch (_) {}
+  }
   document.getElementById("topbar").style.opacity = "0";
   document.getElementById("hero").style.opacity = "0";
   document.getElementById("hero").style.filter = "blur(6px)";
@@ -873,6 +876,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       label.textContent = "Sign In";
       return;
     }
+    try { sessionStorage.setItem("meil_user", JSON.stringify(data.user)); } catch (_) {}
     playLoginAnimation(data.user);
   } catch (err) {
     errorMsg.textContent = "Could not reach server.";
@@ -883,7 +887,10 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
 // If already logged in, skip straight to appropriate landing page
 fetch("/api/me").then(r => r.json()).then(data => {
-  if (data && data.user) window.location.href = getLandingPage(data.user);
+  if (data && data.user) {
+    try { sessionStorage.setItem("meil_user", JSON.stringify(data.user)); } catch (_) {}
+    window.location.href = getLandingPage(data.user);
+  }
 }).catch(() => {});
 
 // Seamless Entrance Dissolve & Back Navigation

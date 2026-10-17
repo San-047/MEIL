@@ -192,18 +192,138 @@ function getNavItemsForUser(user) {
   return ALL_NAV_ITEMS;
 }
 
-async function initLayout(activeHref) {
-  const user = await requireLogin();
-  if (!user) return null;
+// =========================================================================
+// ULTRA-PREMIUM ZERO-LAYOUT-SHIFT SIDEBAR & SEAMLESS TRANSITIONS
+// =========================================================================
+
+function getProgressBar() {
+  let bar = document.getElementById("meilProgressBar");
+  if (!bar && typeof document !== "undefined") {
+    bar = document.createElement("div");
+    bar.id = "meilProgressBar";
+    document.body.appendChild(bar);
+  }
+  return bar;
+}
+
+function startProgressBar() {
+  const bar = getProgressBar();
+  if (!bar) return;
+  bar.classList.add("active");
+  bar.style.opacity = "1";
+  bar.style.width = "0%";
+  requestAnimationFrame(() => {
+    bar.style.width = "38%";
+    setTimeout(() => {
+      if (bar.classList.contains("active")) bar.style.width = "78%";
+    }, 140);
+  });
+}
+
+function finishProgressBar() {
+  const bar = getProgressBar();
+  if (!bar) return;
+  bar.style.width = "100%";
+  setTimeout(() => {
+    bar.style.opacity = "0";
+    bar.classList.remove("active");
+    setTimeout(() => {
+      bar.style.width = "0%";
+    }, 220);
+  }, 160);
+}
+
+function setupPageTransitions() {
+  if (typeof window === "undefined" || window.__meilTransitionsBound) return;
+  window.__meilTransitionsBound = true;
+
+  getProgressBar();
+  finishProgressBar();
+
+  // Reset any leaving state on pageshow (e.g. browser back/forward)
+  window.addEventListener("pageshow", () => {
+    finishProgressBar();
+    const shell = document.getElementById("app-shell");
+    if (shell) shell.classList.remove("page-is-leaving");
+  });
+
+  // Pre-fetch pages on mouse hover or touch for instant 0ms switching
+  document.addEventListener("mouseover", handleLinkPrefetch, { passive: true });
+  document.addEventListener("touchstart", handleLinkPrefetch, { passive: true });
+
+  // Intercept clicks on internal links for sleek page transitions
+  document.addEventListener("click", handleInternalNavClick);
+}
+
+function handleLinkPrefetch(e) {
+  const a = e.target.closest("a");
+  if (!a) return;
+  const href = a.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("javascript:") || href.startsWith("http") || href.includes("/api/")) return;
+  if (a.__meilPrefetched) return;
+  a.__meilPrefetched = true;
+
+  const pre = document.createElement("link");
+  pre.rel = "prefetch";
+  pre.href = href;
+  document.head.appendChild(pre);
+}
+
+function handleInternalNavClick(e) {
+  const a = e.target.closest("a");
+  if (!a) return;
+
+  // Let special clicks pass through
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+  if (a.target && a.target !== "_self") return;
+  if (a.hasAttribute("download")) return;
+
+  const rawHref = a.getAttribute("href");
+  if (!rawHref || rawHref.startsWith("#") || rawHref.startsWith("javascript:") || rawHref.includes("/api/")) return;
+  if (rawHref.startsWith("http") && !rawHref.includes(window.location.host)) return;
+
+  const curFile = window.location.pathname.split("/").pop() || "dashboard.html";
+  const targetFile = rawHref.split("?")[0].split("#")[0].split("/").pop();
+
+  // If already on the same page and no query change, smooth scroll to top
+  if (curFile === targetFile && !rawHref.includes("?")) {
+    if (rawHref.includes("#")) return;
+    e.preventDefault();
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { duration: 0.6 });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    return;
+  }
+
+  // Smooth exit transition
+  e.preventDefault();
+  startProgressBar();
+
+  // Save current sidebar scroll position
+  const sidebar = document.querySelector(".sidebar");
+  if (sidebar) {
+    try { sessionStorage.setItem("meil_sidebar_scroll", sidebar.scrollTop); } catch (_) {}
+  }
 
   const shell = document.getElementById("app-shell");
+  if (shell) shell.classList.add("page-is-leaving");
+
+  setTimeout(() => {
+    window.location.href = rawHref;
+  }, 100);
+}
+
+function renderSidebar(shell, user, activeHref) {
+  if (!shell || shell.querySelector(".sidebar")) return;
   const navList = getNavItemsForUser(user);
 
   const navHtml = navList
     .map(item => `<a href="${item.href}" class="${item.href === activeHref ? "active" : ""}"><span class="nav-icon" style="display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; width:18px;">${item.icon}</span><span>${item.label}</span></a>`)
     .join("");
 
-  shell.insertAdjacentHTML("afterbegin", `
+  const sidebarHtml = `
     <div class="sidebar">
       <div class="brand">
         <div class="logo-mark">M</div>
@@ -216,10 +336,10 @@ async function initLayout(activeHref) {
       
       <div class="user-box">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-          <div class="name" style="font-size:13.5px; font-weight:700;">${user.name}</div>
-          <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(245,183,46,0.15); color:#f5b72e; font-weight:700;">${user.role}</span>
+          <div class="name" style="font-size:13.5px; font-weight:700;">${user.name || "Enterprise User"}</div>
+          <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(245,183,46,0.15); color:#f5b72e; font-weight:700;">${user.role || "User"}</span>
         </div>
-        <div class="role" style="font-size:11.5px; color:#8c8c94; margin-bottom:12px;">${user.username}</div>
+        <div class="role" style="font-size:11.5px; color:#8c8c94; margin-bottom:12px;">${user.username || "meil.user"}</div>
         
         <div class="role-switcher-box" style="padding-top:12px; border-top:1px solid rgba(255,255,255,0.07); margin-bottom:14px;">
           <label style="font-size:10px; color:#8c8c94; text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:6px; font-weight:600;">Demo Role Switcher</label>
@@ -237,39 +357,139 @@ async function initLayout(activeHref) {
         <button class="logout-btn" id="logoutBtn" style="width:100%; padding:9px 12px; border-radius:8px; font-size:12.5px;">Log out</button>
       </div>
     </div>
-  `);
+  `;
 
-  document.getElementById("quickRoleSwitch").addEventListener("change", async (e) => {
-    const uname = e.target.value;
-    toast(`Switching to ${uname}…`);
+  shell.insertAdjacentHTML("afterbegin", sidebarHtml);
+
+  // Restore sidebar scroll position seamlessly
+  const sidebarEl = shell.querySelector(".sidebar");
+  if (sidebarEl) {
     try {
-      await api("/login", { method: "POST", body: { username: uname, password: "demo123" } });
-      if (uname === "group.admin" || uname === "sustain.lead") {
-        window.location.href = "dashboard.html";
-      } else if (uname === "plant.owner") {
-        window.location.href = "portal-plant.html";
-      } else if (uname === "ehs.owner") {
-        window.location.href = "portal-ehs.html";
-      } else if (uname === "hr.owner") {
-        window.location.href = "portal-hr.html";
-      } else if (uname === "auditor") {
-        window.location.href = "portal-auditor.html";
-      } else if (uname === "mgmt.viewer") {
-        window.location.href = "portal-board.html";
-      } else {
-        window.location.href = "data-entry.html";
+      const savedScroll = sessionStorage.getItem("meil_sidebar_scroll");
+      if (savedScroll) sidebarEl.scrollTop = parseInt(savedScroll, 10);
+      sidebarEl.addEventListener("scroll", () => {
+        sessionStorage.setItem("meil_sidebar_scroll", sidebarEl.scrollTop);
+      }, { passive: true });
+    } catch (_) {}
+  }
+
+  // Bind role switcher & logout
+  const switcher = document.getElementById("quickRoleSwitch");
+  if (switcher) {
+    switcher.addEventListener("change", async (e) => {
+      const uname = e.target.value;
+      startProgressBar();
+      toast(`Switching to ${uname}…`);
+      try {
+        const loginRes = await api("/login", { method: "POST", body: { username: uname, password: "demo123" } });
+        if (loginRes && loginRes.user) {
+          try { sessionStorage.setItem("meil_user", JSON.stringify(loginRes.user)); } catch (_) {}
+        }
+        const shellEl = document.getElementById("app-shell");
+        if (shellEl) shellEl.classList.add("page-is-leaving");
+
+        let dest = "dashboard.html";
+        if (uname === "group.admin" || uname === "sustain.lead") dest = "dashboard.html";
+        else if (uname === "plant.owner") dest = "portal-plant.html";
+        else if (uname === "ehs.owner") dest = "portal-ehs.html";
+        else if (uname === "hr.owner") dest = "portal-hr.html";
+        else if (uname === "auditor") dest = "portal-auditor.html";
+        else if (uname === "mgmt.viewer") dest = "portal-board.html";
+        else dest = "data-entry.html";
+
+        setTimeout(() => { window.location.href = dest; }, 100);
+      } catch (err) {
+        finishProgressBar();
+        toast("Switch failed");
       }
-    } catch (err) {
-      toast("Switch failed");
+    });
+  }
+
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      try { sessionStorage.removeItem("meil_user"); } catch (_) {}
+      await api("/logout", { method: "POST" });
+      window.location.href = "/pages/login.html";
+    });
+  }
+}
+
+function updateSidebarUser(shell, user) {
+  if (!shell || !user) return;
+  const nameEl = shell.querySelector(".sidebar .user-box .name");
+  if (nameEl && user.name) nameEl.textContent = user.name;
+  const roleEl = shell.querySelector(".sidebar .user-box .role");
+  if (roleEl && user.username) roleEl.textContent = user.username;
+  const badgeEl = shell.querySelector(".sidebar .user-box span");
+  if (badgeEl && user.role) badgeEl.textContent = user.role;
+  const switcher = document.getElementById("quickRoleSwitch");
+  if (switcher && user.username) switcher.value = user.username;
+}
+
+// Early Frame-0 Auto-Mount for Instant Zero-Shift Render
+(function autoMountSidebar() {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  if (window.location.pathname.includes("login.html")) return;
+
+  function doMount() {
+    const shell = document.getElementById("app-shell");
+    if (!shell || shell.querySelector(".sidebar")) return;
+
+    let user = null;
+    try {
+      const raw = sessionStorage.getItem("meil_user");
+      if (raw) user = JSON.parse(raw);
+    } catch (_) {}
+
+    if (user) {
+      const cur = window.location.pathname.split("/").pop() || "dashboard.html";
+      renderSidebar(shell, user, cur);
     }
-  });
+  }
 
-  document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await api("/logout", { method: "POST" });
-    window.location.href = "/pages/login.html";
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", doMount);
+  } else {
+    doMount();
+  }
+})();
 
-  // Inject Role Boundary Strip at top of .content
+async function initLayout(activeHref) {
+  setupPageTransitions();
+
+  const shell = document.getElementById("app-shell");
+
+  // Frame 0 synchronous check from sessionStorage
+  let cachedUser = null;
+  try {
+    const raw = sessionStorage.getItem("meil_user");
+    if (raw) cachedUser = JSON.parse(raw);
+  } catch (_) {}
+
+  if (cachedUser && shell) {
+    renderSidebar(shell, cachedUser, activeHref);
+  }
+
+  // Fetch live session
+  const freshUser = await requireLogin();
+  if (!freshUser) return null;
+
+  try {
+    sessionStorage.setItem("meil_user", JSON.stringify(freshUser));
+  } catch (_) {}
+
+  if (shell) {
+    if (!shell.querySelector(".sidebar")) {
+      renderSidebar(shell, freshUser, activeHref);
+    } else {
+      updateSidebarUser(shell, freshUser);
+    }
+  }
+
+  const user = freshUser;
+
+  // Inject Role Boundary Strip at top of .content if present
   const contentEl = document.querySelector(".content");
   if (contentEl && !document.getElementById("roleScopeBanner")) {
     let scopeDesc = "MEIL Corporate HQ · Full Conglomerate Boundary (42 Subsidiaries, 250+ Units)";
@@ -312,14 +532,22 @@ async function initLayout(activeHref) {
     `);
   }
 
+  finishProgressBar();
   return user;
 }
 
 async function requireLogin() {
   try {
     const data = await api("/me");
-    return data ? data.user : null;
+    if (data && data.user) {
+      try { sessionStorage.setItem("meil_user", JSON.stringify(data.user)); } catch (_) {}
+      return data.user;
+    }
+    try { sessionStorage.removeItem("meil_user"); } catch (_) {}
+    window.location.href = "/pages/login.html";
+    return null;
   } catch (e) {
+    try { sessionStorage.removeItem("meil_user"); } catch (_) {}
     window.location.href = "/pages/login.html";
     return null;
   }
